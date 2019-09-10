@@ -77,6 +77,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa5cd8d4ba1c3354ca614a2002bede5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  muzzlePrefab: {fileID: 1820505111244332, guid: fbc33af47af4d490ab2919530c88fa53,
+    type: 3}
+  hitPrefab: {fileID: 100000, guid: fabdd45f98921b547b28c84c0818d2a4, type: 3}
 --- !u!1 &970754734791754896
 GameObject:
   m_ObjectHideFlags: 0
