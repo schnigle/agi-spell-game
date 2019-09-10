@@ -25,11 +25,12 @@ public class Spell : MonoBehaviour
         if (Input.GetKeyDown("space"))
         {
             GameObject tempBull;
-            tempBull = Instantiate(bullet, bulletEmitter.transform.position, playerTrans.rotation) as GameObject;
+            tempBull = Instantiate(bullet, bulletEmitter.transform.forward.normalized*0.5f+bulletEmitter.transform.position, playerTrans.rotation) as GameObject;
             //tempBull.transform.Rotate(Vector3.left * 90);
             Rigidbody tempBody;
             tempBody = tempBull.GetComponent<Rigidbody>();
-            tempBody.AddForce(transform.forward * forwardForce);
+           // tempBody.transform.position = (bulletEmitter.transform.forward.normalized * 2+ tempBody.position);
+            tempBody.AddForce(bulletEmitter.transform.forward * forwardForce);
             Destroy(tempBull, waitTime);
         }
 

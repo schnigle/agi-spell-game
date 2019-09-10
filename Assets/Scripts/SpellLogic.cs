@@ -19,6 +19,6 @@ public class SpellLogic : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        Debug.Log(col.gameObject.name + " _ " + gameObject.name);
+        Destroy(gameObject);
     }
 }
