@@ -1,3 +1,5 @@
+# ---- DEFAULT UNITY CONFIGURATION ----
+
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
@@ -34,3 +36,13 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+# ---- ADDITIONAL CUSTOM CONFIGURATION ----
+
+# IDE stuff
+.vscode/
+
+# Third party stuff (copy these manually instead)
+Fantasy Forest Environment Free Sample/
+SteamVR/
+SteamVR_Input/
