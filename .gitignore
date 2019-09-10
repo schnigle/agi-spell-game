@@ -41,8 +41,3 @@ sysinfo.txt
 
 # IDE stuff
 .vscode/
-
-# Third party stuff (copy these manually instead)
-Fantasy Forest Environment Free Sample/
-SteamVR/
-SteamVR_Input/
