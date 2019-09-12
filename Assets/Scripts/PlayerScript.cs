@@ -20,6 +20,13 @@ public class PlayerScript : MonoBehaviour
 
     StreamWriter fileStream;
 
+    PlayerData playerData;
+
+    public PlayerData GetPlayerData()
+    {
+        return playerData;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,7 +37,9 @@ public class PlayerScript : MonoBehaviour
         // camera.transform.localRotation = Quaternion.identity;
 
         hand = rightStick.GetComponent<Valve.VR.InteractionSystem.Hand>();
-        
+        playerData = new PlayerData();
+
+
     }
 
     public SteamVR_Action_Boolean grabPinch; //Grab Pinch is the trigger, select from inspecter
@@ -43,6 +52,7 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
+        playerData.customUpdater();
         bool trigger_down = SteamVR_Actions._default.Squeeze.GetAxis(rightInput) == 1;
         if (trigger_down)
         {
