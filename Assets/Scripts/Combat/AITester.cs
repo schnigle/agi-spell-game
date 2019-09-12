@@ -27,6 +27,7 @@ public class AITester : MonoBehaviour
             if (CursorToGroundHit(out groundHit))
             {
                 enemy.agent.destination = groundHit;
+                // enemy.IndirectlyMoveTowards(groundHit);
             }
         }
         // Toggle ragdoll

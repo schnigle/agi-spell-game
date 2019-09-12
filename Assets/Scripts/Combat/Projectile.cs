@@ -7,6 +7,14 @@ public class Projectile : MonoBehaviour
     [SerializeField]
     float lifeTime = 100;
     float lifeTimeRemaining;
+    public GameObject caster;
+    public Rigidbody RBody { get; private set; }
+
+    void Awake()
+    {
+        RBody = GetComponent<Rigidbody>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,12 +34,23 @@ public class Projectile : MonoBehaviour
     // void OnCollisionEnter(Collision other)
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Actor")
+        if (other.gameObject != caster)
         {
-            print("hit");
-            // Destroy(other.gameObject);
+            // TODO: damage player, knock back enemies, VFX etc
+            if (other.tag == "Actor")
+            {
+                print("projectile hit enemy");
+            }
+            else if (other.tag == "Player")
+            {
+                print("projectile hit player");
+            }
+            else
+            {
+                print("projectile hit ground");
+            }
+            Destroy(gameObject);
         }
 
-        Destroy(gameObject);
     }
 }
