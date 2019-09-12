@@ -22,12 +22,12 @@ public class TrajectoryPreview : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
     }
 
-    void DisableTrajectory()
+    public void DisableTrajectory()
     {
         lineRenderer.enabled = false;
     }
 
-    void EnableTrajectory()
+    public void EnableTrajectory()
     {
         lineRenderer.enabled = true;
     }
