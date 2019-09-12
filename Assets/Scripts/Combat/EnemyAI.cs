@@ -67,9 +67,9 @@ public class EnemyAI : MonoBehaviour
 
     void Awake()
     {
-        isRagdolling = false;
         agent = GetComponent<NavMeshAgent>();
         body = GetComponent<Rigidbody>();
+        isRagdolling = false;
     }
 
     // Start is called before the first frame update
