@@ -65,7 +65,7 @@ public class SpellLogic : MonoBehaviour
             Rigidbody rigidbody = null;
             if(item.tag == "Actor")
             {
-                print("Death good");
+                //print("Death good");
                 var enemy = item.GetComponent<EnemyAI>();
                 enemy.isRagdolling = true;
             }
