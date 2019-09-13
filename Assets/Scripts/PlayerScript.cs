@@ -24,6 +24,8 @@ public class PlayerScript : MonoBehaviour
 
     public PlayerData GetPlayerData()
     {
+        if (playerData == null)
+            playerData = new PlayerData();
         return playerData;
     }
 
@@ -37,7 +39,8 @@ public class PlayerScript : MonoBehaviour
         // camera.transform.localRotation = Quaternion.identity;
 
         hand = rightStick.GetComponent<Valve.VR.InteractionSystem.Hand>();
-        playerData = new PlayerData();
+        if(playerData == null)
+            playerData = new PlayerData();
 
 
     }

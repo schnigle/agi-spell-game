@@ -20,7 +20,12 @@ public class ManaBar : MonoBehaviour
         barImage = maskRectTransform.Find("Bar").GetComponent<RawImage>();
         barMaskWidth = maskRectTransform.sizeDelta.x;
         if(playerObject != null)
-            mana = playerObject.GetComponent<PlayerScript>().GetPlayerData().mana;
+        {
+            var temp = playerObject.GetComponent<PlayerScript>();
+            if(temp != null)
+                mana = temp.GetPlayerData().mana;
+        }
+           
 
     }
 
