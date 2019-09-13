@@ -49,7 +49,15 @@ public class PlayerScript : MonoBehaviour
 
         trajectory.SetActive(false);
         trail.SetActive(false);
+
+        //print(SteamVR.instance.hmd_ModelNumber);
+        if(SteamVR.instance.hmd_ModelNumber == "Vive MV")
+            resolution = new Tuple<int, int>(2160 / 2, 1200);
+        else
+            resolution = new Tuple<int, int>(2880 / 2, 1600);
     }
+
+    private Tuple<int, int> resolution;
 
     public SteamVR_Action_Boolean grabPinch; //Grab Pinch is the trigger, select from inspecter
     public SteamVR_Input_Sources inputSource = SteamVR_Input_Sources.Any;//which controller
@@ -80,6 +88,7 @@ public class PlayerScript : MonoBehaviour
                 trail.SetActive(true);
                 trail.GetComponent<TrailRenderer>().Clear();
             }
+
             //print("Left trigger value: " + SteamVR_Actions._default.Squeeze.GetAxis(leftInput));
             /*print(Time.time + " "
                 + rightStick.transform.position.x + " "
@@ -89,17 +98,17 @@ public class PlayerScript : MonoBehaviour
             var pixelPos = VRcamera.WorldToScreenPoint(rightStick.transform.position);
             //var height = 1600; // TODO D:
             //var width = 2880 / 2;
-            var height = 1200;
-            var width = 2160 / 2;
+            //var height = 1200;
+            //var width = 2160 / 2;
             
             //print("cam space: " + pixelPos.x / Screen.width + ", " + pixelPos.y / Screen.height);
-            string line = Time.time + " " + pixelPos.x / width + " " + pixelPos.y / height + " " + pixelPos.z;
-            print(line);
+            // string line = Time.time + " " + pixelPos.x / resolution.Item1 + " " + pixelPos.y / resolution.Item2 + " " + pixelPos.z;
+            // print(line);
             // fileStream
             var point = new GestureRecognition.Point_2D();
             point.time = Time.time;
-            point.x = pixelPos.x / width;
-            point.y = pixelPos.y / height;
+            point.x = pixelPos.x / resolution.Item1;
+            point.y = pixelPos.y / resolution.Item2;
             point.z = pixelPos.z;
             gesture.Add(point);
         }
@@ -107,10 +116,10 @@ public class PlayerScript : MonoBehaviour
         {
             trail.SetActive(false);
             GestureRecognition.Gesture result = gestureRecognition.recognize_gesture(gesture);
-            print(result);
             identifiedGesture = result;
             if (identifiedGesture != GestureRecognition.Gesture.unknown)
             {
+                print(result);
                 spellReady = true;
                 trajectory.SetActive(true);
             }

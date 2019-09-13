@@ -156,9 +156,9 @@ class GestureRecognition
         Point_2D start = gesture[0];
         Point_2D end = gesture[gesture.Count - 1];
 
-        Debug.Log("angle_sum: " + angle_sum);
-        Debug.Log("gesture_width: " + gesture_width);
-        Debug.Log("gesture_height: " + gesture_height);
+        // Debug.Log("angle_sum: " + angle_sum);
+        // Debug.Log("gesture_width: " + gesture_width);
+        // Debug.Log("gesture_height: " + gesture_height);
 
         // I'm sorry
         if (angle_sum > (2 - ANGLE_SUM_THRESHOLD) * Math.PI && angle_sum < (2 + ANGLE_SUM_THRESHOLD) * Math.PI)
