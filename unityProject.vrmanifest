@@ -1,0 +1,16 @@
+{
+  "source": "Unity",
+  "applications": [
+    {
+      "app_key": "application.generated.unity.vr_project2.exe",
+      "launch_type": "url",
+      "url": "steam://launch/",
+      "action_manifest_path": "D:\\AGI19Projects\\agi-spell-game\\actions.json",
+      "strings": {
+        "en_us": {
+          "name": "VR_Project2 [Testing]"
+        }
+      }
+    }
+  ]
+}

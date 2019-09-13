@@ -102,7 +102,7 @@ public class EnemyAI : MonoBehaviour
         {
             if (agent.enabled && agent.remainingDistance < 0.1f)
             {
-                Attack();
+                // Attack();
                 IndirectlyMoveTowards(player.transform.position);
             }
         }

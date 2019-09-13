@@ -11,7 +11,7 @@ public class Spell : MonoBehaviour
     public GameObject bullet, bulletEmitter;
     public Transform playerTrans;
 
-    public float forwardForce = 5.0f;
+    public float forwardForce = 15.0f;
 
 
     // Start is called before the first frame update
@@ -25,17 +25,22 @@ public class Spell : MonoBehaviour
     {
         if (Input.GetKeyDown("space"))
         {
-            GameObject tempBull;
-            tempBull = Instantiate(bullet, bulletEmitter.transform.forward.normalized*0.5f+bulletEmitter.transform.position, playerTrans.rotation) as GameObject;
-            //tempBull.transform.Rotate(Vector3.left * 90);
-            Rigidbody tempBody;
-            tempBody = tempBull.GetComponent<Rigidbody>();
-           // tempBody.transform.position = (bulletEmitter.transform.forward.normalized * 2+ tempBody.position);
-            tempBody.AddForce(bulletEmitter.transform.forward * forwardForce);
-            Destroy(tempBull, waitTime);
+            UnleashSpell();
         }
 
         timer += Time.deltaTime;
+    }
+
+    public void UnleashSpell()
+    {
+        GameObject tempBull;
+        tempBull = Instantiate(bullet, bulletEmitter.transform.forward.normalized * 0.5f + bulletEmitter.transform.position, playerTrans.rotation) as GameObject;
+        //tempBull.transform.Rotate(Vector3.left * 90);
+        Rigidbody tempBody;
+        tempBody = tempBull.GetComponent<Rigidbody>();
+        // tempBody.transform.position = (bulletEmitter.transform.forward.normalized * 2+ tempBody.position);
+        tempBody.AddForce(bulletEmitter.transform.forward * forwardForce);
+        Destroy(tempBull, waitTime);
     }
 
 }

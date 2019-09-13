@@ -59,6 +59,24 @@ public class SpellLogic : MonoBehaviour
             }
         }
 
+        var nearby = Physics.OverlapSphere(pos, 5);
+        foreach(var item in nearby)
+        {
+            Rigidbody rigidbody = null;
+            if(item.tag == "Actor")
+            {
+                print("Death good");
+                var enemy = item.GetComponent<EnemyAI>();
+                enemy.isRagdolling = true;
+            }
+            rigidbody = item.GetComponent<Rigidbody>();
+            if (rigidbody != null)
+            {
+                var direction = (rigidbody.transform.position - pos).normalized;
+                rigidbody.AddForce((5 - Vector3.Distance(rigidbody.position, pos)) * (direction) * 200, ForceMode.Impulse);
+            }
+        }
+
         Destroy(gameObject);
     }
 }
