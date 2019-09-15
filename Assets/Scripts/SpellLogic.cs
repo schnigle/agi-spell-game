@@ -55,7 +55,7 @@ public class SpellLogic : MonoBehaviour
 
 
         Debug.Log(col.gameObject.name);
-        if(col.gameObject.name == "Cylinder"){
+        if(col.gameObject.tag== "Actor"){
           latesthitObject = col.gameObject;
           latesthitObject.GetComponent<FloatLogic>().enabled = true;
 
