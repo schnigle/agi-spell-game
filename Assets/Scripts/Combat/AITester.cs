@@ -34,8 +34,8 @@ public class AITester : MonoBehaviour
         if (Input.GetKeyDown("r"))
         {
             enemy.isRagdolling = !enemy.isRagdolling;
-            // enemy.body.AddForce(new Vector3(Random.Range(-5,5),15,Random.Range(-5,5)), ForceMode.VelocityChange);
-            // enemy.body.AddTorque(new Vector3(Random.Range(-50,50), Random.Range(-50,50), Random.Range(-50,50)), ForceMode.VelocityChange);
+            enemy.body.AddForce(new Vector3(Random.Range(-5,5),15,Random.Range(-5,5)), ForceMode.VelocityChange);
+            enemy.body.AddTorque(new Vector3(Random.Range(-50,50), Random.Range(-50,50), Random.Range(-50,50)), ForceMode.VelocityChange);
         }
         // Spawn a projectile that falls down on the enemy
         if (Input.GetKeyDown("p"))

@@ -14,6 +14,10 @@ public class EnemyAI : MonoBehaviour
     GameObject player;
     [SerializeField]
     Projectile projectilePrefab;
+    const float riseVelocityLimit = 0.4f;
+    const float riseAngularVelocityLimit = 5;
+    const float minRagdollTime = 3f;
+    float ragdollTime = 0;
 
     private bool _isRagdolling;
     /// True if the actor is currently in "ragdoll" mode (which means that it acts as a non-kinematic rigidbody while having its movement disabled)
@@ -24,6 +28,7 @@ public class EnemyAI : MonoBehaviour
         {
             if (value)
             {
+                ragdollTime = 0;
                 _isRagdolling = true;
                 agent.enabled = false;
                 body.isKinematic = false;
@@ -95,6 +100,14 @@ public class EnemyAI : MonoBehaviour
                 isRising = false;
                 agent.enabled = true;
             }
+        }
+        if (isRagdolling)
+        {
+            ragdollTime += Time.deltaTime;
+        }
+        if (isRagdolling && ragdollTime > minRagdollTime && body.velocity.sqrMagnitude < riseVelocityLimit * riseVelocityLimit && body.angularVelocity.sqrMagnitude < riseAngularVelocityLimit * riseAngularVelocityLimit)
+        {
+            isRagdolling = false;
         }
 
         // Move towards player and attack them
