@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class FloatLogic : MonoBehaviour
 {
-    public float frequency = 10f;
-    public float frequency2 = 10f;
-    public float initialForce = 5f;
+    public float frequency = 15f;
+    public float frequency2 = 6.2f;
+    public float initialForce = 100f;
     public float levAltitude = 5f;
 
   // Position Storage Variables
@@ -16,8 +16,9 @@ public class FloatLogic : MonoBehaviour
   // Use this for initialization
   void Start () {
 
-    //Rigidbody rb = GetComponent<Rigidbody>();
-    //rb.AddForce(0,100*initialForce,0);
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+        rb.AddForce(0,100*initialForce,0);
       // Store the starting position & rotation of the object
       //this.enabled = false;
     //  rb.AddForce(0,60,0);
