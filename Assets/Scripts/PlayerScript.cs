@@ -67,7 +67,7 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     bool trigger_down_last = false;
     List<GestureRecognition.Point_2D> gesture = new List<GestureRecognition.Point_2D>();
-    
+
     void Teleport()
     {
         RaycastHit hit;
@@ -76,14 +76,14 @@ public class PlayerScript : MonoBehaviour
             transform.position = hit.point;
         }
     }
-    
+
     void Update()
     {
-        
+
 
         playerData.customUpdater();
         bool trigger_down = SteamVR_Actions._default.Squeeze.GetAxis(rightInput) == 1;
-        
+
         if (trigger_down)
         {
             if (!trigger_down_last)
@@ -97,6 +97,11 @@ public class PlayerScript : MonoBehaviour
                     else if (identifiedGesture == GestureRecognition.Gesture.circle_cw)
                     {
                         Teleport();
+                    }
+                    else if (identifiedGesture == GestureRecognition.Gesture.vline_du)
+                    {
+                      GetComponent<Spell2>().UnleashSpell();
+
                     }
                     spellReady = false;
                     trajectory.SetActive(false);
@@ -116,7 +121,7 @@ public class PlayerScript : MonoBehaviour
             //var width = 2880 / 2;
             //var height = 1200;
             //var width = 2160 / 2;
-            
+
             //print("cam space: " + pixelPos.x / Screen.width + ", " + pixelPos.y / Screen.height);
             // string line = Time.time + " " + pixelPos.x / resolution.Item1 + " " + pixelPos.y / resolution.Item2 + " " + pixelPos.z;
             // print(line);

@@ -5,10 +5,10 @@ using UnityEngine;
 public class FloatLogic : MonoBehaviour
 {
     public float frequency = 15f;
-    public float frequency2 = 6.2f;
-    public int initialForce = 24;
-    public float levAltitude;
-
+    public int frequency2 = 9;
+    public int initialForce = 15;
+    public float initialAltitude;
+    public float levAltitude = 4f;
   // Position Storage Variables
   Vector3 posOffset = new Vector3 ();
   Vector3 tempPos = new Vector3 ();
@@ -18,7 +18,7 @@ public class FloatLogic : MonoBehaviour
 
 
     Rigidbody rb = GetComponent<Rigidbody>();
-    levAltitude = rb.worldCenterOfMass.y;
+    initialAltitude = rb.worldCenterOfMass.y;
         //rb.AddForce(Vector3.up*1000, ForceMode.Impulse);
       // Store the starting position & rotation of the object
       //this.enabled = false;
@@ -38,12 +38,12 @@ public class FloatLogic : MonoBehaviour
             this.enabled = false;
         }
 
-        if (rb.worldCenterOfMass.y <levAltitude+6){
+        if (rb.worldCenterOfMass.y <initialAltitude+levAltitude){
             rb.AddForce(Vector3.up*initialForce, ForceMode.Impulse);
             rb.AddForce(0,frequency,0);
         }
         else{
-            rb.AddForce(0,frequency2,0);
+            rb.AddForce(Vector3.up*frequency2, ForceMode.Impulse);
         }
 
       // Float up/down with a Sin()
