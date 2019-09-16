@@ -6,9 +6,14 @@ public class SpellLogic : MonoBehaviour
 {
 
     public GameObject muzzlePrefab, hitPrefab;
+    public int force = 100;
+    bool hit = false;
+    private GameObject latesthitObject;
+
 
     void Start()
     {
+       //hit = false;
         if (muzzlePrefab != null)
         {
             var muzzleVFX = Instantiate(muzzlePrefab, transform.position, Quaternion.identity);
@@ -31,11 +36,14 @@ public class SpellLogic : MonoBehaviour
         Physics.IgnoreCollision(colliderToIgnore, GetComponent<Collider>());
     }
 
+    public float degreesPerSecond = 15.0f;
+    public float amplitude = 0.5f;
+    public float frequency = 1f;
 
-    void Update()
-    {
-        
-    }
+    Vector3 posOffset = new Vector3();
+    Vector3 tempPos = new Vector3();
+
+
 
     void OnCollisionEnter(Collision col)
     {
@@ -43,6 +51,15 @@ public class SpellLogic : MonoBehaviour
         ContactPoint contact = col.contacts[0];
         Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
         Vector3 pos = contact.point;
+
+
+
+        Debug.Log(col.gameObject.name);
+        if(col.gameObject.tag== "Floatyobject"){
+          latesthitObject = col.gameObject;
+          latesthitObject.GetComponent<FloatLogic>().enabled = true;
+
+        }
 
         if(hitPrefab != null)
         {
@@ -56,6 +73,24 @@ public class SpellLogic : MonoBehaviour
             {
                 var psChild = hitVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
                 Destroy(hitVFX, psChild.main.duration);
+            }
+        }
+
+        var nearby = Physics.OverlapSphere(pos, 5);
+        foreach(var item in nearby)
+        {
+            Rigidbody rigidbody = null;
+            if(item.tag == "Actor")
+            {
+                //print("Death good");
+                var enemy = item.GetComponent<EnemyAI>();
+                enemy.isRagdolling = true;
+            }
+            rigidbody = item.GetComponent<Rigidbody>();
+            if (rigidbody != null)
+            {
+                var direction = (rigidbody.transform.position - pos).normalized;
+                rigidbody.AddForce((5 - Vector3.Distance(rigidbody.position, pos)) * (direction) * 200, ForceMode.Impulse);
             }
         }
 
