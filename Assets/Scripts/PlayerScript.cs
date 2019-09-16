@@ -67,7 +67,16 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     bool trigger_down_last = false;
     List<GestureRecognition.Point_2D> gesture = new List<GestureRecognition.Point_2D>();
-
+    
+    void Teleport()
+    {
+        RaycastHit hit;
+        if(Physics.Raycast(trajectory.transform.position, trajectory.transform.forward, out hit))
+        {
+            transform.position = hit.point;
+        }
+    }
+    
     void Update()
     {
         
@@ -81,7 +90,14 @@ public class PlayerScript : MonoBehaviour
             {
                 if(spellReady)
                 {
-                    GetComponent<Spell>().UnleashSpell();
+                    if (identifiedGesture == GestureRecognition.Gesture.hline_lr)
+                    {
+                        GetComponent<Spell>().UnleashSpell();
+                    }
+                    else if (identifiedGesture == GestureRecognition.Gesture.circle_cw)
+                    {
+                        Teleport();
+                    }
                     spellReady = false;
                     trajectory.SetActive(false);
                 }
@@ -125,7 +141,7 @@ public class PlayerScript : MonoBehaviour
             }
             gesture.Clear();
         }
-        
+
 
         //REeset the MoveVector
         moveVector = Vector3.zero;
