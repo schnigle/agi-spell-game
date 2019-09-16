@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,19 +6,20 @@ public class FloatLogic : MonoBehaviour
 {
     public float frequency = 15f;
     public float frequency2 = 6.2f;
-    public float initialForce = 100f;
-    public float levAltitude = 5f;
+    public int initialForce = 24;
+    public float levAltitude;
 
   // Position Storage Variables
   Vector3 posOffset = new Vector3 ();
   Vector3 tempPos = new Vector3 ();
-  public float timer = 5;
+  public float timer = 3;
   // Use this for initialization
   void Start () {
 
 
-        Rigidbody rb = GetComponent<Rigidbody>();
-        rb.AddForce(0,100*initialForce,0);
+    Rigidbody rb = GetComponent<Rigidbody>();
+    levAltitude = rb.worldCenterOfMass.y;
+        //rb.AddForce(Vector3.up*1000, ForceMode.Impulse);
       // Store the starting position & rotation of the object
       //this.enabled = false;
     //  rb.AddForce(0,60,0);
@@ -28,6 +29,7 @@ public class FloatLogic : MonoBehaviour
   void FixedUpdate () {
 
     Rigidbody rb = GetComponent<Rigidbody>();
+
         timer -= Time.deltaTime;
 
         if (timer < 0)
@@ -36,7 +38,8 @@ public class FloatLogic : MonoBehaviour
             this.enabled = false;
         }
 
-        if (rb.worldCenterOfMass.y <levAltitude){
+        if (rb.worldCenterOfMass.y <levAltitude+6){
+            rb.AddForce(Vector3.up*initialForce, ForceMode.Impulse);
             rb.AddForce(0,frequency,0);
         }
         else{
