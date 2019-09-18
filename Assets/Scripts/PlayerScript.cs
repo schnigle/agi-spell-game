@@ -73,10 +73,11 @@ public class PlayerScript : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(trajectory.transform.position, trajectory.transform.forward, out hit))
         {
-            transform.position = hit.point;
+            // setting transform.position directly does not seem to work with character controller
+            controller.Move(hit.point - transform.position);    
         }
     }
-    
+
     void Update()
     {
         
