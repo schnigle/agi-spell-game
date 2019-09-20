@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2576301025888762653}
   - component: {fileID: 4490465506289730171}
   - component: {fileID: 3425322833995951482}
-  - component: {fileID: 3478099801471093093}
+  - component: {fileID: 7066545449305671516}
   m_Layer: 0
   m_Name: Crate
   m_TagString: Untagged
@@ -111,7 +111,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &3478099801471093093
+--- !u!114 &7066545449305671516
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,5 +127,5 @@ MonoBehaviour:
   frequency2: 9
   initialForce: 15
   initialAltitude: 0
-  levAltitude: 4
-  timer: 3
+  levAltitude: 24
+  timer: 6

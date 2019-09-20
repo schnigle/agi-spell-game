@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2255f9748de4fb94a8030a5d5bc8a4c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  muzzlePrefab: {fileID: 0}
-  hitPrefab: {fileID: 0}
+  muzzlePrefab: {fileID: 1820505111244332, guid: fbc33af47af4d490ab2919530c88fa53,
+    type: 3}
+  hitPrefab: {fileID: 4308658998904027059, guid: 8560b67eb3085dd4498cee3b9dc9e94e,
+    type: 3}
 --- !u!1001 &3024861917997621996
 PrefabInstance:
   m_ObjectHideFlags: 0

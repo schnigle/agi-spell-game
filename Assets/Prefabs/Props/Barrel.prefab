@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2687744810227512852}
   - component: {fileID: 6820461210435851461}
   - component: {fileID: 4154183261965115524}
-  - component: {fileID: -5315311812896183097}
+  - component: {fileID: 5572080867982357691}
   m_Layer: 0
   m_Name: Barrel
   m_TagString: Untagged
@@ -111,7 +111,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-5315311812896183097
+--- !u!114 &5572080867982357691
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,5 +127,5 @@ MonoBehaviour:
   frequency2: 9
   initialForce: 15
   initialAltitude: 0
-  levAltitude: 4
-  timer: 3
+  levAltitude: 24
+  timer: 6

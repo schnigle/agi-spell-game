@@ -5,30 +5,33 @@ using UnityEngine;
 public class FloatLogic : MonoBehaviour
 {
     public float frequency = 15f;
-    public int frequency2 = 9;
+    
     public int initialForce = 15;
     public float initialAltitude;
-    public float levAltitude = 4f;
-  // Position Storage Variables
-  Vector3 posOffset = new Vector3 ();
-  Vector3 tempPos = new Vector3 ();
-  public float timer = 3;
+    public float levAltitude = 24f;
+    Vector3 m_EulerAngleVelocity;
+    Rigidbody rb;
+    public float timer = 6;
+    
   // Use this for initialization
   void Start () {
 
+        m_EulerAngleVelocity = new Vector3(-45, 100, 45);
+        Rigidbody rb = GetComponent<Rigidbody>();
+        initialAltitude = rb.worldCenterOfMass.y;
 
-    Rigidbody rb = GetComponent<Rigidbody>();
-    initialAltitude = rb.worldCenterOfMass.y;
-        //rb.AddForce(Vector3.up*1000, ForceMode.Impulse);
-      // Store the starting position & rotation of the object
-      //this.enabled = false;
-    //  rb.AddForce(0,60,0);
+        
+        //this.enabled = false;
+      
   }
 
   // Update is called once per frame
   void FixedUpdate () {
 
-    Rigidbody rb = GetComponent<Rigidbody>();
+        
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+        Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity * Time.deltaTime);
 
         timer -= Time.deltaTime;
 
@@ -41,11 +44,14 @@ public class FloatLogic : MonoBehaviour
         if (rb.worldCenterOfMass.y <initialAltitude+levAltitude){
             rb.AddForce(Vector3.up*initialForce, ForceMode.Impulse);
             rb.AddForce(0,frequency,0);
+            rb.MoveRotation(rb.rotation * deltaRotation);
         }
-        else{
-            rb.AddForce(Vector3.up*frequency2, ForceMode.Impulse);
-        }
+        else
+        {
+            rb.velocity = new Vector3(0, 0, 0);
 
+            rb.MoveRotation(rb.rotation * deltaRotation); 
+        }
       // Float up/down with a Sin()
     //  tempPos = posOffset;
     //  tempPos.y += Mathf.Sin (Time.fixedTime * Mathf.PI * frequency) * amplitude;
