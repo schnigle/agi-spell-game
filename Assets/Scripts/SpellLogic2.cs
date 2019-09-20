@@ -46,12 +46,12 @@ public class SpellLogic2 : MonoBehaviour
         Vector3 pos = contact.point;
 
 
-          latesthitObject = col.gameObject;
-          latesthitObject.GetComponent<FloatLogic>().enabled = true;
 
-        
 
-        if(hitPrefab != null)
+        latesthitObject = col.gameObject;
+
+
+        if (hitPrefab != null)
         {
             var hitVFX = Instantiate(hitPrefab, pos, rot);
             var psHit = hitVFX.GetComponent<ParticleSystem>();
@@ -66,7 +66,7 @@ public class SpellLogic2 : MonoBehaviour
             }
         }
 
-      /*  var nearby = Physics.OverlapSphere(pos, 5);
+       var nearby = Physics.OverlapSphere(pos, 5);
         foreach(var item in nearby)
         {
             Rigidbody rigidbody = null;
@@ -75,15 +75,16 @@ public class SpellLogic2 : MonoBehaviour
                 //print("Death good");
                 var enemy = item.GetComponent<EnemyAI>();
                 enemy.isRagdolling = true;
+                item.GetComponent<FloatLogic>().enabled = true;
+
             }
             rigidbody = item.GetComponent<Rigidbody>();
             if (rigidbody != null)
             {
-                var direction = (rigidbody.transform.position - pos).normalized;
-                rigidbody.AddForce((5 - Vector3.Distance(rigidbody.position, pos)) * (direction) * 200, ForceMode.Impulse);
+                latesthitObject.GetComponent<FloatLogic>().enabled = true;
             }
         }
 
-        Destroy(gameObject);*/
+        Destroy(gameObject);
     }
 }

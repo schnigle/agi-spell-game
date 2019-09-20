@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2576301025888762653}
   - component: {fileID: 4490465506289730171}
   - component: {fileID: 3425322833995951482}
-  - component: {fileID: 7066545449305671516}
+  - component: {fileID: -5328960990479474849}
   m_Layer: 0
   m_Name: Crate
   m_TagString: Untagged
@@ -111,7 +111,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &7066545449305671516
+--- !u!114 &-5328960990479474849
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -120,11 +120,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4322340937989672897}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe0ed6ccc609470468c9d549070bd975, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b77beb28d4c7464ab22847548f186cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   frequency: 15
-  frequency2: 9
   initialForce: 15
   initialAltitude: 0
   levAltitude: 24

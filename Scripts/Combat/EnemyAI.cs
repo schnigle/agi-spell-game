@@ -111,14 +111,14 @@ public class EnemyAI : MonoBehaviour
         }
 
         // Move towards player and attack them
-        /*if (player)
+        if (player)
         {
             if (agent.enabled && agent.remainingDistance < 0.1f)
             {
                 // Attack();
                 IndirectlyMoveTowards(player.transform.position);
             }
-        }*/
+        }
     }
 
     /// Experimental movement script. Causes the actor to move to a random point on the border of a circle centered on the target.
