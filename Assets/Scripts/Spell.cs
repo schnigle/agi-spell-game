@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spell : MonoBehaviour
+public class Spell : MonoBehaviour, ISpell
 {
 
     private float timer = 0.0f;
@@ -13,9 +13,13 @@ public class Spell : MonoBehaviour
 
     public float forwardForce = 15.0f;
 
+    [SerializeField]
+    TrajectoryPreview trajectory;
 
-    // Start is called before the first frame update
-    void Start()
+	public GestureRecognition.Gesture SpellGesture => GestureRecognition.Gesture.hline_lr;
+
+	// Start is called before the first frame update
+	void Start()
     {
 
     }
@@ -43,4 +47,13 @@ public class Spell : MonoBehaviour
         Destroy(tempBull, waitTime);
     }
 
+	public void OnAimStart()
+	{
+		trajectory?.gameObject.SetActive(true);
+	}
+
+	public void OnAimEnd()
+	{
+		trajectory?.gameObject.SetActive(false);
+	}
 }
