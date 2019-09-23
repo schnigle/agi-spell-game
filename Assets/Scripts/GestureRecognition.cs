@@ -8,13 +8,14 @@ public class GestureRecognition
 {
 
     /*
-         * Constants
-         */
+     * Constants
+     */
     public const int ANGLE_GRANULARITY = 10;
-    public const float PROXIMITY_THRESHOLD = 0.2f;
+    public const float PROXIMITY_THRESH = 0.2f;
     public const int MIN_GESTURE_SIZE = 10;
-    public const float ANGLE_SUM_THRESHOLD = 0.5f;
-    public const float VEL_VEC_NORM_THRESHOLD = 0.25f;
+    public const float ANGLE_SUM_THRESH = 0.5f;
+    public const float VEL_VEC_NORM_THRESH = 0.25f;
+    public const float ANGLE_DEVIATION_THRESH = 0.5f;
     public const bool LOWPASS = false;
     public const int LP_KERNEL_SIZE = 2;
     public const float LP_SIGMA = 2.0f;
@@ -113,8 +114,8 @@ public class GestureRecognition
     }
 
     /*
-         * Returns the mean velocity vector for the gesture in screen space.
-         */
+     * Returns the mean velocity vector for the gesture in screen space.
+     */
     private Point_2D mean_velocity_2D(ref List<Point_2D> gesture)
     {
         Point_2D v = new Point_2D();
@@ -141,10 +142,10 @@ public class GestureRecognition
     }
 
     /*
-         * Optional low pass filter. Averages sequences of 2d points with
-         * weights calculated from Gaussian function. Basically 1D Gaussian
-         * blur. Crops edges.
-         */
+     * Optional low pass filter. Averages sequences of 2d points with
+     * weights calculated from Gaussian function. Basically 1D Gaussian
+     * blur. Crops edges.
+     */
     private List<Point_2D> gaussian_average_lowpass(
             List<Point_2D> gesture,
             int kernel_size,
@@ -348,55 +349,40 @@ public class GestureRecognition
         Point_2D avg_vel_vec2 = mean_velocity_2D(ref gesture);
         Point_3D avg_vel_vec3 = mean_velocity_3D(ref gesture3D);
 
-        // super simple (and ugly) ad hoc classifier
         float gesture_width = bounds.max_x - bounds.min_x;
         float gesture_height = bounds.max_y - bounds.min_y;
         Point_2D start = gesture[0];
         Point_2D end = gesture[gesture.Count - 1];
 
-        // Debug.Log("angle_sum: " + angle_sum);
-        // Debug.Log("gesture_width: " + gesture_width);
-        // Debug.Log("gesture_height: " + gesture_height);
-
-        // I'm sorry
         Gesture_Meta ret = new Gesture_Meta();
+        ret.type = Gesture.unknown;
         ret.avg_vel_vector = avg_vel_vec3;
         ret.angle_sum = angle_sum;
         ret.bounds = bounds;
+ 
+        float vel_vec_norm = vec2_norm(avg_vel_vec2, false);
+        float x_pos_dev = angle(avg_vel_vec2, new Point_2D(0,1,0,0),  false);
+        float y_pos_dev = angle(avg_vel_vec2, new Point_2D(0,0,1,0),  false);
+        float z_pos_dev = angle(avg_vel_vec2, new Point_2D(0,0,0,1),  false);
+        float x_neg_dev = angle(avg_vel_vec2, new Point_2D(0,-1,0,0), false);
+        float y_neg_dev = angle(avg_vel_vec2, new Point_2D(0,0,-1,0), false);
+        float z_neg_dev = angle(avg_vel_vec2, new Point_2D(0,0,0,-1), false);
 
-        if (angle_sum > (2 - ANGLE_SUM_THRESHOLD) * Math.PI && angle_sum < (2 + ANGLE_SUM_THRESHOLD) * Math.PI)
-        {
-            ret.type = Gesture.circle_ccw;
-        }
-        else if (angle_sum < -(2 - ANGLE_SUM_THRESHOLD) * Math.PI && angle_sum > -(2 + ANGLE_SUM_THRESHOLD) * Math.PI)
-        {
-            ret.type = Gesture.circle_cw;
-        }
-        else if (Math.Abs(angle_sum) < ANGLE_SUM_THRESHOLD && gesture_width > 4 * gesture_height && gesture_width > 0.15)
-        {
-            if (start.x > end.x)
-            {
-                ret.type = Gesture.hline_rl;
-            }
-            else
-            {
-                ret.type = Gesture.hline_lr;
-            }
-        }
-        else if (Math.Abs(angle_sum) < ANGLE_SUM_THRESHOLD && gesture_height > 4 * gesture_width && gesture_height > 0.15)
-        {
-            if (start.y > end.y)
-            {
-                ret.type = Gesture.vline_ud;
-            }
-            else
-            {
-                ret.type = Gesture.vline_du;
-            }
-        }
-        else
-        {
-            ret.type = Gesture.unknown;
+
+        if(vel_vec_norm < VEL_VEC_NORM_THRESH) {
+            // likely a circle (so far)
+            float min_angle = (2 - ANGLE_SUM_THRESHOLD) * Math.PI;
+            float max_angle = (2 + ANGLE_SUM_THRESHOLD) * Math.PI; 
+            if (angle_sum > min_angle && angle_sum < max_angle) ret.type = Gesture.circle_ccw;
+            if (angle_sum < -min_angle && angle_sum > -max_angle) ret.type = Gesture.circle_ccw;
+        } else {
+            // likely something else 
+            if     (x_pos_dev < ANGLE_DEVIATION_THRESH && abs(avg_vel_vec2.x) > 0.2) ret.type = Gesture.hline_lr;
+            else if(x_neg_dev < ANGLE_DEVIATION_THRESH && abs(avg_vel_vec2.x) > 0.2) ret.type = Gesture.hline_rl;
+            else if(y_pos_dev < ANGLE_DEVIATION_THRESH && abs(avg_vel_vec2.x) > 0.2) ret.type = Gesture.vline_du;
+            else if(y_neg_dev < ANGLE_DEVIATION_THRESH && abs(avg_vel_vec2.x) > 0.2) ret.type = Gesture.vline_up;
+            else if(z_pos_dev < ANGLE_DEVIATION_THRESH && abs(avg_vel_vec2.x) > 0.2) ret.type = Gesture.push;
+            else if(z_neg_dev < ANGLE_DEVIATION_THRESH && abs(avg_vel_vec2.x) > 0.2) ret.type = Gesture.pull;
         }
 
         return ret;
