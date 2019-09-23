@@ -5,31 +5,24 @@ using UnityEngine;
 public class FloatLogic : MonoBehaviour
 {
     public float frequency = 15f;
-    
+
     public int initialForce = 15;
     public float initialAltitude;
     public float levAltitude = 24f;
     Vector3 m_EulerAngleVelocity;
     Rigidbody rb;
     public float timer = 6;
-    
+
   // Use this for initialization
   void Start () {
 
         m_EulerAngleVelocity = new Vector3(-45, 100, 45);
         Rigidbody rb = GetComponent<Rigidbody>();
-        initialAltitude = rb.worldCenterOfMass.y;
-
-        
+        initialAltitude = rb.worldCenterOfMass.y;    
         //this.enabled = false;
-      
   }
-
   // Update is called once per frame
   void FixedUpdate () {
-
-        
-
         Rigidbody rb = GetComponent<Rigidbody>();
         Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity * Time.deltaTime);
 
@@ -50,12 +43,7 @@ public class FloatLogic : MonoBehaviour
         {
             rb.velocity = new Vector3(0, 0, 0);
 
-            rb.MoveRotation(rb.rotation * deltaRotation); 
+            rb.MoveRotation(rb.rotation * deltaRotation);
         }
-      // Float up/down with a Sin()
-    //  tempPos = posOffset;
-    //  tempPos.y += Mathf.Sin (Time.fixedTime * Mathf.PI * frequency) * amplitude;
-
-      //transform.position = tempPos;
   }
 }
