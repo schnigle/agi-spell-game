@@ -379,10 +379,10 @@ public class GestureRecognition
             // likely something else 
             if     (x_pos_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.x) > 0.2) ret.type = Gesture.hline_lr;
             else if(x_neg_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.x) > 0.2) ret.type = Gesture.hline_rl;
-            else if(y_pos_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.x) > 0.2) ret.type = Gesture.vline_du;
-            else if(y_neg_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.x) > 0.2) ret.type = Gesture.vline_ud;
-            else if(z_pos_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.x) > 0.2) ret.type = Gesture.push;
-            else if(z_neg_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.x) > 0.2) ret.type = Gesture.pull;
+            else if(y_pos_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.y) > 0.2) ret.type = Gesture.vline_du;
+            else if(y_neg_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.y) > 0.2) ret.type = Gesture.vline_ud;
+            else if(z_pos_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.z) > 0.2) ret.type = Gesture.push;
+            else if(z_neg_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.z) > 0.2) ret.type = Gesture.pull;
         }
 
         return ret;
