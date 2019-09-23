@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1892748278278217030}
   - component: {fileID: 7624509346187702566}
   - component: {fileID: -2552977356808430161}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Tornado1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 401114}
   - component: {fileID: 19806176}
   - component: {fileID: 19942818}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: particle glow slave birth trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4819,7 +4819,7 @@ GameObject:
   - component: {fileID: 457024}
   - component: {fileID: 19807740}
   - component: {fileID: 19990304}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: particle master
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9705,7 +9705,7 @@ GameObject:
   - component: {fileID: 419112}
   - component: {fileID: 19885320}
   - component: {fileID: 19979540}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: particle glow slave birth dust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
