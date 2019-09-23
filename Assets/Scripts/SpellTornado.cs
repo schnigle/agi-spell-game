@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class SpellTornado : MonoBehaviour, ISpell
 {
-    public GestureRecognition.Gesture SpellGesture => GestureRecognition.Gesture.hline_lr;
+    public GestureRecognition.Gesture SpellGesture => GestureRecognition.Gesture.circle_ccw;
 
     public GameObject bullet, bulletEmitter;
     public Transform playerTrans;
-    public float forwardForce = 15.0f;
-    private const float waitTime = 10.0f;
+    public float forwardForce = 30.0f;
+    private const float waitTime = 15.0f;
 
     [SerializeField]
     TrajectoryPreview trajectory;
