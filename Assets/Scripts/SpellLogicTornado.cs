@@ -37,6 +37,8 @@ public class SpellLogicTornado : MonoBehaviour
         var colliderToIgnore = GameObject.Find("PlayerObject").GetComponent<Collider>(); // traversing hierarchy like a tree
         Physics.IgnoreCollision(colliderToIgnore, GetComponent<Collider>());
 
+        
+
     }
 
     public float degreesPerSecond = 15.0f;
@@ -55,9 +57,10 @@ public class SpellLogicTornado : MonoBehaviour
         dir.Normalize();
 
         var rigidBod = gameObject.GetComponent<Rigidbody>();
-        rigidBod.AddRelativeForce(dir * 10);
+        rigidBod.AddRelativeForce(dir * 0.01f, ForceMode.VelocityChange);
 
         Vector3 pos = gameObject.transform.position;
+        var nearby = Physics.OverlapSphere(pos, 25);
 
         /*var nearby = Physics.OverlapSphere(pos, 25);
         foreach (var item in nearby)
