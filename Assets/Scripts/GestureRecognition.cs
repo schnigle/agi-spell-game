@@ -375,7 +375,7 @@ public class GestureRecognition
             float max_angle = (float) ((2 + ANGLE_SUM_THRESH) * Math.PI); 
             if (angle_sum > min_angle && angle_sum < max_angle) ret.type = Gesture.circle_ccw;
             if (angle_sum < -min_angle && angle_sum > -max_angle) ret.type = Gesture.circle_ccw;
-        } else {
+        } else if (angle_sum < 2*ANGLE_SUM_THRESH) {
             // likely something else 
             if     (x_pos_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.x) > 0.2) ret.type = Gesture.hline_lr;
             else if(x_neg_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.x) > 0.2) ret.type = Gesture.hline_rl;
