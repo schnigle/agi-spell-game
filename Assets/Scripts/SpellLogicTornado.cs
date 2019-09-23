@@ -62,10 +62,16 @@ public class SpellLogicTornado : MonoBehaviour
         Vector3 pos = gameObject.transform.position;
         var nearby = Physics.OverlapSphere(pos, 25);
 
-        /*var nearby = Physics.OverlapSphere(pos, 25);
         foreach (var item in nearby)
         {
             Rigidbody rigidbody = null;
+
+            if (LayerMask.NameToLayer("Default") != item.gameObject.layer)
+            {
+                continue;
+            }
+                
+
             if (item.tag == "Actor")
             {
                 var enemy = item.GetComponent<EnemyAI>();
@@ -77,7 +83,7 @@ public class SpellLogicTornado : MonoBehaviour
                 var direction = (rigidbody.transform.position - pos).normalized;
                 rigidbody.AddForce((5 - Vector3.Distance(rigidbody.position, pos)) * (direction) * 200, ForceMode.Impulse);
             }
-        }*/
+        }
 
 
     }
