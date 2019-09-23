@@ -4,7 +4,7 @@ using UnityEngine;
 
 using System;
 
-class GestureRecognition
+public class GestureRecognition
 {
 
     /*
@@ -46,13 +46,13 @@ class GestureRecognition
         public Bounds bounds;
     }
 
-    /*                                                                                           
-    * a data point.                                                                             
-    *                                                                                           
-    * @param time timestamp since start of program (s)                                          
-    * @param x x-coordinate on 2d plane                                                         
+    /*
+    * a data point.
+    *
+    * @param time timestamp since start of program (s)
+    * @param x x-coordinate on 2d plane
     * @param y y-coordinate on 2d plane
-    * @param z depth value. 
+    * @param z depth value.
     */
     public struct Point_2D
     {
@@ -60,11 +60,11 @@ class GestureRecognition
         public float x, y, z;
     }
 
-    /*                                                                                           
-     * a 3D point in world space.                                                                             
-     *                                                                                           
-     * @param time timestamp since start of program (s)                                          
-     * @param x x-coordinate                                                         
+    /*
+     * a 3D point in world space.
+     *
+     * @param time timestamp since start of program (s)
+     * @param x x-coordinate
      * @param y y-coordinate
      * @param z z-coordinate
      */
@@ -125,7 +125,7 @@ class GestureRecognition
     }
 
     /*
-         * Optional low pass filter. Averages sequences of 2d points with 
+         * Optional low pass filter. Averages sequences of 2d points with
          * weights calculated from Gaussian function. Basically 1D Gaussian
          * blur. Crops edges.
          */
@@ -206,7 +206,7 @@ class GestureRecognition
     }
 
     /*
-     * returns bounds of gesture for subsection described by start & end 
+     * returns bounds of gesture for subsection described by start & end
      * parameters.
      */
     private Bounds calculate_bounds(
@@ -236,7 +236,7 @@ class GestureRecognition
     }
 
     /*
-    * Calculates the angles between a gestures data points, and stores 
+    * Calculates the angles between a gestures data points, and stores
     * them in @angles. Returns angle sum for subsection described by start
     * & end parameters. @angles should be empty.
     *
