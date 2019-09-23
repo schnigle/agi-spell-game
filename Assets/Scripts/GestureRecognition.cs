@@ -8,25 +8,43 @@ class GestureRecognition
 {
 
     /*
-    * Constants
-    */
+         * Constants
+         */
     public const int ANGLE_GRANULARITY = 10;
-    public const float PROXIMITY_THRESHOLD = 0.1f;
+    public const float PROXIMITY_THRESHOLD = 0.2f;
     public const int MIN_GESTURE_SIZE = 10;
     public const float ANGLE_SUM_THRESHOLD = 0.5f;
+    public const float VEL_VEC_NORM_THRESHOLD = 0.25f;
+    public const bool LOWPASS = false;
+    public const int LP_KERNEL_SIZE = 2;
+    public const float LP_SIGMA = 2.0f;
 
     /*
-    * Types of gestures.
-    */
-    public enum Gesture {
+     * The types of gestures.
+     */
+    public enum Gesture
+    {
         circle_cw,
         circle_ccw,
         hline_lr,
         hline_rl,
         vline_ud,
         vline_du,
+        push,
+        pull,
         unknown
     };
+
+    /*
+     * Contains information about the performed gesture.
+     */
+    public struct Gesture_Meta
+    {
+        public Gesture type;
+        public float angle_sum;
+        public Point_3D avg_vel_vector;
+        public Bounds bounds;
+    }
 
     /*                                                                                           
     * a data point.                                                                             
@@ -42,19 +60,156 @@ class GestureRecognition
         public float x, y, z;
     }
 
-    /*
-    * Represents a bounding box.
-    */
-    public struct Bounds
+    /*                                                                                           
+     * a 3D point in world space.                                                                             
+     *                                                                                           
+     * @param time timestamp since start of program (s)                                          
+     * @param x x-coordinate                                                         
+     * @param y y-coordinate
+     * @param z z-coordinate
+     */
+    public struct Point_3D
     {
-        public float min_x, min_y, max_x, max_y;
+        public float time;
+        public float x, y, z;
+    }
+
+    private float vec3_norm(Point_3D vec)
+    {
+        return (float)Math.Sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+    }
+
+    private float vec2_norm(Point_2D vec, bool ignore_z)
+    {
+        return (float)Math.Sqrt(
+                vec.x * vec.x +
+                vec.y * vec.y +
+                ((ignore_z) ? 0 : vec.z * vec.z)
+        );
     }
 
     /*
-    * returns Bounds of gesture for subsection described by start & end 
-    * parameters.
-    */
-    private Bounds calculate_Bounds(
+     * Represents a bounding box.
+     */
+    public struct Bounds
+    {
+        public float min_x, min_y, max_x, max_y, min_z, max_z;
+    }
+
+    /*
+         * Returns the mean velocity vector for the gesture in screen space.
+         */
+    private Point_2D mean_velocity_2D(ref List<Point_2D> gesture)
+    {
+        Point_2D v = new Point_2D();
+        v.time = 0;
+        v.x = 0;
+        v.y = 0;
+        v.z = 0;
+        for (int i = 0; i < gesture.Count - 1; i++)
+        {
+            float dx = gesture[i + 1].x - gesture[i].x;
+            float dy = gesture[i + 1].y - gesture[i].y;
+            float dz = gesture[i + 1].z - gesture[i].z;
+            float dt = gesture[i + 1].time - gesture[i].time;
+            v.x += dx / dt;
+            v.y += dy / dt;
+            v.z += dz / dt;
+        }
+
+        v.x /= (gesture.Count - 1);
+        v.y /= (gesture.Count - 1);
+        v.z /= (gesture.Count - 1);
+
+        return v;
+    }
+
+    /*
+         * Optional low pass filter. Averages sequences of 2d points with 
+         * weights calculated from Gaussian function. Basically 1D Gaussian
+         * blur. Crops edges.
+         */
+    private List<Point_2D> gaussian_average_lowpass(
+            List<Point_2D> gesture,
+            int kernel_size,
+            float sigma
+    )
+    {
+        List<Point_2D> output = new List<Point_2D>();
+        double denom = Math.Sqrt(2 * Math.PI) * sigma;
+        double[] kernel = new double[2 * kernel_size + 1];
+        double kernel_sum = 0.0f;
+
+        // calculate kernel coefficients
+        for (int i = -kernel_size; i < kernel_size + 1; i++)
+        {
+            int i_adj = i + kernel_size;
+            double numer = Math.Exp((-(i * i)) / (2 * sigma * sigma));
+            double cell_value = numer / denom;
+            kernel[i_adj] = cell_value;
+            kernel_sum += cell_value;
+        }
+
+        // normalize kernel
+        for (int i = 0; i < 2 * kernel_size + 1; i++)
+        {
+            kernel[i] /= kernel_sum;
+            //Console.WriteLine(kernel[i]);
+        }
+
+        // apply kernel, with crop.
+        for (int i = kernel_size; i < gesture.Count - kernel_size; i++)
+        {
+            Point_2D point = new Point_2D();
+            point.x = 0.0f;
+            point.y = 0.0f;
+            point.time = 0.0f;
+            for (int j = 0; j < 2 * kernel_size + 1; j++)
+            {
+                point.x += (float)kernel[j] * gesture[i - kernel_size + j].x;
+                point.y += (float)kernel[j] * gesture[i - kernel_size + j].y;
+                point.z += (float)kernel[j] * gesture[i - kernel_size + j].z;
+                point.time += (float)kernel[j] * gesture[i - kernel_size + j].time;
+            }
+            output.Add(point);
+        }
+
+        return output;
+    }
+
+    /*
+     * Returns the mean velocity vector for the gesture in world space.
+     */
+    private Point_3D mean_velocity_3D(ref List<Point_3D> gesture3d)
+    {
+        Point_3D v = new Point_3D();
+        v.time = 0;
+        v.x = 0;
+        v.y = 0;
+        v.z = 0;
+        for (int i = 0; i < gesture3d.Count - 1; i++)
+        {
+            float dx = gesture3d[i + 1].x - gesture3d[i].x;
+            float dy = gesture3d[i + 1].y - gesture3d[i].y;
+            float dz = gesture3d[i + 1].z - gesture3d[i].z;
+            float dt = gesture3d[i + 1].time - gesture3d[i].time;
+            v.x += dx / dt;
+            v.y += dy / dt;
+            v.z += dz / dt;
+        }
+
+        v.x /= (gesture3d.Count - 1);
+        v.y /= (gesture3d.Count - 1);
+        v.z /= (gesture3d.Count - 1);
+
+        return v;
+    }
+
+    /*
+     * returns bounds of gesture for subsection described by start & end 
+     * parameters.
+     */
+    private Bounds calculate_bounds(
             ref List<Point_2D> gesture,
             int start, int end
     )
@@ -62,15 +217,19 @@ class GestureRecognition
         Bounds b = new Bounds();
         b.min_x = float.MaxValue;
         b.min_y = float.MaxValue;
+        b.min_z = float.MaxValue;
         b.max_x = float.MinValue;
         b.max_y = float.MinValue;
+        b.max_z = float.MinValue;
 
         for (int i = start; i < end; i++)
         {
             b.min_x = (gesture[i].x < b.min_x) ? gesture[i].x : b.min_x;
             b.min_y = (gesture[i].y < b.min_y) ? gesture[i].y : b.min_y;
+            b.min_z = (gesture[i].z < b.min_z) ? gesture[i].z : b.min_z;
             b.max_x = (gesture[i].x > b.max_x) ? gesture[i].x : b.max_x;
             b.max_y = (gesture[i].y > b.max_y) ? gesture[i].y : b.max_y;
+            b.max_z = (gesture[i].z > b.max_z) ? gesture[i].z : b.max_z;
         }
 
         return b;
@@ -145,10 +304,17 @@ class GestureRecognition
         return relative_distance;
     }
 
-    public Gesture recognize_gesture(List<Point_2D> gesture) {
-        Bounds bounds = calculate_Bounds(ref gesture, 0, gesture.Count);
+    public Gesture_Meta recognize_gesture(List<Point_2D> gesture, List<Point_3D> gesture3D) {
+        Bounds bounds = calculate_bounds(ref gesture, 0, gesture.Count);
         List<float> angles = new List<float>();
+        if (LOWPASS)
+        {
+            gesture = gaussian_average_lowpass(gesture, LP_KERNEL_SIZE, LP_SIGMA);
+        }
+
         float angle_sum = calculate_angles(ref gesture, ref angles, bounds);
+        Point_2D avg_vel_vec2 = mean_velocity_2D(ref gesture);
+        Point_3D avg_vel_vec3 = mean_velocity_3D(ref gesture3D);
 
         // super simple (and ugly) ad hoc classifier
         float gesture_width = bounds.max_x - bounds.min_x;
@@ -161,40 +327,47 @@ class GestureRecognition
         // Debug.Log("gesture_height: " + gesture_height);
 
         // I'm sorry
+        Gesture_Meta ret = new Gesture_Meta();
+        ret.avg_vel_vector = avg_vel_vec3;
+        ret.angle_sum = angle_sum;
+        ret.bounds = bounds;
+
         if (angle_sum > (2 - ANGLE_SUM_THRESHOLD) * Math.PI && angle_sum < (2 + ANGLE_SUM_THRESHOLD) * Math.PI)
         {
-            return Gesture.circle_ccw;
+            ret.type = Gesture.circle_ccw;
         }
         else if (angle_sum < -(2 - ANGLE_SUM_THRESHOLD) * Math.PI && angle_sum > -(2 + ANGLE_SUM_THRESHOLD) * Math.PI)
         {
-            return Gesture.circle_cw;
+            ret.type = Gesture.circle_cw;
         }
         else if (Math.Abs(angle_sum) < ANGLE_SUM_THRESHOLD && gesture_width > 4 * gesture_height && gesture_width > 0.15)
         {
             if (start.x > end.x)
             {
-                return Gesture.hline_rl;
+                ret.type = Gesture.hline_rl;
             }
             else
             {
-                return Gesture.hline_lr;
+                ret.type = Gesture.hline_lr;
             }
         }
         else if (Math.Abs(angle_sum) < ANGLE_SUM_THRESHOLD && gesture_height > 4 * gesture_width && gesture_height > 0.15)
         {
             if (start.y > end.y)
             {
-                return Gesture.vline_ud;
+                ret.type = Gesture.vline_ud;
             }
             else
             {
-                return Gesture.vline_du;
+                ret.type = Gesture.vline_du;
             }
         }
         else
         {
-            return Gesture.unknown;
+            ret.type = Gesture.unknown;
         }
+
+        return ret;
     }
 }
 

@@ -67,7 +67,8 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     bool trigger_down_last = false;
     List<GestureRecognition.Point_2D> gesture = new List<GestureRecognition.Point_2D>();
-    
+    List<GestureRecognition.Point_3D> gesture3D = new List<GestureRecognition.Point_3D>();
+
     void Teleport()
     {
         RaycastHit hit;
@@ -80,7 +81,6 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
-        
 
         playerData.customUpdater();
         bool trigger_down = SteamVR_Actions._default.Squeeze.GetAxis(rightInput) == 1;
@@ -112,35 +112,40 @@ public class PlayerScript : MonoBehaviour
                 + rightStick.transform.position.y + " "
                 + rightStick.transform.position.z
             );*/
-            var pixelPos = VRcamera.WorldToScreenPoint(rightStick.transform.position);
-            //var height = 1600; // TODO D:
-            //var width = 2880 / 2;
-            //var height = 1200;
-            //var width = 2160 / 2;
+
+            var pos = rightStick.transform.position;
+            var pixelPos = VRcamera.WorldToScreenPoint(pos);
             
-            //print("cam space: " + pixelPos.x / Screen.width + ", " + pixelPos.y / Screen.height);
-            // string line = Time.time + " " + pixelPos.x / resolution.Item1 + " " + pixelPos.y / resolution.Item2 + " " + pixelPos.z;
-            // print(line);
-            // fileStream
             var point = new GestureRecognition.Point_2D();
+            var point_3D = new GestureRecognition.Point_3D();
             point.time = Time.time;
+            point_3D.time = point.time;
+
             point.x = pixelPos.x / resolution.Item1;
             point.y = pixelPos.y / resolution.Item2;
             point.z = pixelPos.z;
+
+            point_3D.x = pos.x;
+            point_3D.y = pos.y;
+            point_3D.z = pos.z;
+
             gesture.Add(point);
+            gesture3D.Add(point_3D);
         }
         else if (trigger_down_last)
         {
             trail.SetActive(false);
-            GestureRecognition.Gesture result = gestureRecognition.recognize_gesture(gesture);
-            identifiedGesture = result;
+            GestureRecognition.Gesture_Meta result = gestureRecognition.recognize_gesture(gesture, gesture3D);
+            identifiedGesture = result.type;
             if (identifiedGesture != GestureRecognition.Gesture.unknown)
             {
-                print(result);
+                print(result.type);
+                print(result.avg_vel_vector.x + " " + result.avg_vel_vector.y + " " + result.avg_vel_vector.z);
                 spellReady = true;
                 trajectory.SetActive(true);
             }
             gesture.Clear();
+            gesture3D.Clear();
         }
 
 
