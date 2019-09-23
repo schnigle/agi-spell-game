@@ -367,22 +367,35 @@ public class GestureRecognition
         float x_neg_dev = angle(avg_vel_vec2, new Point_2D(0,-1,0,0), false);
         float y_neg_dev = angle(avg_vel_vec2, new Point_2D(0,0,-1,0), false);
         float z_neg_dev = angle(avg_vel_vec2, new Point_2D(0,0,0,-1), false);
+        bool x_pos = x_pos_dev < x_neg_dev;
+        bool y_pos = y_pos_dev < y_neg_dev;
+        bool z_pos = z_pos_dev < z_neg_dev;
+        bool z_gesture = false;
 
+        if(z_pos){
+            z_gesture = (z_pos_dev < ((x_pos) ? x_pos_dev : x_neg_dev)) &&
+                    (z_pos_dev < ((y_pos) ? y_pos_dev : y_neg_dev));
+        } else {
+            z_gesture = (z_neg_dev < ((x_pos) ? x_pos_dev : x_neg_dev)) &&
+                    (z_neg_dev < ((y_pos) ? y_pos_dev : y_neg_dev));        
+        }
 
-        if(vel_vec_norm < VEL_VEC_NORM_THRESH) {
+        if(vel_vec_norm < VEL_VEC_NORM_THRESH && Math.Abs(angle_sum) > 6*ANGLE_SUM_THRESH) {
             // likely a circle (so far)
             float min_angle = (float) ((2 - ANGLE_SUM_THRESH) * Math.PI);
             float max_angle = (float) ((2 + ANGLE_SUM_THRESH) * Math.PI); 
             if (angle_sum > min_angle && angle_sum < max_angle) ret.type = Gesture.circle_ccw;
-            if (angle_sum < -min_angle && angle_sum > -max_angle) ret.type = Gesture.circle_ccw;
-        } else if (Math.Abs(angle_sum) < 2*ANGLE_SUM_THRESH) {
+            if (angle_sum < -min_angle && angle_sum > -max_angle) ret.type = Gesture.circle_cw;
+        } else if (vel_vec_norm > VEL_VEC_NORM_THRESH && z_gesture) {
             // likely something else 
+            if     (z_pos_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.z) > 0.2) ret.type = Gesture.push;
+            else if(z_neg_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.z) > 0.2) ret.type = Gesture.pull;
+        } else if (vel_vec_norm > VEL_VEC_NORM_THRESH) {
             if     (x_pos_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.x) > 0.2) ret.type = Gesture.hline_lr;
             else if(x_neg_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.x) > 0.2) ret.type = Gesture.hline_rl;
             else if(y_pos_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.y) > 0.2) ret.type = Gesture.vline_du;
             else if(y_neg_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.y) > 0.2) ret.type = Gesture.vline_ud;
-            else if(z_pos_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.z) > 0.2) ret.type = Gesture.push;
-            else if(z_neg_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.z) > 0.2) ret.type = Gesture.pull;
+
         }
 
         return ret;

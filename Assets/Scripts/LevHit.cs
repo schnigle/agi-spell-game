@@ -1,19 +1,15 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpellLogic : MonoBehaviour
+public class LevHit : MonoBehaviour
 {
 
     public GameObject muzzlePrefab, hitPrefab;
-    public int force = 100;
-    bool hit = false;
     private GameObject latesthitObject;
-
 
     void Start()
     {
-       //hit = false;
         if (muzzlePrefab != null)
         {
             var muzzleVFX = Instantiate(muzzlePrefab, transform.position, Quaternion.identity);
@@ -37,6 +33,11 @@ public class SpellLogic : MonoBehaviour
     }
 
 
+    void Update()
+    {
+
+    }
+
     void OnCollisionEnter(Collision col)
     {
 
@@ -46,14 +47,11 @@ public class SpellLogic : MonoBehaviour
 
 
 
-        Debug.Log(col.gameObject.name);
-        if(col.gameObject.tag== "Floatyobject"){
-          latesthitObject = col.gameObject;
-          latesthitObject.GetComponent<FloatLogic>().enabled = true;
 
-        }
+        latesthitObject = col.gameObject;
 
-        if(hitPrefab != null)
+
+        if (hitPrefab != null)
         {
             var hitVFX = Instantiate(hitPrefab, pos, rot);
             var psHit = hitVFX.GetComponent<ParticleSystem>();
@@ -68,7 +66,7 @@ public class SpellLogic : MonoBehaviour
             }
         }
 
-        var nearby = Physics.OverlapSphere(pos, 5);
+       var nearby = Physics.OverlapSphere(pos, 5);
         foreach(var item in nearby)
         {
             Rigidbody rigidbody = null;
@@ -76,13 +74,14 @@ public class SpellLogic : MonoBehaviour
             {
                 //print("Death good");
                 var enemy = item.GetComponent<EnemyAI>();
+                item.GetComponent<FloatLogic>().enabled = true;
                 enemy.isRagdolling = true;
+
             }
             rigidbody = item.GetComponent<Rigidbody>();
             if (rigidbody != null)
             {
-                var direction = (rigidbody.transform.position - pos).normalized;
-                rigidbody.AddForce((5 - Vector3.Distance(rigidbody.position, pos)) * (direction) * 200, ForceMode.Impulse);
+                latesthitObject.GetComponent<FloatLogic>().enabled = true;
             }
         }
 
