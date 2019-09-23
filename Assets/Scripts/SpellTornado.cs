@@ -45,5 +45,7 @@ public class SpellTornado : MonoBehaviour, ISpell
         {
             UnleashSpell();
         }
+
+
     }
 }

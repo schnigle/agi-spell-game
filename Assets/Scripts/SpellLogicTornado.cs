@@ -14,6 +14,7 @@ public class SpellLogicTornado : MonoBehaviour
 
     void Start()
     {
+  
         if (muzzlePrefab != null)
         {
             var muzzleVFX = Instantiate(muzzlePrefab, transform.position, Quaternion.identity);
@@ -47,10 +48,34 @@ public class SpellLogicTornado : MonoBehaviour
 
     void Update()
     {
-        Vector3 dir = (gameObject.transform.position - playerPos).normalized;
-        dir.y = 0.01f;
+        gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
+
+        Vector3 dir = (gameObject.transform.position - playerPos);
+        dir.y = 0.1f;
         dir.Normalize();
-        gameObject.GetComponent<Rigidbody>().AddForce(dir * 8);
+
+        var rigidBod = gameObject.GetComponent<Rigidbody>();
+        rigidBod.AddRelativeForce(dir * 10);
+
+        Vector3 pos = gameObject.transform.position;
+
+        /*var nearby = Physics.OverlapSphere(pos, 25);
+        foreach (var item in nearby)
+        {
+            Rigidbody rigidbody = null;
+            if (item.tag == "Actor")
+            {
+                var enemy = item.GetComponent<EnemyAI>();
+                enemy.isRagdolling = true;
+            }
+            rigidbody = item.GetComponent<Rigidbody>();
+            if (rigidbody != null)
+            {
+                var direction = (rigidbody.transform.position - pos).normalized;
+                rigidbody.AddForce((5 - Vector3.Distance(rigidbody.position, pos)) * (direction) * 200, ForceMode.Impulse);
+            }
+        }*/
+
 
     }
 
