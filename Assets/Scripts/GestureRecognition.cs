@@ -58,6 +58,12 @@ public class GestureRecognition
     {
         public float time;
         public float x, y, z;
+        public Point_2D(float time, float x, float y, float z) {
+            this.time = time;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
     }
 
     /*
@@ -72,6 +78,16 @@ public class GestureRecognition
     {
         public float time;
         public float x, y, z;
+    }
+
+    private Point_2D normalize(Point_2D vec2, bool ignore_z) {
+        Point_2D ret;
+        float norm = vec2_norm(vec2, ignore_z);
+        ret.time = vec2.time;
+        ret.x = vec2.x / norm;
+        ret.y = vec2.y / norm;
+        ret.z = vec2.z / ((ignore_z) ? 1 : norm);
+        return ret; 
     }
 
     private float vec3_norm(Point_3D vec)
@@ -302,6 +318,22 @@ public class GestureRecognition
         float relative_distance = (float)Math.Sqrt(relative_dx * relative_dx
                 + relative_dy * relative_dy);
         return relative_distance;
+    }
+
+    /*
+     * Returns the dot product of two 2D vectors.
+     */
+    private float dot(Point_2D a, Point_2D b, bool ignore_z) {
+        return a.x*b.x + a.y*b.y + ((ignore_z) ? 0 : a.z*b.z);
+    }
+
+    /*
+     * Returns angle between two 2D vectors.
+     */
+    private float angle(Point_2D a, Point_2D b, bool ignore_z) {
+        Point_2D na = normalize(a, ignore_z);
+        Point_2D nb = normalize(b, ignore_z);
+        return (float) Math.Acos(dot(na, nb, ignore_z));
     }
 
     public Gesture_Meta recognize_gesture(List<Point_2D> gesture, List<Point_3D> gesture3D) {
