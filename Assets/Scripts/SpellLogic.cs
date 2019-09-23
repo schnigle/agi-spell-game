@@ -84,7 +84,8 @@ public class SpellLogic : MonoBehaviour
             {
                 //print("Death good");
                 var enemy = item.GetComponent<EnemyAI>();
-                enemy.isRagdolling = true;
+                if(enemy != null)
+                    enemy.isRagdolling = true;
             }
             rigidbody = item.GetComponent<Rigidbody>();
             if (rigidbody != null)

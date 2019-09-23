@@ -11,6 +11,8 @@ public class Spell : MonoBehaviour
     public GameObject bullet, bulletEmitter;
     public Transform playerTrans;
 
+    public GameObject tornadoBullet;
+
     public float forwardForce = 15.0f;
 
 
@@ -27,6 +29,10 @@ public class Spell : MonoBehaviour
         {
             UnleashSpell();
         }
+        if (Input.GetKeyDown("c"))
+        {
+            UnleashSpell2();
+        }
 
         timer += Time.deltaTime;
     }
@@ -41,6 +47,16 @@ public class Spell : MonoBehaviour
         // tempBody.transform.position = (bulletEmitter.transform.forward.normalized * 2+ tempBody.position);
         tempBody.AddForce(bulletEmitter.transform.forward * forwardForce);
         Destroy(tempBull, waitTime);
+    }
+
+    public void UnleashSpell2()
+    {
+        GameObject tempBull;
+        tempBull = Instantiate(tornadoBullet, bulletEmitter.transform.forward.normalized * 0.5f + bulletEmitter.transform.position, playerTrans.rotation) as GameObject;
+        Rigidbody tempBody;
+        tempBody = tempBull.GetComponent<Rigidbody>();
+        tempBody.AddForce(bulletEmitter.transform.forward * forwardForce*20f);
+        Destroy(tempBull, waitTime*2);
     }
 
 }
