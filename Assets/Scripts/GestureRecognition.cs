@@ -371,8 +371,8 @@ public class GestureRecognition
 
         if(vel_vec_norm < VEL_VEC_NORM_THRESH) {
             // likely a circle (so far)
-            float min_angle = (2 - ANGLE_SUM_THRESH) * Math.PI;
-            float max_angle = (2 + ANGLE_SUM_THRESH) * Math.PI; 
+            float min_angle = (float) ((2 - ANGLE_SUM_THRESH) * Math.PI);
+            float max_angle = (float) ((2 + ANGLE_SUM_THRESH) * Math.PI); 
             if (angle_sum > min_angle && angle_sum < max_angle) ret.type = Gesture.circle_ccw;
             if (angle_sum < -min_angle && angle_sum > -max_angle) ret.type = Gesture.circle_ccw;
         } else {
