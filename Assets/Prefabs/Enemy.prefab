@@ -117,7 +117,7 @@ MonoBehaviour:
   frequency: 15
   initialForce: 15
   initialAltitude: 0
-  levAltitude: 24
+  levAltitude: 10
   timer: 6
 --- !u!1001 &3306375030932598367
 PrefabInstance:
