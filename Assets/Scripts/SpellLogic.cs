@@ -10,9 +10,13 @@ public class SpellLogic : MonoBehaviour
     bool hit = false;
     private GameObject latesthitObject;
 
+    public AudioClip explosion_clip;
+    public AudioSource hit_pos_source;
+
 
     void Start()
     {
+        hit_pos_source.clip = explosion_clip;
        //hit = false;
         if (muzzlePrefab != null)
         {
@@ -44,7 +48,8 @@ public class SpellLogic : MonoBehaviour
         Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
         Vector3 pos = contact.point;
 
-
+        print("kalas");
+        AudioSource.PlayClipAtPoint(explosion_clip, pos);
 
         Debug.Log(col.gameObject.name);
         if(col.gameObject.tag== "Floatyobject"){

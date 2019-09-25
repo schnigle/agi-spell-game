@@ -5,6 +5,13 @@ using UnityEngine;
 public class Spell : MonoBehaviour, ISpell
 {
 
+    // audio
+    public AudioClip summon_clip;
+    public AudioClip hold_clip;
+    public AudioClip cast_clip;
+    public AudioSource projectile_source;
+    public AudioSource wand_source;
+
     private float timer = 0.0f;
     private const float waitTime = 10.0f;
 
@@ -21,7 +28,7 @@ public class Spell : MonoBehaviour, ISpell
 	// Start is called before the first frame update
 	void Start()
     {
-
+        //wand_source.clip = cast_clip;
     }
 
     // Update is called once per frame
@@ -37,6 +44,8 @@ public class Spell : MonoBehaviour, ISpell
 
     public void UnleashSpell()
     {
+        //wand_source.time = 0.3f;
+        //wand_source.Play();
         GameObject tempBull;
         tempBull = Instantiate(bullet, bulletEmitter.transform.forward.normalized * 0.5f + bulletEmitter.transform.position, playerTrans.rotation) as GameObject;
         //tempBull.transform.Rotate(Vector3.left * 90);
@@ -50,7 +59,8 @@ public class Spell : MonoBehaviour, ISpell
 	public void OnAimStart()
 	{
 		trajectory?.gameObject.SetActive(true);
-	}
+
+    }
 
 	public void OnAimEnd()
 	{

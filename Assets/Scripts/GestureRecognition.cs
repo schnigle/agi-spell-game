@@ -15,7 +15,7 @@ public class GestureRecognition
                                                         // with lowpass filter.
     public const float PROXIMITY_THRESH = 0.2f;         // - Minimum required distance between nodes for
                                                         // calculating angle.
-    public const int MIN_GESTURE_SIZE = 10;             // - Minimum number of nodes in a gesture. Shorter nodes
+    public const int MIN_GESTURE_SIZE = 30;             // - Minimum number of nodes in a gesture. Shorter nodes
                                                         // return unknown.
     public const float ANGLE_SUM_THRESH = 0.5f;         // - Used when determining circle type gestures. A circle
                                                         // is accepted when angle_sum ∈ [2*pi - angle_sum_thresh,
@@ -36,7 +36,7 @@ public class GestureRecognition
     public const float Z_GESTURE_THRESH_MULTIPLIER = 0.5f;
 
     // Constants for lowpass filter.
-    public const bool LP_ENABLE = false;
+    public const bool LP_ENABLE = true;
     public const int LP_KERNEL_SIZE = 2;
     public const float LP_SIGMA = 2.0f;
 

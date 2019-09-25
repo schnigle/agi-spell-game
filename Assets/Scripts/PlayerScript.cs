@@ -16,6 +16,9 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     GameObject trail;
 
+    // audio
+    public AudioClip ambient_sounds;
+    public AudioSource self_audio_source;
 
     Vector3 moveVector;
     CharacterController controller;
@@ -38,6 +41,10 @@ public class PlayerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //audio
+        self_audio_source.clip = ambient_sounds;
+        self_audio_source.Play();
+
         controller = GetComponent<CharacterController>();
 
         hand = rightStick.GetComponent<Valve.VR.InteractionSystem.Hand>();
