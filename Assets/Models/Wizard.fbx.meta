@@ -59,7 +59,12 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Staff
-    second: {fileID: 2100000, guid: 6955e86e2ae12f34aa1c1aebef639615, type: 2}
+    second: {fileID: 2100000, guid: 8c400d631a0346449abd8ad52699edc2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Staff detail
+    second: {fileID: 2100000, guid: 16b15d180a5d8d145868c096c24b83df, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
