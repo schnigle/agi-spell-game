@@ -18,6 +18,20 @@ public class EnemyAI : MonoBehaviour
     const float riseAngularVelocityLimit = 5;
     const float minRagdollTime = 3f;
     float ragdollTime = 0;
+    float castTimeRemaining = 0;
+    [SerializeField]
+    float spellPrepTime = 1;
+    [SerializeField]
+    float spellUnleashTime = 1;
+    bool isCasting = false;
+    float defaultSpeed;
+    bool hasUnleashedSpell = false;
+    [SerializeField]
+    float projectileVelocity = 20;
+    [SerializeField]
+    TrailRenderer staffTrail = null;
+
+    const float projectileSpawnHeight = 1f;
 
     private bool _isRagdolling;
     /// True if the actor is currently in "ragdoll" mode (which means that it acts as a non-kinematic rigidbody while having its movement disabled)
@@ -48,25 +62,49 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    void Attack()
+    void PrepareAttack()
     {
-        if (player && projectilePrefab)
+        if (!isCasting && !isRagdolling && player != null && projectilePrefab)
+        {
+            var projStartPos = transform.position + Vector3.up*projectileSpawnHeight;
+            var currentFireAngle = GetAttackAngle();
+            // Only fire if AI is within range
+            if (!float.IsNaN(currentFireAngle))
+            {
+                castTimeRemaining = spellUnleashTime + spellPrepTime;
+                isCasting = true;
+                hasUnleashedSpell = false;
+                GetComponent<EnemyAnimator>().PlayCastAnimation("spell line", spellPrepTime, spellUnleashTime);
+            }
+        }
+    }
+
+    float GetAttackAngle()
+    {
+        var projStartPos = transform.position + Vector3.up*projectileSpawnHeight;
+        var distance = Vector3.Distance(projStartPos, player.transform.position);
+        var g = Physics.gravity.y;
+        var altitude = projStartPos.y-player.transform.position.y;
+        var currentFireAngle = Mathf.Atan((projectileVelocity*projectileVelocity - Mathf.Sqrt(Mathf.Pow(projectileVelocity, 4) - g*(g*distance*distance+2*altitude*projectileVelocity*projectileVelocity))) / (g*distance)) * Mathf.Rad2Deg;
+        return currentFireAngle;
+    }
+
+    void UnleashAttack()
+    {
+        if (!isRagdolling && player != null && projectilePrefab)
         {
             var projStartPos = transform.position + Vector3.up*2;
-            var velocity = 20;
-            var distance = Vector3.Distance(projStartPos, player.transform.position);
-            var g = Physics.gravity.y;
-            var altitude = projStartPos.y-player.transform.position.y;
-            var angle = Mathf.Atan((velocity*velocity - Mathf.Sqrt(Mathf.Pow(velocity, 4) - g*(g*distance*distance+2*altitude*velocity*velocity))) / (g*distance)) * Mathf.Rad2Deg;
+            var currentFireAngle = GetAttackAngle();
             // Only fire if AI is within range
-            if (!float.IsNaN(angle))
+            if (!float.IsNaN(currentFireAngle))
             {
                 var proj = Instantiate(projectilePrefab, projStartPos, new Quaternion());
                 proj.caster = gameObject;
                 proj.transform.LookAt(player.transform);
-                proj.transform.eulerAngles = new Vector3(angle,proj.transform.eulerAngles.y,proj.transform.eulerAngles.z);
-                proj.RBody.velocity = proj.transform.forward * velocity;
+                proj.transform.eulerAngles = new Vector3(currentFireAngle,proj.transform.eulerAngles.y,proj.transform.eulerAngles.z);
+                proj.RBody.velocity = proj.transform.forward * projectileVelocity;
             }
+            print("unleash");
         }
     }
 
@@ -74,7 +112,12 @@ public class EnemyAI : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         body = GetComponent<Rigidbody>();
+        if (staffTrail == null)
+        {
+            staffTrail = transform.GetComponentInChildren<TrailRenderer>();
+        }
         isRagdolling = false;
+        defaultSpeed = agent.speed;
     }
 
     // Start is called before the first frame update
@@ -103,6 +146,7 @@ public class EnemyAI : MonoBehaviour
         }
         if (isRagdolling)
         {
+            isCasting = false;
             ragdollTime += Time.deltaTime;
         }
         if (isRagdolling && ragdollTime > minRagdollTime && body.velocity.sqrMagnitude < riseVelocityLimit * riseVelocityLimit && body.angularVelocity.sqrMagnitude < riseAngularVelocityLimit * riseAngularVelocityLimit)
@@ -115,8 +159,56 @@ public class EnemyAI : MonoBehaviour
         {
             if (agent.enabled && agent.remainingDistance < 0.1f)
             {
-                // Attack();
+                PrepareAttack();
                 IndirectlyMoveTowards(player.transform.position);
+            }
+        }
+
+        if (isCasting)
+        {
+            agent.speed = 0;
+            if (player)
+            {
+                // rotate towards player
+                // transform.LookAt(player.transform.position);
+                var q = Quaternion.LookRotation(player.transform.position - transform.position);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, q, 500 * Time.deltaTime);
+            }
+            castTimeRemaining -= Time.deltaTime;
+            if (castTimeRemaining < spellUnleashTime && !hasUnleashedSpell)
+            {
+                hasUnleashedSpell = true;
+                UnleashAttack();
+            }
+            if (castTimeRemaining <= 0)
+            {
+                isCasting = false;
+            }
+
+        }
+        else
+        {
+            agent.speed = defaultSpeed;
+        }
+
+        UpdateStaffLine();
+    }
+
+    void UpdateStaffLine()
+    {
+        if (staffTrail != null)
+        {
+            var preparationProgress = 1 - (castTimeRemaining - spellUnleashTime) / spellPrepTime;
+            float lowerPrepLimit = 2f/6;
+            float upperPrepLimit = 5f/6;
+            if (isCasting && preparationProgress > lowerPrepLimit && preparationProgress < upperPrepLimit && preparationProgress < 1)
+            {
+                staffTrail.enabled = true;
+            }
+            else
+            {
+                staffTrail.enabled = false;
+                staffTrail.Clear();
             }
         }
     }

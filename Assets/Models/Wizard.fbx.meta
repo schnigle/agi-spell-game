@@ -1,8 +1,29 @@
 fileFormatVersion: 2
-guid: b1710f01603ba034a8ab3876a67687b7
+guid: 3124a0966cb8fe14abf046caf489ed8b
 ModelImporter:
   serializedVersion: 26
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      74: -82534132851131065
+    second: Wizard|idle
+  - first:
+      74: -5950464622645432185
+    second: Wizard|Hand L.001Action
+  - first:
+      74: 170871706099161030
+    second: Wizard|walk
+  - first:
+      74: 8897199543160295035
+    second: Wizard|spell_line
+  - first:
+      74: -6851009577689332010
+    second: Wizard|ragdoll
+  - first:
+      74: -3404600627495011318
+    second: Wizard|spell_unleash
+  - first:
+      74: 3994960218242057354
+    second: Wizard|spell_circle
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -34,6 +55,16 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Skin
     second: {fileID: 2100000, guid: a4f6b3ca02f5baa4f92b0b4038e095fe, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Staff
+    second: {fileID: 2100000, guid: 6955e86e2ae12f34aa1c1aebef639615, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Staff orb
+    second: {fileID: 2100000, guid: e1a2622e41c3aa1428139732fd52e994, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -117,7 +148,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
