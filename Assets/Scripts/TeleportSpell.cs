@@ -8,6 +8,8 @@ public class TeleportSpell : MonoBehaviour, ISpell
 
 	[SerializeField]
     TrajectoryPreview trajectory;
+	[SerializeField]
+	GameObject effectPrefab;
 
 	public void OnAimEnd()
 	{
@@ -24,8 +26,20 @@ public class TeleportSpell : MonoBehaviour, ISpell
         RaycastHit hit;
         if(Physics.Raycast(trajectory.transform.position, trajectory.transform.forward, out hit))
         {
-            // setting transform.position directly does not seem to work with character controller
-            GetComponent<CharacterController>().Move(hit.point - transform.position);
+            if (effectPrefab)
+			{
+				var newObj = Instantiate(effectPrefab);
+				newObj.transform.position = transform.position;
+				Destroy(newObj, 5);
+			}
+			// setting transform.position directly does not seem to work with character controller
+			GetComponent<CharacterController>().Move(hit.point - transform.position);
+			if (effectPrefab)
+			{
+				var newObj = Instantiate(effectPrefab);
+				newObj.transform.position = transform.position;
+				Destroy(newObj, 5);
+			}
         }
 
 	}

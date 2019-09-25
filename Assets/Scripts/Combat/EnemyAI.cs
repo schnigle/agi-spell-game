@@ -33,6 +33,8 @@ public class EnemyAI : MonoBehaviour
     TrailRenderer staffTrail = null;
     [SerializeField]
     Shield shieldPrefab;
+    [SerializeField]
+    GameObject teleportEffectPrefab;
 
     EnemySpell preparedSpell;
     Vector3 currentTargetPosition;
@@ -100,7 +102,19 @@ public class EnemyAI : MonoBehaviour
     {
         if (!isRagdolling)
         {
+            if (teleportEffectPrefab)
+			{
+				var newObj = Instantiate(teleportEffectPrefab);
+				newObj.transform.position = transform.position;
+				Destroy(newObj, 5);
+			}
             transform.position = currentTargetPosition;
+            if (teleportEffectPrefab)
+			{
+				var newObj = Instantiate(teleportEffectPrefab);
+				newObj.transform.position = transform.position;
+				Destroy(newObj, 5);
+			}
         }
     }
 

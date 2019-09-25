@@ -204,6 +204,7 @@ MonoBehaviour:
   projectileVelocity: 20
   staffTrail: {fileID: 474664403}
   shieldPrefab: {fileID: 0}
+  teleportEffectPrefab: {fileID: 0}
 --- !u!136 &3306375032083718169
 CapsuleCollider:
   m_ObjectHideFlags: 0
