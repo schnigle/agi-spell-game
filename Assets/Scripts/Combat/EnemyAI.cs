@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
+    public enum EnemySpell { attack, teleport, shield }
 
     public NavMeshAgent agent { get; private set; }
     public Rigidbody body { get; private set; }
@@ -14,7 +15,7 @@ public class EnemyAI : MonoBehaviour
     GameObject player;
     [SerializeField]
     Projectile projectilePrefab;
-    const float riseVelocityLimit = 0.4f;
+    const float riseVelocityLimit = 0.6f;
     const float riseAngularVelocityLimit = 5;
     const float minRagdollTime = 3f;
     float ragdollTime = 0;
@@ -30,6 +31,11 @@ public class EnemyAI : MonoBehaviour
     float projectileVelocity = 20;
     [SerializeField]
     TrailRenderer staffTrail = null;
+    [SerializeField]
+    GameObject shieldPrefab;
+
+    EnemySpell preparedSpell;
+    Vector3 currentTargetPosition;
 
     const float projectileSpawnHeight = 1f;
 
@@ -62,8 +68,66 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    void StartPrepareAnimation(string animation)
+    {
+            castTimeRemaining = spellUnleashTime + spellPrepTime;
+            isCasting = true;
+            hasUnleashedSpell = false;
+            GetComponent<EnemyAnimator>().PlayCastAnimation(animation, spellPrepTime, spellUnleashTime);
+    }
+
+    void PrepareTeleport()
+    {
+        if (!isCasting && !isRagdolling && player != null)
+        {
+            preparedSpell = EnemySpell.teleport;
+
+            Vector3 targetPosition = transform.position;
+            float r = 10;
+            float theta = Random.Range(0, Mathf.PI*2);
+            targetPosition.x += r * Mathf.Cos(theta);
+            targetPosition.z += r * Mathf.Sin(theta);
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(targetPosition, out hit, 100, NavMesh.AllAreas))
+            {
+                currentTargetPosition = hit.position;
+                StartPrepareAnimation("spell circle cw");
+            }
+        }
+    }
+
+    void UnleashTeleport()
+    {
+        if (!isRagdolling)
+        {
+            transform.position = currentTargetPosition;
+        }
+    }
+
+    void PrepareShield()
+    {
+        if (!isCasting && !isRagdolling && player != null && shieldPrefab)
+        {
+            currentTargetPosition = player.transform.position;
+            preparedSpell = EnemySpell.shield;
+            StartPrepareAnimation("spell circle ccw");
+        }
+    }
+
+    void UnleashShield()
+    {
+        if (!isRagdolling && player != null && shieldPrefab)
+        {
+            var shield = Instantiate(shieldPrefab);
+            shield.transform.position = transform.position + transform.forward * 3 + Vector3.up * 1;
+            shield.transform.rotation = transform.rotation;
+            Destroy(shield, 5);
+        }
+    }
+
     void PrepareAttack()
     {
+        currentTargetPosition = player.transform.position;
         if (!isCasting && !isRagdolling && player != null && projectilePrefab)
         {
             var projStartPos = transform.position + Vector3.up*projectileSpawnHeight;
@@ -71,22 +135,10 @@ public class EnemyAI : MonoBehaviour
             // Only fire if AI is within range
             if (!float.IsNaN(currentFireAngle))
             {
-                castTimeRemaining = spellUnleashTime + spellPrepTime;
-                isCasting = true;
-                hasUnleashedSpell = false;
-                GetComponent<EnemyAnimator>().PlayCastAnimation("spell line", spellPrepTime, spellUnleashTime);
+                preparedSpell = EnemySpell.attack;
+                StartPrepareAnimation("spell line lr");
             }
         }
-    }
-
-    float GetAttackAngle()
-    {
-        var projStartPos = transform.position + Vector3.up*projectileSpawnHeight;
-        var distance = Vector3.Distance(projStartPos, player.transform.position);
-        var g = Physics.gravity.y;
-        var altitude = projStartPos.y-player.transform.position.y;
-        var currentFireAngle = Mathf.Atan((projectileVelocity*projectileVelocity - Mathf.Sqrt(Mathf.Pow(projectileVelocity, 4) - g*(g*distance*distance+2*altitude*projectileVelocity*projectileVelocity))) / (g*distance)) * Mathf.Rad2Deg;
-        return currentFireAngle;
     }
 
     void UnleashAttack()
@@ -104,8 +156,17 @@ public class EnemyAI : MonoBehaviour
                 proj.transform.eulerAngles = new Vector3(currentFireAngle,proj.transform.eulerAngles.y,proj.transform.eulerAngles.z);
                 proj.RBody.velocity = proj.transform.forward * projectileVelocity;
             }
-            print("unleash");
         }
+    }
+
+    float GetAttackAngle()
+    {
+        var projStartPos = transform.position + Vector3.up*projectileSpawnHeight;
+        var distance = Vector3.Distance(projStartPos, player.transform.position);
+        var g = Physics.gravity.y;
+        var altitude = projStartPos.y-player.transform.position.y;
+        var currentFireAngle = Mathf.Atan((projectileVelocity*projectileVelocity - Mathf.Sqrt(Mathf.Pow(projectileVelocity, 4) - g*(g*distance*distance+2*altitude*projectileVelocity*projectileVelocity))) / (g*distance)) * Mathf.Rad2Deg;
+        return currentFireAngle;
     }
 
     void Awake()
@@ -125,6 +186,10 @@ public class EnemyAI : MonoBehaviour
     {
         // Quick fix to find the player in a "pluggable" way
         player = GameObject.FindGameObjectWithTag("Player");
+        if (player)
+        {
+            currentTargetPosition = player.transform.position;
+        }
     }
 
     // Update is called once per frame
@@ -159,7 +224,19 @@ public class EnemyAI : MonoBehaviour
         {
             if (agent.enabled && agent.remainingDistance < 0.1f)
             {
-                PrepareAttack();
+                int rand = Random.Range(0, 3);
+                if (rand == 0)
+                {
+                    PrepareAttack();
+                }
+                else if (rand == 1)
+                {
+                    PrepareShield();
+                }
+                else if (rand == 2)
+                {
+                    PrepareTeleport();
+                }
                 IndirectlyMoveTowards(player.transform.position);
             }
         }
@@ -170,15 +247,27 @@ public class EnemyAI : MonoBehaviour
             if (player)
             {
                 // rotate towards player
-                // transform.LookAt(player.transform.position);
-                var q = Quaternion.LookRotation(player.transform.position - transform.position);
+                var q = Quaternion.LookRotation(currentTargetPosition - transform.position);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, q, 500 * Time.deltaTime);
             }
             castTimeRemaining -= Time.deltaTime;
             if (castTimeRemaining < spellUnleashTime && !hasUnleashedSpell)
             {
                 hasUnleashedSpell = true;
-                UnleashAttack();
+                switch (preparedSpell)
+                {
+                    case EnemySpell.attack:
+                        UnleashAttack();
+                        break;
+                    case EnemySpell.shield:
+                        UnleashShield();
+                        break;
+                    case EnemySpell.teleport:
+                        UnleashTeleport();
+                        break;
+                    default:
+                        break;
+                }
             }
             if (castTimeRemaining <= 0)
             {

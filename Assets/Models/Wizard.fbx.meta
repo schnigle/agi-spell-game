@@ -24,6 +24,15 @@ ModelImporter:
   - first:
       74: 3994960218242057354
     second: Wizard|spell_circle
+  - first:
+      74: -7389408341841411036
+    second: Wizard|spell_circle_ccw
+  - first:
+      74: 4009733317309289515
+    second: Wizard|spell_circle_cw
+  - first:
+      74: 1263452873884794285
+    second: Wizard|spell_line_lr
   externalObjects:
   - first:
       type: UnityEngine:Material
