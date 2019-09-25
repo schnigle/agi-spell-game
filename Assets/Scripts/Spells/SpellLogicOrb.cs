@@ -5,7 +5,6 @@ using UnityEngine;
 public class SpellLogicOrb : MonoBehaviour
 {
     public GameObject muzzlePrefab, hitPrefab;
-    public int force = 100;
     bool hit = false;
     private GameObject latesthitObject;
 
@@ -39,9 +38,9 @@ public class SpellLogicOrb : MonoBehaviour
 
     //////////////////// Code from https://answers.unity.com/questions/1484056/tornado-physics-2.html
 
-    public float pullInSpeed = 0.5f;
+    public float pullInSpeed = 50f;
     public float rotateSpeed = 2.25f;
-    public float radius = 20;
+    public float radius = 30;
     public List<GameObject> objectsToPullIn;
     public Dictionary<GameObject, bool> objectsPulled;
 
@@ -89,19 +88,19 @@ public class SpellLogicOrb : MonoBehaviour
         {
             if (objectsPulled[thing] != true)
             {
-                thing.transform.position = Vector3.MoveTowards(thing.transform.position, transform.position, thing.GetComponent<Rigidbody>().mass * Time.deltaTime * pullInSpeed);
-                float dist = Vector3.Distance(thing.transform.position, transform.position);
-                float extra = radius - dist;
-                var rigidBod = thing.GetComponent<Rigidbody>();
-                extra *= extra * rigidBod.mass * Time.deltaTime * 5;
-                rigidBod.AddForce(new Vector3(0, extra, 0));
-                //  thing. = Vector3.MoveTowards(thing.transform.position, transform.position + new Vector3(0, 500, 0), thing.GetComponent<Rigidbody>().mass * Time.deltaTime * extra);
+                var otherRig = thing.GetComponent<Rigidbody>();
+                Vector3 dir = (gameObject.transform.position - otherRig.position);
+                dir.y = 0.01f;
+                dir.Normalize();
+                otherRig.AddForce(dir * 80f* otherRig.mass);
+               // thing.transform.position = Vector3.MoveTowards(thing.transform.position, transform.position, thing.GetComponent<Rigidbody>().mass * Time.deltaTime * pullInSpeed);
+               // float dist = Vector3.Distance(thing.transform.position, transform.position);
 
             }
         }
     }
 
-    void OnCollisionEnter(Collision other)
+   /* void OnCollisionEnter(Collision other)
     {
         if (objectsToPullIn.Contains(other.gameObject))
         {
@@ -121,22 +120,11 @@ public class SpellLogicOrb : MonoBehaviour
 
     void OnCollisionExit(Collision other)
     {
-        if (objectsToPullIn.Contains(other.gameObject))
-        {
-            objectsPulled[other.gameObject] = false;
-        }
-    }
-
-    void RemoveObjectsFarAway()
-    {
-        foreach (GameObject thing in objectsToPullIn)
-        {
-            if (Vector3.Distance(thing.transform.position, transform.position) > radius)
-            {
-                objectsToPullIn.Remove(thing);
-            }
-        }
-    }
+      //  if (objectsToPullIn.Contains(other.gameObject))
+      //  {
+          //  objectsPulled[other.gameObject] = false;
+      //  }
+    }*/
 
 
     ///////////////////////////////////////////
@@ -145,12 +133,22 @@ public class SpellLogicOrb : MonoBehaviour
     {
         foreach (var obj in objectsToPullIn)
         {
+            var otherRig = obj.GetComponent<Rigidbody>();
+            if (otherRig == null)
+                continue;
+
+            Vector3 dir = (gameObject.transform.position - obj.gameObject.transform.position);
+            dir.y = 0.1f;
+            dir.Normalize();
+            otherRig.AddForce(dir*otherRig.mass*700);
+
             if (obj.tag == "Actor")
             {
-                var enemy = obj.GetComponent<EnemyAI>();
-                enemy.isRagdolling = false;
             }
         }
+
+        if(hitPrefab != null)
+            Instantiate(hitPrefab,transform);
     }
 
 
@@ -164,18 +162,21 @@ public class SpellLogicOrb : MonoBehaviour
 
     void moveTornado()
     {
-        gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
         Vector3 dir = (gameObject.transform.position - playerPos);
         dir.y = 0.1f;
         dir.Normalize();
         var rigidBod = gameObject.GetComponent<Rigidbody>();
         rigidBod.AddRelativeForce(dir * 0.01f, ForceMode.VelocityChange);
+        if(transform.position.y < 50)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, 50f, transform.position.z), GetComponent<Rigidbody>().mass * Time.deltaTime * pullInSpeed);
+        }
+
     }
 
     void Update()
     {
         moveTornado();
-        RemoveObjectsFarAway();
         GetObjectsToPullIn();
         PullObjectsIn();
         RotateObjects();

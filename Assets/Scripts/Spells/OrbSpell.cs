@@ -8,7 +8,7 @@ public class OrbSpell : MonoBehaviour, ISpell
 
     public GameObject bullet, bulletEmitter;
     public Transform playerTrans;
-    public float forwardForce = 30.0f;
+    public float forwardForce = 250.0f;
     private const float waitTime = 15.0f;
 
     [SerializeField]
