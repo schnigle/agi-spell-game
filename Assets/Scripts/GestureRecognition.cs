@@ -370,15 +370,19 @@ public class GestureRecognition
         bool x_pos = x_pos_dev < x_neg_dev;
         bool y_pos = y_pos_dev < y_neg_dev;
         bool z_pos = z_pos_dev < z_neg_dev;
-        bool z_gesture = false;
+        float gesture_width  = bounds.max_x - bounds.min_x;
+        float gesture_height = bounds.max_y - bounds.min_y;
+        float gesture_depth  = bounds.max_z - bounds.min_z;
+        bool z_gesture = gesture_depth > gesture_height 
+                && gesture_depth > gesture_width;
 
-        if(z_pos){
-            z_gesture = (z_pos_dev < ((x_pos) ? x_pos_dev : x_neg_dev)) &&
-                    (z_pos_dev < ((y_pos) ? y_pos_dev : y_neg_dev));
-        } else {
-            z_gesture = (z_neg_dev < ((x_pos) ? x_pos_dev : x_neg_dev)) &&
-                    (z_neg_dev < ((y_pos) ? y_pos_dev : y_neg_dev));        
-        }
+        //if(z_pos){
+        //    z_gesture = (z_pos_dev < ((x_pos) ? x_pos_dev : x_neg_dev)) &&
+        //            (z_pos_dev < ((y_pos) ? y_pos_dev : y_neg_dev));
+        //} else {
+        //    z_gesture = (z_neg_dev < ((x_pos) ? x_pos_dev : x_neg_dev)) &&
+        //            (z_neg_dev < ((y_pos) ? y_pos_dev : y_neg_dev));        
+        //}
 
         if(vel_vec_norm < VEL_VEC_NORM_THRESH && Math.Abs(angle_sum) > 6*ANGLE_SUM_THRESH) {
             // likely a circle (so far)
