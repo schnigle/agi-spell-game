@@ -4849,8 +4849,8 @@ GameObject:
   - component: {fileID: 3692036914013115447}
   - component: {fileID: 3692036914013115446}
   - component: {fileID: 3692036914013115443}
-  m_Layer: 0
-  m_Name: SimpleProjectile
+  m_Layer: 9
+  m_Name: EnemyProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
