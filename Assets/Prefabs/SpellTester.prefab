@@ -25,7 +25,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3421256609441018232}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 33.38, y: 3.8181305, z: 25.67}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
@@ -57,8 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0d99266d12d14742812e8e01445c99a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shieldPrefab: {fileID: 891331517316755058, guid: d1113ec2ef252e642bf9be13bda47900,
-    type: 3}
+  shieldPrefab: {fileID: 0}
   staffKnob: {fileID: 3421256609441019523}
   shieldDistance: 3
 --- !u!1001 &3421256608410979855

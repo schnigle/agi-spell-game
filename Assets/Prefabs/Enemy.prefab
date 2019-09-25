@@ -203,8 +203,7 @@ MonoBehaviour:
   spellUnleashTime: 0.5
   projectileVelocity: 20
   staffTrail: {fileID: 474664403}
-  shieldPrefab: {fileID: 891331517316755058, guid: d1113ec2ef252e642bf9be13bda47900,
-    type: 3}
+  shieldPrefab: {fileID: 0}
 --- !u!136 &3306375032083718169
 CapsuleCollider:
   m_ObjectHideFlags: 0

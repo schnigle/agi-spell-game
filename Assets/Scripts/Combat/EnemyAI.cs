@@ -32,7 +32,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField]
     TrailRenderer staffTrail = null;
     [SerializeField]
-    GameObject shieldPrefab;
+    Shield shieldPrefab;
 
     EnemySpell preparedSpell;
     Vector3 currentTargetPosition;
@@ -121,7 +121,7 @@ public class EnemyAI : MonoBehaviour
             var shield = Instantiate(shieldPrefab);
             shield.transform.position = transform.position + transform.forward * 3 + Vector3.up * 1;
             shield.transform.rotation = transform.rotation;
-            Destroy(shield, 5);
+            shield.SetTimer(5);
         }
     }
 

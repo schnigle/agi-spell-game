@@ -5,8 +5,8 @@ using UnityEngine;
 public class ShieldSpell : MonoBehaviour, ISpell
 {
     [SerializeField]
-    GameObject shieldPrefab = null;
-    GameObject instantiatedShield = null;
+    Shield shieldPrefab = null;
+    Shield instantiatedShield = null;
     [SerializeField]
     Transform staffKnob = null;
     [SerializeField]
@@ -17,7 +17,7 @@ public class ShieldSpell : MonoBehaviour, ISpell
 
 	public void OnAimEnd()
 	{
-        Destroy(instantiatedShield, 10);
+        instantiatedShield.SetTimer(10);
         aimingShield = false;
 		instantiatedShield = null;
 	}
