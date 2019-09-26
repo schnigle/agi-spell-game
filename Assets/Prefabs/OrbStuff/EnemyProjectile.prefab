@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5449278644954915232}
   - component: {fileID: 4215938973420014715}
   - component: {fileID: 9193342803989306145}
-  m_Layer: 9
+  m_Layer: 14
   m_Name: FireSource (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4849,7 +4849,7 @@ GameObject:
   - component: {fileID: 3692036914013115447}
   - component: {fileID: 3692036914013115446}
   - component: {fileID: 3692036914013115443}
-  m_Layer: 9
+  m_Layer: 14
   m_Name: EnemyProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4927,7 +4927,7 @@ GameObject:
   - component: {fileID: 2033517653829688541}
   - component: {fileID: 259554509637181025}
   - component: {fileID: 5920749652008543004}
-  m_Layer: 9
+  m_Layer: 14
   m_Name: FireSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
