@@ -82,7 +82,10 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
-
+        if (Input.GetKeyDown("r"))
+        {
+            Application.LoadLevel(Application.loadedLevel);
+        }
         playerData.customUpdater();
         bool trigger_down = SteamVR_Actions._default.Squeeze.GetAxis(rightInput) == 1;
 
