@@ -33,10 +33,7 @@ public class LevHit : MonoBehaviour
     }
 
 
-    void Update()
-    {
 
-    }
 
     void OnCollisionEnter(Collision col)
     {
@@ -78,10 +75,11 @@ public class LevHit : MonoBehaviour
                 enemy.isRagdolling = true;
 
             }
-            rigidbody = item.GetComponent<Rigidbody>();
-            if (rigidbody != null)
+            Component levitate = item.GetComponent<FloatLogic>();
+            if (levitate != null)
             {
-                latesthitObject.GetComponent<FloatLogic>().enabled = true;
+                Debug.Log(latesthitObject);
+                item.GetComponent<FloatLogic>().enabled = true;
             }
         }
 

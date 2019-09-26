@@ -79,6 +79,10 @@ MonoBehaviour:
     type: 3}
   hitPrefab: {fileID: 0}
   force: 100
+  pullInSpeed: 0.5
+  rotateSpeed: 2.25
+  radius: 20
+  objectsToPullIn: []
   degreesPerSecond: 15
   amplitude: 0.5
   frequency: 1

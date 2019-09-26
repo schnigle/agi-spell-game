@@ -10,13 +10,33 @@ public class GestureRecognition
     /*
      * Constants
      */
-    public const int ANGLE_GRANULARITY = 10;
-    public const float PROXIMITY_THRESH = 0.2f;
-    public const int MIN_GESTURE_SIZE = 10;
-    public const float ANGLE_SUM_THRESH = 0.5f;
-    public const float VEL_VEC_NORM_THRESH = 0.25f;
-    public const float ANGLE_DEVIATION_THRESH = 0.5f;
-    public const bool LOWPASS = false;
+    public const int ANGLE_GRANULARITY = 10;            // - How many nodes we skip per angle calculation.
+                                                        // keep high (ca 5-10 works good) unless when using 
+                                                        // with lowpass filter.
+    public const float PROXIMITY_THRESH = 0.2f;         // - Minimum required distance between nodes for
+                                                        // calculating angle.
+    public const int MIN_GESTURE_SIZE = 30;             // - Minimum number of nodes in a gesture. Shorter nodes
+                                                        // return unknown.
+    public const float ANGLE_SUM_THRESH = 0.5f;         // - Used when determining circle type gestures. A circle
+                                                        // is accepted when angle_sum ∈ [2*pi - angle_sum_thresh,
+                                                        // 2*pi + angle_sum_thres].
+    public const float VEL_VEC_NORM_THRESH = 0.25f;     // - |vel_vec| < vel_vec_norm_thresh counts as zero
+                                                        // internally.
+    public const float ANGLE_DEVIATION_THRESH = 0.5f;   // - Used for linear gesture segments. Angle deviation
+                                                        // describes difference in angle between two vectors.
+                                                        // Angles > angle_deviation_thresh rules out a 
+                                                        // candidate gesture
+    public const float Z_DEPTH_THRESH = 0.3f;           // If depth of gesture is larger than this, consider
+                                                        // gestures with depth as candidates.
+
+    // Determines how sensitive we want to be in regards to thresholds
+    // on an axis. 0.5f means doubling the thresholds.
+    public const float X_GESTURE_THRESH_MULTIPLIER = 1f;
+    public const float Y_GESTURE_THRESH_MULTIPLIER = 1f;
+    public const float Z_GESTURE_THRESH_MULTIPLIER = 0.5f;
+
+    // Constants for lowpass filter.
+    public const bool LP_ENABLE = true;
     public const int LP_KERNEL_SIZE = 2;
     public const float LP_SIGMA = 2.0f;
 
@@ -340,7 +360,7 @@ public class GestureRecognition
     public Gesture_Meta recognize_gesture(List<Point_2D> gesture, List<Point_3D> gesture3D) {
         Bounds bounds = calculate_bounds(ref gesture, 0, gesture.Count);
         List<float> angles = new List<float>();
-        if (LOWPASS)
+        if (LP_ENABLE)
         {
             gesture = gaussian_average_lowpass(gesture, LP_KERNEL_SIZE, LP_SIGMA);
         }
@@ -349,8 +369,9 @@ public class GestureRecognition
         Point_2D avg_vel_vec2 = mean_velocity_2D(ref gesture);
         Point_3D avg_vel_vec3 = mean_velocity_3D(ref gesture3D);
 
-        float gesture_width = bounds.max_x - bounds.min_x;
+        float gesture_width  = bounds.max_x - bounds.min_x;
         float gesture_height = bounds.max_y - bounds.min_y;
+        float gesture_depth  = bounds.max_z - bounds.min_z;
         Point_2D start = gesture[0];
         Point_2D end = gesture[gesture.Count - 1];
 
@@ -370,15 +391,8 @@ public class GestureRecognition
         bool x_pos = x_pos_dev < x_neg_dev;
         bool y_pos = y_pos_dev < y_neg_dev;
         bool z_pos = z_pos_dev < z_neg_dev;
-        bool z_gesture = false;
-
-        if(z_pos){
-            z_gesture = (z_pos_dev < ((x_pos) ? x_pos_dev : x_neg_dev)) &&
-                    (z_pos_dev < ((y_pos) ? y_pos_dev : y_neg_dev));
-        } else {
-            z_gesture = (z_neg_dev < ((x_pos) ? x_pos_dev : x_neg_dev)) &&
-                    (z_neg_dev < ((y_pos) ? y_pos_dev : y_neg_dev));        
-        }
+        bool z_gesture = gesture_depth > gesture_height 
+                && gesture_depth > gesture_width;
 
         if(vel_vec_norm < VEL_VEC_NORM_THRESH && Math.Abs(angle_sum) > 6*ANGLE_SUM_THRESH) {
             // likely a circle (so far)
@@ -386,7 +400,7 @@ public class GestureRecognition
             float max_angle = (float) ((2 + ANGLE_SUM_THRESH) * Math.PI); 
             if (angle_sum > min_angle && angle_sum < max_angle) ret.type = Gesture.circle_ccw;
             if (angle_sum < -min_angle && angle_sum > -max_angle) ret.type = Gesture.circle_cw;
-        } else if (vel_vec_norm > VEL_VEC_NORM_THRESH && z_gesture) {
+        } else if (vel_vec_norm > VEL_VEC_NORM_THRESH && z_gesture || gesture_depth > Z_DEPTH_THRESH) {
             // likely something else 
             if     (z_pos_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.z) > 0.2) ret.type = Gesture.push;
             else if(z_neg_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.z) > 0.2) ret.type = Gesture.pull;

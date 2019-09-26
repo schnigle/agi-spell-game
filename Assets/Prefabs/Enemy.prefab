@@ -195,8 +195,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c61d2eec0e6c9b34996be881754effa7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   projectilePrefab: {fileID: 3692036914013115446, guid: 91fd865d7edb5c14fada3b9fef1dd6e1,
     type: 3}
   spellPrepTime: 2
@@ -245,8 +245,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f84d44191dac804cbe6916ebbb00759, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!1001 &1495586829820540261
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -332,7 +332,7 @@ PrefabInstance:
     - target: {fileID: -6057140222963153312, guid: 3124a0966cb8fe14abf046caf489ed8b,
         type: 3}
       propertyPath: m_Controller
-      value: 
+      value:
       objectReference: {fileID: 9100000, guid: 546e7dae69edf994ebbda3244880b998, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3124a0966cb8fe14abf046caf489ed8b, type: 3}
