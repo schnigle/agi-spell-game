@@ -89,12 +89,8 @@ public class EnemyAI : MonoBehaviour
             float theta = Random.Range(0, Mathf.PI*2);
             targetPosition.x += r * Mathf.Cos(theta);
             targetPosition.z += r * Mathf.Sin(theta);
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(targetPosition, out hit, 100, NavMesh.AllAreas))
-            {
-                currentTargetPosition = hit.position;
-                StartPrepareAnimation("spell circle cw");
-            }
+            currentTargetPosition = targetPosition;
+            StartPrepareAnimation("spell circle cw");
         }
     }
 
@@ -238,18 +234,21 @@ public class EnemyAI : MonoBehaviour
         {
             if (agent.enabled && agent.remainingDistance < 0.1f)
             {
-                int rand = Random.Range(0, 3);
-                if (rand == 0)
+                if (!isCasting)
                 {
-                    PrepareAttack();
-                }
-                else if (rand == 1)
-                {
-                    PrepareShield();
-                }
-                else if (rand == 2)
-                {
-                    PrepareTeleport();
+                    int rand = Random.Range(0, 3);
+                    if (rand == 0)
+                    {
+                        PrepareAttack();
+                    }
+                    else if (rand == 1)
+                    {
+                        PrepareShield();
+                    }
+                    else if (rand == 2)
+                    {
+                        PrepareTeleport();
+                    }
                 }
                 IndirectlyMoveTowards(player.transform.position);
             }
