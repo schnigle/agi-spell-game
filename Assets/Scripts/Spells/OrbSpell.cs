@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class OrbSpell : MonoBehaviour, ISpell
 {
-    public GestureRecognition.Gesture SpellGesture => GestureRecognition.Gesture.vline_ud;
+    [SerializeField]
+    GestureRecognition.Gesture gesture;
+	public GestureRecognition.Gesture SpellGesture => gesture;
 
     public GameObject bullet, bulletEmitter;
     public Transform playerTrans;

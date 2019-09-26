@@ -5,6 +5,10 @@ using UnityEngine;
 public class ShieldSpell : MonoBehaviour, ISpell
 {
     [SerializeField]
+    GestureRecognition.Gesture gesture;
+	public GestureRecognition.Gesture SpellGesture => gesture;
+
+    [SerializeField]
     Shield shieldPrefab = null;
     Shield instantiatedShield = null;
     [SerializeField]
@@ -12,8 +16,6 @@ public class ShieldSpell : MonoBehaviour, ISpell
     [SerializeField]
     float shieldDistance = 2;
     bool aimingShield = false;
-
-	public GestureRecognition.Gesture SpellGesture => GestureRecognition.Gesture.circle_ccw;
 
 	public void OnAimEnd()
 	{
@@ -53,7 +55,7 @@ public class ShieldSpell : MonoBehaviour, ISpell
 	// Start is called before the first frame update
 	void Start()
     {
-        
+
     }
 
     // Update is called once per frame

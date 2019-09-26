@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class SpellTornado : MonoBehaviour, ISpell
 {
-    public GestureRecognition.Gesture SpellGesture => GestureRecognition.Gesture.hline_rl;
+    [SerializeField]
+    GestureRecognition.Gesture gesture;
+	public GestureRecognition.Gesture SpellGesture => gesture;
+
 
     public GameObject bullet, bulletEmitter;
     public Transform playerTrans;

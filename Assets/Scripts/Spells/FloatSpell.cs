@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class FloatSpell : MonoBehaviour, ISpell
 {
+    [SerializeField]
+    GestureRecognition.Gesture gesture;
+	public GestureRecognition.Gesture SpellGesture => gesture;
+
 
     private float timer = 0.0f;
     private const float waitTime = 10.0f;
@@ -15,8 +19,6 @@ public class FloatSpell : MonoBehaviour, ISpell
 
     [SerializeField]
     TrajectoryPreview trajectory;
-
-	public GestureRecognition.Gesture SpellGesture => GestureRecognition.Gesture.vline_du;
 
 	// Start is called before the first frame update
 	void Start()

@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class TeleportSpell : MonoBehaviour, ISpell
 {
-	public GestureRecognition.Gesture SpellGesture => GestureRecognition.Gesture.circle_cw;
+	[SerializeField]
+    GestureRecognition.Gesture gesture;
+	public GestureRecognition.Gesture SpellGesture => gesture;
+
 
 	[SerializeField]
     TrajectoryPreview trajectory;
