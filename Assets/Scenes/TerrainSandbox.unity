@@ -5109,6 +5109,11 @@ PrefabInstance:
       propertyPath: gesture
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 7821075721968457893, guid: 18b29c8cfd693a544af26287a63e83d5,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.005
+      objectReference: {fileID: 0}
     - target: {fileID: 2133086210248475963, guid: 18b29c8cfd693a544af26287a63e83d5,
         type: 3}
       propertyPath: weight
