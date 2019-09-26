@@ -5117,6 +5117,10 @@ PrefabInstance:
       propertyPath: gesture
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 2102614419, guid: 18b29c8cfd693a544af26287a63e83d5, type: 3}
+      propertyPath: forwardForce
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 2102614418, guid: 18b29c8cfd693a544af26287a63e83d5, type: 3}
       propertyPath: gesture
       value: 4
