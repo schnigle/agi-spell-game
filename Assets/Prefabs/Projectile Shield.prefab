@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 891331517316755057}
   - component: {fileID: 4270273}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: Projectile Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 2b5da3e790a142246adefd567c07c5f0,
         type: 3}
       propertyPath: m_Layer
-      value: 11
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 2b5da3e790a142246adefd567c07c5f0,
         type: 3}
