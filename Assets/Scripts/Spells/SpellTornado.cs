@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpellTornado : MonoBehaviour, ISpell
 {
-    public GestureRecognition.Gesture SpellGesture => GestureRecognition.Gesture.circle_ccw;
+    public GestureRecognition.Gesture SpellGesture => GestureRecognition.Gesture.line_rl;
 
     public GameObject bullet, bulletEmitter;
     public Transform playerTrans;
@@ -36,7 +36,7 @@ public class SpellTornado : MonoBehaviour, ISpell
 
     void Start()
     {
- 
+
     }
 
     void Update()
