@@ -31,6 +31,13 @@ public class PlayerScript : MonoBehaviour
     GestureRecognition.Gesture identifiedGesture;
     ISpell selectedSpell = null;
 
+    [SerializeField]
+    Material inactiveStaffOrbMaterial;
+    [SerializeField]
+    Material activeStaffOrbMaterial;
+    [SerializeField]
+    MeshRenderer staffOrb;
+
     public PlayerData GetPlayerData()
     {
         if (playerData == null)
@@ -94,6 +101,10 @@ public class PlayerScript : MonoBehaviour
             // Trigger press start
             if (!trigger_down_last)
             {
+                if (staffOrb && activeStaffOrbMaterial)
+                {
+                    staffOrb.material = activeStaffOrbMaterial;
+                }
                 if(spellReady && selectedSpell != null)
                 {
                     selectedSpell.OnAimEnd();
@@ -128,6 +139,10 @@ public class PlayerScript : MonoBehaviour
         // Trigger press end
         else if (trigger_down_last)
         {
+            if (staffOrb && inactiveStaffOrbMaterial)
+            {
+                staffOrb.material = inactiveStaffOrbMaterial;
+            }
             trail.SetActive(false);
             GestureRecognition.Gesture_Meta result = gestureRecognition.recognize_gesture(gesture, gesture3D);
             identifiedGesture = result.type;
