@@ -204,8 +204,9 @@ MonoBehaviour:
   spellUnleashTime: 0.5
   projectileVelocity: 20
   staffTrail: {fileID: 474664403}
-  shieldPrefab: {fileID: 0}
-  teleportEffectPrefab: {fileID: 0}
+  shieldPrefab: {fileID: 4270273, guid: d1113ec2ef252e642bf9be13bda47900, type: 3}
+  teleportEffectPrefab: {fileID: 8166681735931906920, guid: 2b4c82c43a4981f4eaf9caac59446dd1,
+    type: 3}
 --- !u!136 &3306375032083718169
 CapsuleCollider:
   m_ObjectHideFlags: 0
