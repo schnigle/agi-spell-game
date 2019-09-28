@@ -148,11 +148,16 @@ public class PlayerScript : MonoBehaviour
             identifiedGesture = result.type;
             foreach (var spell in GetComponents<ISpell>())
             {
-                if (identifiedGesture == spell.SpellGesture)
+                // A bit of an ugly check
+                MonoBehaviour spellComp = (MonoBehaviour)spell;
+                if (spellComp.enabled)
                 {
-                    spellReady = true;
-                    selectedSpell = spell;
-                    selectedSpell.OnAimStart();
+                    if (identifiedGesture == spell.SpellGesture)
+                    {
+                        spellReady = true;
+                        selectedSpell = spell;
+                        selectedSpell.OnAimStart();
+                    }    
                 }
             }
             gesture.Clear();
