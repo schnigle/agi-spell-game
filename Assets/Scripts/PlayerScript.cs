@@ -117,7 +117,7 @@ public class PlayerScript : MonoBehaviour
             }
 
             // Record gesture
-            var pos = rightStick.transform.position;
+            var pos = trail.transform.position;
             var pixelPos = VRcamera.WorldToScreenPoint(pos);
 
             var point = new GestureRecognition.Point_2D();

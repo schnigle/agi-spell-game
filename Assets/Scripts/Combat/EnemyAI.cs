@@ -105,6 +105,7 @@ public class EnemyAI : MonoBehaviour
 				Destroy(newObj, 5);
 			}
             transform.position = currentTargetPosition;
+            agent.destination = currentTargetPosition;
             if (teleportEffectPrefab)
 			{
 				var newObj = Instantiate(teleportEffectPrefab);
@@ -261,7 +262,10 @@ public class EnemyAI : MonoBehaviour
             {
                 // rotate towards player
                 var q = Quaternion.LookRotation(currentTargetPosition - transform.position);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, q, 500 * Time.deltaTime);
+                var euler_q = q.eulerAngles;
+                euler_q.x = 0;
+                euler_q.z = 0;
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(euler_q), 500 * Time.deltaTime);
             }
             castTimeRemaining -= Time.deltaTime;
             if (castTimeRemaining < spellUnleashTime && !hasUnleashedSpell)
@@ -323,7 +327,7 @@ public class EnemyAI : MonoBehaviour
         float distance = Mathf.Max(Vector2.Distance(flatPosition, flatTargetPosition), 10);
         float r = Random.Range(distance * 0.8f, distance);
         var angle = Mathf.Atan2(transform.position.z - target.z, transform.position.x- target.x);
-        var maxAngleDelta = Mathf.PI/4;
+        var maxAngleDelta = Mathf.PI/32;
         float theta = Random.Range(angle - maxAngleDelta, angle + maxAngleDelta);
         target.x += r * Mathf.Cos(theta);
         target.z += r * Mathf.Sin(theta);
