@@ -27,7 +27,7 @@ public class PlayerScript : MonoBehaviour
 
     PlayerData playerData;
 
-    bool spellReady = false;
+    bool aimingSpell = false;
     GestureRecognition.Gesture identifiedGesture;
     ISpell selectedSpell = null;
 
@@ -70,8 +70,8 @@ public class PlayerScript : MonoBehaviour
         }
         catch (System.Exception)
         {
-            Debug.Log("No VR headset has been identified. Defaulting to Vive MV configuration.");
-            resolution = new Tuple<int, int>(2160 / 2, 1200);
+            Debug.Log("No VR headset has been identified. Defaulting to main screen dimensions.");
+            resolution = new Tuple<int, int>(Screen.width, Screen.height);
         }
     }
 
@@ -94,74 +94,95 @@ public class PlayerScript : MonoBehaviour
             Application.LoadLevel(Application.loadedLevel);
         }
         playerData.customUpdater();
-        bool trigger_down = SteamVR_Actions._default.Squeeze.GetAxis(rightInput) == 1;
-
+        bool trigger_down = SteamVR_Actions._default.Squeeze.GetAxis(rightInput) == 1 || Input.GetMouseButton(0);
         if (trigger_down)
         {
             // Trigger press start
             if (!trigger_down_last)
             {
-                if (staffOrb && activeStaffOrbMaterial)
+                if (!aimingSpell)
                 {
-                    staffOrb.material = activeStaffOrbMaterial;
+                    trail.SetActive(true);
+                    trail.GetComponent<TrailRenderer>().Clear();
+                    if (staffOrb && activeStaffOrbMaterial)
+                    {
+                        staffOrb.material = activeStaffOrbMaterial;
+                    }
                 }
-                if(spellReady && selectedSpell != null)
+                if(aimingSpell && selectedSpell != null)
                 {
                     selectedSpell.OnAimEnd();
                     selectedSpell.UnleashSpell();
                     selectedSpell = null;
-                    spellReady = false;
+                    aimingSpell = false;
+                    if (staffOrb && inactiveStaffOrbMaterial)
+                    {
+                        staffOrb.material = inactiveStaffOrbMaterial;
+                    }
                 }
-                trail.SetActive(true);
-                trail.GetComponent<TrailRenderer>().Clear();
+            }
+            if (!aimingSpell)
+            {
+                // Record gesture
+                var pos = trail.transform.position;
+                var pixelPos = VRcamera.WorldToScreenPoint(pos);
+
+                var point = new GestureRecognition.Point_2D();
+                var point_3D = new GestureRecognition.Point_3D();
+                point.time = Time.time;
+                point_3D.time = point.time;
+
+                point.x = pixelPos.x / resolution.Item1;
+                point.y = pixelPos.y / resolution.Item2;
+                point.z = pixelPos.z;
+
+
+                point_3D.x = pos.x;
+                point_3D.y = pos.y;
+                point_3D.z = pos.z;
+
+                print(point.x + ", " + point.y);
+                gesture.Add(point);
+                gesture3D.Add(point_3D);
             }
 
-            // Record gesture
-            var pos = trail.transform.position;
-            var pixelPos = VRcamera.WorldToScreenPoint(pos);
-
-            var point = new GestureRecognition.Point_2D();
-            var point_3D = new GestureRecognition.Point_3D();
-            point.time = Time.time;
-            point_3D.time = point.time;
-
-            point.x = pixelPos.x / resolution.Item1;
-            point.y = pixelPos.y / resolution.Item2;
-            point.z = pixelPos.z;
-
-            point_3D.x = pos.x;
-            point_3D.y = pos.y;
-            point_3D.z = pos.z;
-
-            gesture.Add(point);
-            gesture3D.Add(point_3D);
         }
         // Trigger press end
         else if (trigger_down_last)
         {
-            if (staffOrb && inactiveStaffOrbMaterial)
+            if (!aimingSpell)
             {
-                staffOrb.material = inactiveStaffOrbMaterial;
-            }
-            trail.SetActive(false);
-            GestureRecognition.Gesture_Meta result = gestureRecognition.recognize_gesture(gesture, gesture3D);
-            identifiedGesture = result.type;
-            foreach (var spell in GetComponents<ISpell>())
-            {
-                // A bit of an ugly check
-                MonoBehaviour spellComp = (MonoBehaviour)spell;
-                if (spellComp.enabled)
+                trail.SetActive(false);
+                if (gesture.Count > 0 && gesture3D.Count > 0)
                 {
-                    if (identifiedGesture == spell.SpellGesture)
+                    GestureRecognition.Gesture_Meta result = gestureRecognition.recognize_gesture(gesture, gesture3D);
+                    identifiedGesture = result.type;
+                    print("Identified gesture: " + identifiedGesture);
+                    foreach (var spell in GetComponents<ISpell>())
                     {
-                        spellReady = true;
-                        selectedSpell = spell;
-                        selectedSpell.OnAimStart();
-                    }    
+                        // A bit of an ugly check
+                        MonoBehaviour spellComp = (MonoBehaviour)spell;
+                        if (spellComp.enabled)
+                        {
+                            if (identifiedGesture == spell.SpellGesture)
+                            {
+                                aimingSpell = true;
+                                selectedSpell = spell;
+                                selectedSpell.OnAimStart();
+                            }    
+                        }
+                    }
+                }
+                gesture.Clear();
+                gesture3D.Clear();
+                if (!aimingSpell)
+                {
+                    if (staffOrb && inactiveStaffOrbMaterial)
+                    {
+                        staffOrb.material = inactiveStaffOrbMaterial;
+                    }
                 }
             }
-            gesture.Clear();
-            gesture3D.Clear();
         }
 
 
