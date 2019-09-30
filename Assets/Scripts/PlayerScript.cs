@@ -86,6 +86,8 @@ public class PlayerScript : MonoBehaviour
     bool trigger_down_last = false;
     List<GestureRecognition.Point_2D> gesture = new List<GestureRecognition.Point_2D>();
     List<GestureRecognition.Point_3D> gesture3D = new List<GestureRecognition.Point_3D>();
+    FileStream fs;
+    StreamWriter sw;
 
     void Update()
     {
@@ -114,6 +116,8 @@ public class PlayerScript : MonoBehaviour
                 }
                 trail.SetActive(true);
                 trail.GetComponent<TrailRenderer>().Clear();
+                fs = new FileStream("output.txt", FileMode.CreateNew, FileAccess.Write, FileShare.None);
+                sw = new StreamWriter(fs);
             }
 
             // Record gesture
@@ -135,6 +139,8 @@ public class PlayerScript : MonoBehaviour
 
             gesture.Add(point);
             gesture3D.Add(point_3D);
+
+            sw.Write(point.time + " " + point.x + " " + point.y + " " + point.z + "\n");
         }
         // Trigger press end
         else if (trigger_down_last)
@@ -162,6 +168,8 @@ public class PlayerScript : MonoBehaviour
             }
             gesture.Clear();
             gesture3D.Clear();
+            sw.Flush();
+            sw.Close();
         }
 
 
