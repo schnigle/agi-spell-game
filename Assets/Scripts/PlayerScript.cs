@@ -16,6 +16,9 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     GameObject trail;
 
+    // audio
+    public AudioClip ambient_sounds;
+    public AudioSource self_audio_source;
 
     Vector3 moveVector;
     CharacterController controller;
@@ -26,6 +29,14 @@ public class PlayerScript : MonoBehaviour
 
     bool spellReady = false;
     GestureRecognition.Gesture identifiedGesture;
+    ISpell selectedSpell = null;
+
+    [SerializeField]
+    Material inactiveStaffOrbMaterial;
+    [SerializeField]
+    Material activeStaffOrbMaterial;
+    [SerializeField]
+    MeshRenderer staffOrb;
 
     public PlayerData GetPlayerData()
     {
@@ -37,11 +48,11 @@ public class PlayerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //audio
+        self_audio_source.clip = ambient_sounds;
+        self_audio_source.Play();
+
         controller = GetComponent<CharacterController>();
-        // camera = (GameObject)GameObject.Instantiate(CameraPrefab);
-        // camera.transform.SetParent(transform);
-        // camera.transform.localPosition = Vector3.zero;
-        // camera.transform.localRotation = Quaternion.identity;
 
         hand = rightStick.GetComponent<Valve.VR.InteractionSystem.Hand>();
         if(playerData == null)
@@ -50,11 +61,18 @@ public class PlayerScript : MonoBehaviour
         trajectory.SetActive(false);
         trail.SetActive(false);
 
-        //print(SteamVR.instance.hmd_ModelNumber);
-        if(SteamVR.instance.hmd_ModelNumber == "Vive MV")
+        try
+        {
+            if(SteamVR.instance.hmd_ModelNumber == "Vive MV")
+                resolution = new Tuple<int, int>(2160 / 2, 1200);
+            else
+                resolution = new Tuple<int, int>(2880 / 2, 1600);
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("No VR headset has been identified. Defaulting to Vive MV configuration.");
             resolution = new Tuple<int, int>(2160 / 2, 1200);
-        else
-            resolution = new Tuple<int, int>(2880 / 2, 1600);
+        }
     }
 
     private Tuple<int, int> resolution;
@@ -67,65 +85,85 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     bool trigger_down_last = false;
     List<GestureRecognition.Point_2D> gesture = new List<GestureRecognition.Point_2D>();
+    List<GestureRecognition.Point_3D> gesture3D = new List<GestureRecognition.Point_3D>();
 
     void Update()
     {
-        
-
+        if (Input.GetKeyDown("r"))
+        {
+            Application.LoadLevel(Application.loadedLevel);
+        }
         playerData.customUpdater();
         bool trigger_down = SteamVR_Actions._default.Squeeze.GetAxis(rightInput) == 1;
-        
+
         if (trigger_down)
         {
+            // Trigger press start
             if (!trigger_down_last)
             {
-                if(spellReady)
+                if (staffOrb && activeStaffOrbMaterial)
                 {
-                    GetComponent<Spell>().UnleashSpell();
+                    staffOrb.material = activeStaffOrbMaterial;
+                }
+                if(spellReady && selectedSpell != null)
+                {
+                    selectedSpell.OnAimEnd();
+                    selectedSpell.UnleashSpell();
+                    selectedSpell = null;
                     spellReady = false;
-                    trajectory.SetActive(false);
                 }
                 trail.SetActive(true);
                 trail.GetComponent<TrailRenderer>().Clear();
             }
 
-            //print("Left trigger value: " + SteamVR_Actions._default.Squeeze.GetAxis(leftInput));
-            /*print(Time.time + " "
-                + rightStick.transform.position.x + " "
-                + rightStick.transform.position.y + " "
-                + rightStick.transform.position.z
-            );*/
-            var pixelPos = VRcamera.WorldToScreenPoint(rightStick.transform.position);
-            //var height = 1600; // TODO D:
-            //var width = 2880 / 2;
-            //var height = 1200;
-            //var width = 2160 / 2;
-            
-            //print("cam space: " + pixelPos.x / Screen.width + ", " + pixelPos.y / Screen.height);
-            // string line = Time.time + " " + pixelPos.x / resolution.Item1 + " " + pixelPos.y / resolution.Item2 + " " + pixelPos.z;
-            // print(line);
-            // fileStream
+            // Record gesture
+            var pos = trail.transform.position;
+            var pixelPos = VRcamera.WorldToScreenPoint(pos);
+
             var point = new GestureRecognition.Point_2D();
+            var point_3D = new GestureRecognition.Point_3D();
             point.time = Time.time;
+            point_3D.time = point.time;
+
             point.x = pixelPos.x / resolution.Item1;
             point.y = pixelPos.y / resolution.Item2;
             point.z = pixelPos.z;
+
+            point_3D.x = pos.x;
+            point_3D.y = pos.y;
+            point_3D.z = pos.z;
+
             gesture.Add(point);
+            gesture3D.Add(point_3D);
         }
+        // Trigger press end
         else if (trigger_down_last)
         {
-            trail.SetActive(false);
-            GestureRecognition.Gesture result = gestureRecognition.recognize_gesture(gesture);
-            identifiedGesture = result;
-            if (identifiedGesture != GestureRecognition.Gesture.unknown)
+            if (staffOrb && inactiveStaffOrbMaterial)
             {
-                print(result);
-                spellReady = true;
-                trajectory.SetActive(true);
+                staffOrb.material = inactiveStaffOrbMaterial;
+            }
+            trail.SetActive(false);
+            GestureRecognition.Gesture_Meta result = gestureRecognition.recognize_gesture(gesture, gesture3D);
+            identifiedGesture = result.type;
+            foreach (var spell in GetComponents<ISpell>())
+            {
+                // A bit of an ugly check
+                MonoBehaviour spellComp = (MonoBehaviour)spell;
+                if (spellComp.enabled)
+                {
+                    if (identifiedGesture == spell.SpellGesture)
+                    {
+                        spellReady = true;
+                        selectedSpell = spell;
+                        selectedSpell.OnAimStart();
+                    }    
+                }
             }
             gesture.Clear();
+            gesture3D.Clear();
         }
-        
+
 
         //REeset the MoveVector
         moveVector = Vector3.zero;

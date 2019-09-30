@@ -1,11 +1,12 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpellLogic : MonoBehaviour
+public class LevHit : MonoBehaviour
 {
 
     public GameObject muzzlePrefab, hitPrefab;
+    private GameObject latesthitObject;
 
     void Start()
     {
@@ -32,10 +33,7 @@ public class SpellLogic : MonoBehaviour
     }
 
 
-    void Update()
-    {
-        
-    }
+
 
     void OnCollisionEnter(Collision col)
     {
@@ -44,7 +42,13 @@ public class SpellLogic : MonoBehaviour
         Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
         Vector3 pos = contact.point;
 
-        if(hitPrefab != null)
+
+
+
+        latesthitObject = col.gameObject;
+
+
+        if (hitPrefab != null)
         {
             var hitVFX = Instantiate(hitPrefab, pos, rot);
             var psHit = hitVFX.GetComponent<ParticleSystem>();
@@ -59,7 +63,7 @@ public class SpellLogic : MonoBehaviour
             }
         }
 
-        var nearby = Physics.OverlapSphere(pos, 5);
+       var nearby = Physics.OverlapSphere(pos, 5);
         foreach(var item in nearby)
         {
             Rigidbody rigidbody = null;
@@ -67,13 +71,15 @@ public class SpellLogic : MonoBehaviour
             {
                 //print("Death good");
                 var enemy = item.GetComponent<EnemyAI>();
+                item.GetComponent<FloatLogic>().enabled = true;
                 enemy.isRagdolling = true;
+
             }
-            rigidbody = item.GetComponent<Rigidbody>();
-            if (rigidbody != null)
+            Component levitate = item.GetComponent<FloatLogic>();
+            if (levitate != null)
             {
-                var direction = (rigidbody.transform.position - pos).normalized;
-                rigidbody.AddForce((5 - Vector3.Distance(rigidbody.position, pos)) * (direction) * 200, ForceMode.Impulse);
+                Debug.Log(latesthitObject);
+                item.GetComponent<FloatLogic>().enabled = true;
             }
         }
 
