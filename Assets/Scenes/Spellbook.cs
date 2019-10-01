@@ -30,7 +30,7 @@ namespace Valve.VR.InteractionSystem.Sample
 
 
             // if not moving
-
+            if (m_move.GetStateUp())
             // if button pressed
 
             //Apply
