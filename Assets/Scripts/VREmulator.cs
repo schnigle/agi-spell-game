@@ -29,6 +29,7 @@ public class VREmulator : MonoBehaviour
         else
         {
             VRCamera.transform.position += Vector3.up * 1.8f;
+            VRCamera.nearClipPlane = 0.03f;
         }
     }
 
