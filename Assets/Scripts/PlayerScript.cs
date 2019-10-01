@@ -141,7 +141,7 @@ public class PlayerScript : MonoBehaviour
                 point_3D.y = pos.y;
                 point_3D.z = pos.z;
 
-                print(point.x + ", " + point.y);
+                // print(point.x + ", " + point.y);
                 gesture.Add(point);
                 gesture3D.Add(point_3D);
             }
