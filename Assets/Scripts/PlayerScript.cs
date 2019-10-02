@@ -8,7 +8,7 @@ using System.IO;
 
 public class PlayerScript : MonoBehaviour
 {
-    public GameObject rightStick;
+    public GameObject rightStick, leftStick;
     [SerializeField]
     Camera VRcamera;
     [SerializeField]
@@ -24,6 +24,9 @@ public class PlayerScript : MonoBehaviour
     CharacterController controller;
 
     public SteamVR_Input_Sources rightInput = SteamVR_Input_Sources.RightHand;
+    public SteamVR_Input_Sources leftInput = SteamVR_Input_Sources.LeftHand;
+
+    public SteamVR_Action_Vector2 actionSteering;
 
     PlayerData playerData;
 
@@ -55,7 +58,8 @@ public class PlayerScript : MonoBehaviour
         controller = GetComponent<CharacterController>();
 
         hand = rightStick.GetComponent<Valve.VR.InteractionSystem.Hand>();
-        if(playerData == null)
+        Lhand = leftStick.GetComponent<Valve.VR.InteractionSystem.Hand>();
+        if (playerData == null)
             playerData = new PlayerData();
 
         trajectory.SetActive(false);
@@ -81,20 +85,28 @@ public class PlayerScript : MonoBehaviour
     public SteamVR_Input_Sources inputSource = SteamVR_Input_Sources.Any;//which controller
 
     private Valve.VR.InteractionSystem.Hand hand;
+    private Valve.VR.InteractionSystem.Hand Lhand;
     GestureRecognition gestureRecognition = new GestureRecognition();
     // Update is called once per frame
     bool trigger_down_last = false;
+    bool Ltrigger_down_last = false;
     List<GestureRecognition.Point_2D> gesture = new List<GestureRecognition.Point_2D>();
     List<GestureRecognition.Point_3D> gesture3D = new List<GestureRecognition.Point_3D>();
 
     void Update()
     {
+
         if (Input.GetKeyDown("r"))
         {
             Application.LoadLevel(Application.loadedLevel);
         }
         playerData.customUpdater();
+        
         bool trigger_down = SteamVR_Actions._default.Squeeze.GetAxis(rightInput) == 1;
+        bool Ltrigger_down = SteamVR_Actions._default.Squeeze.GetAxis(leftInput) == 1;
+
+        Vector2 steer = Vector2.zero;
+
 
         if (trigger_down)
         {
@@ -163,7 +175,14 @@ public class PlayerScript : MonoBehaviour
             gesture.Clear();
             gesture3D.Clear();
         }
+        if (Ltrigger_down)
+        {
+            SteamVR_Input_Sources leftInput2 = SteamVR_Input_Sources.Any;
+            steer = actionSteering.GetAxis(leftInput2);
+            Debug.Log(steer);
 
+
+        }
 
         //REeset the MoveVector
         moveVector = Vector3.zero;
