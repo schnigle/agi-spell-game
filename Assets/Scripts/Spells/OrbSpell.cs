@@ -7,8 +7,12 @@ public class OrbSpell : MonoBehaviour, ISpell
     [SerializeField]
     GestureRecognition.Gesture gesture;
 	public GestureRecognition.Gesture SpellGesture => gesture;
+    [SerializeField]
+    Color color = Color.white;
+	public Color OrbColor => color;
 
-    public GameObject bullet, bulletEmitter;
+
+	public GameObject bullet, bulletEmitter;
     public Transform playerTrans;
     public float forwardForce = 250.0f;
     private const float waitTime = 15.0f;

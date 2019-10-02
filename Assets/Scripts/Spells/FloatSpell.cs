@@ -8,8 +8,11 @@ public class FloatSpell : MonoBehaviour, ISpell
     GestureRecognition.Gesture gesture;
 	public GestureRecognition.Gesture SpellGesture => gesture;
 
+	[SerializeField]
+    Color color = Color.white;
+	public Color OrbColor => color;
 
-    private float timer = 0.0f;
+	private float timer = 0.0f;
     private const float waitTime = 10.0f;
 
     public GameObject bullet, bulletEmitter;

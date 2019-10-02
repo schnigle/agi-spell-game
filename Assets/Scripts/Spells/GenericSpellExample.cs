@@ -6,6 +6,10 @@ public class GenericSpellExample : MonoBehaviour, ISpell
 {
 	public GestureRecognition.Gesture SpellGesture => GestureRecognition.Gesture.circle_ccw;
 
+	[SerializeField]
+    Color color = Color.white;
+	public Color OrbColor => color;
+
 	public void OnAimEnd()
 	{
 		print("Aim end");

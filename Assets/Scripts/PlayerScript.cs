@@ -176,7 +176,7 @@ public class PlayerScript : MonoBehaviour
                                 aimingSpell = true;
                                 selectedSpell = spell;
                                 selectedSpell.OnAimStart();
-                                staffOrb.mainColor = Color.red;
+                                staffOrb.mainColor = selectedSpell.OrbColor;
                             }    
                         }
                     }

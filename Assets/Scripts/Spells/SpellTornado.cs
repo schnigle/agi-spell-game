@@ -7,6 +7,9 @@ public class SpellTornado : MonoBehaviour, ISpell
     [SerializeField]
     GestureRecognition.Gesture gesture;
 	public GestureRecognition.Gesture SpellGesture => gesture;
+    [SerializeField]
+    Color color = Color.white;
+	public Color OrbColor => color;
 
 
     public GameObject bullet, bulletEmitter;

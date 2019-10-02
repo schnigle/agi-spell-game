@@ -7,7 +7,9 @@ public class Spell : MonoBehaviour, ISpell
     [SerializeField]
     GestureRecognition.Gesture gesture;
 	public GestureRecognition.Gesture SpellGesture => gesture;
-
+    [SerializeField]
+    Color color = Color.white;
+	public Color OrbColor => color;
 
     // audio
     public AudioClip summon_clip;
