@@ -28,15 +28,16 @@ public class PlayerScript : MonoBehaviour
     PlayerData playerData;
 
     bool aimingSpell = false;
+    bool drawingGesture = false;
     GestureRecognition.Gesture identifiedGesture;
     ISpell selectedSpell = null;
 
     [SerializeField]
-    Material inactiveStaffOrbMaterial;
+    Color inactiveStaffColor = Color.black;
     [SerializeField]
-    Material activeStaffOrbMaterial;
+    Color activeStaffColor = Color.cyan;
     [SerializeField]
-    MeshRenderer staffOrb;
+    StaffOrb staffOrb;
 
     public PlayerData GetPlayerData()
     {
@@ -60,6 +61,10 @@ public class PlayerScript : MonoBehaviour
 
         trajectory.SetActive(false);
         trail.SetActive(false);
+        if (staffOrb)
+        {
+            staffOrb.mainColor = inactiveStaffColor;
+        }
 
         try
         {
@@ -102,11 +107,12 @@ public class PlayerScript : MonoBehaviour
             {
                 if (!aimingSpell)
                 {
+                    drawingGesture = true;
                     trail.SetActive(true);
                     trail.GetComponent<TrailRenderer>().Clear();
-                    if (staffOrb && activeStaffOrbMaterial)
+                    if (staffOrb)
                     {
-                        staffOrb.material = activeStaffOrbMaterial;
+                        staffOrb.mainColor = activeStaffColor;
                     }
                 }
                 if(aimingSpell && selectedSpell != null)
@@ -115,13 +121,13 @@ public class PlayerScript : MonoBehaviour
                     selectedSpell.UnleashSpell();
                     selectedSpell = null;
                     aimingSpell = false;
-                    if (staffOrb && inactiveStaffOrbMaterial)
+                    if (staffOrb)
                     {
-                        staffOrb.material = inactiveStaffOrbMaterial;
+                        staffOrb.mainColor = inactiveStaffColor;
                     }
                 }
             }
-            if (!aimingSpell)
+            if (drawingGesture)
             {
                 // Record gesture
                 var pos = trail.transform.position;
@@ -150,8 +156,9 @@ public class PlayerScript : MonoBehaviour
         // Trigger press end
         else if (trigger_down_last)
         {
-            if (!aimingSpell)
+            if (drawingGesture)
             {
+                drawingGesture = false;
                 trail.SetActive(false);
                 if (gesture.Count > 0 && gesture3D.Count > 0)
                 {
@@ -169,6 +176,7 @@ public class PlayerScript : MonoBehaviour
                                 aimingSpell = true;
                                 selectedSpell = spell;
                                 selectedSpell.OnAimStart();
+                                staffOrb.mainColor = Color.red;
                             }    
                         }
                     }
@@ -177,9 +185,9 @@ public class PlayerScript : MonoBehaviour
                 gesture3D.Clear();
                 if (!aimingSpell)
                 {
-                    if (staffOrb && inactiveStaffOrbMaterial)
+                    if (staffOrb)
                     {
-                        staffOrb.material = inactiveStaffOrbMaterial;
+                        staffOrb.mainColor = inactiveStaffColor;
                     }
                 }
             }

@@ -12,6 +12,8 @@ public class VREmulator : MonoBehaviour
     float cameraLookSpeed = 15;
     [SerializeField]
     float armLength = 0.5f;
+    [SerializeField]
+    float scepterRotationOffset = 5;
 
     Vector3 cameraRotationSpeed = new Vector3();
 
@@ -63,7 +65,7 @@ public class VREmulator : MonoBehaviour
             {
                 controller.transform.position = VRCamera.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, armLength));
                 controller.transform.LookAt(VRCamera.transform.position);
-                controller.transform.rotation =  Quaternion.Euler(controller.transform.rotation.eulerAngles + new Vector3(180 + 5, -5, 0));
+                controller.transform.rotation =  Quaternion.Euler(controller.transform.rotation.eulerAngles + new Vector3(180 + scepterRotationOffset, -scepterRotationOffset, 0));
                 
             }
         }
