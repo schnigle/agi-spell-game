@@ -43,6 +43,10 @@ public class Projectile : MonoBehaviour
             }
             else if (other.tag == "Player")
             {
+                if (CameraPostProcessing.instance != null)
+                {
+                    CameraPostProcessing.instance.TriggerHit();
+                }
                 print("projectile hit player");
             }
             else

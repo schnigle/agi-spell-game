@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class Spell : MonoBehaviour, ISpell
 {
+    [SerializeField]
+    GestureRecognition.Gesture gesture;
+	public GestureRecognition.Gesture SpellGesture => gesture;
+    [SerializeField]
+    Color color = Color.white;
+	public Color OrbColor => color;
 
     // audio
     public AudioClip summon_clip;
@@ -22,8 +28,6 @@ public class Spell : MonoBehaviour, ISpell
 
     [SerializeField]
     TrajectoryPreview trajectory;
-
-	public GestureRecognition.Gesture SpellGesture => GestureRecognition.Gesture.hline_lr;
 
 	// Start is called before the first frame update
 	void Start()

@@ -358,6 +358,12 @@ public class GestureRecognition
     }
 
     public Gesture_Meta recognize_gesture(List<Point_2D> gesture, List<Point_3D> gesture3D) {
+        if (gesture.Count <= 2 * LP_KERNEL_SIZE)
+        {
+            var gm = new Gesture_Meta();
+            gm.type = Gesture.unknown;
+            return gm;
+        }
         Bounds bounds = calculate_bounds(ref gesture, 0, gesture.Count);
         List<float> angles = new List<float>();
         if (LP_ENABLE)

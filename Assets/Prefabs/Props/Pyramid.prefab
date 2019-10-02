@@ -3279,6 +3279,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7646904563333974552}
+  - component: {fileID: -8896616373286537527}
   m_Layer: 0
   m_Name: Pyramid
   m_TagString: Untagged
@@ -3330,3 +3331,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-8896616373286537527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3701603258928698993}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe0ed6ccc609470468c9d549070bd975, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frequency: 15
+  initialForce: 15
+  initialAltitude: 0
+  levAltitude: 10
+  timer: 6

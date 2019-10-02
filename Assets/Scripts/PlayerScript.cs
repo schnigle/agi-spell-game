@@ -27,9 +27,17 @@ public class PlayerScript : MonoBehaviour
 
     PlayerData playerData;
 
-    bool spellReady = false;
+    bool aimingSpell = false;
+    bool drawingGesture = false;
     GestureRecognition.Gesture identifiedGesture;
     ISpell selectedSpell = null;
+
+    [SerializeField]
+    Color inactiveStaffColor = Color.black;
+    [SerializeField]
+    Color activeStaffColor = Color.cyan;
+    [SerializeField]
+    StaffOrb staffOrb;
 
     public PlayerData GetPlayerData()
     {
@@ -53,6 +61,10 @@ public class PlayerScript : MonoBehaviour
 
         trajectory.SetActive(false);
         trail.SetActive(false);
+        if (staffOrb)
+        {
+            staffOrb.mainColor = inactiveStaffColor;
+        }
 
         try
         {
@@ -63,8 +75,8 @@ public class PlayerScript : MonoBehaviour
         }
         catch (System.Exception)
         {
-            Debug.Log("No VR headset has been identified. Defaulting to Vive MV configuration.");
-            resolution = new Tuple<int, int>(2160 / 2, 1200);
+            Debug.Log("No VR headset has been identified. Defaulting to main screen dimensions.");
+            resolution = new Tuple<int, int>(Screen.width, Screen.height);
         }
     }
 
@@ -82,63 +94,103 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
-
+        if (Input.GetKeyDown("r"))
+        {
+            Application.LoadLevel(Application.loadedLevel);
+        }
         playerData.customUpdater();
-        bool trigger_down = SteamVR_Actions._default.Squeeze.GetAxis(rightInput) == 1;
-
+        bool trigger_down = SteamVR_Actions._default.Squeeze.GetAxis(rightInput) == 1 || Input.GetMouseButton(0);
         if (trigger_down)
         {
             // Trigger press start
             if (!trigger_down_last)
             {
-                if(spellReady && selectedSpell != null)
+                if (!aimingSpell)
+                {
+                    drawingGesture = true;
+                    trail.SetActive(true);
+                    trail.GetComponent<TrailRenderer>().Clear();
+                    if (staffOrb)
+                    {
+                        staffOrb.mainColor = activeStaffColor;
+                    }
+                }
+                if(aimingSpell && selectedSpell != null)
                 {
                     selectedSpell.OnAimEnd();
                     selectedSpell.UnleashSpell();
                     selectedSpell = null;
-                    spellReady = false;
+                    aimingSpell = false;
+                    if (staffOrb)
+                    {
+                        staffOrb.mainColor = inactiveStaffColor;
+                    }
                 }
-                trail.SetActive(true);
-                trail.GetComponent<TrailRenderer>().Clear();
+            }
+            if (drawingGesture)
+            {
+                // Record gesture
+                var pos = trail.transform.position;
+                var pixelPos = VRcamera.WorldToScreenPoint(pos);
+
+                var point = new GestureRecognition.Point_2D();
+                var point_3D = new GestureRecognition.Point_3D();
+                point.time = Time.time;
+                point_3D.time = point.time;
+
+                point.x = pixelPos.x / resolution.Item1;
+                point.y = pixelPos.y / resolution.Item2;
+                point.z = pixelPos.z;
+
+
+                point_3D.x = pos.x;
+                point_3D.y = pos.y;
+                point_3D.z = pos.z;
+
+                // print(point.x + ", " + point.y);
+                gesture.Add(point);
+                gesture3D.Add(point_3D);
             }
 
-            // Record gesture
-            var pos = rightStick.transform.position;
-            var pixelPos = VRcamera.WorldToScreenPoint(pos);
-
-            var point = new GestureRecognition.Point_2D();
-            var point_3D = new GestureRecognition.Point_3D();
-            point.time = Time.time;
-            point_3D.time = point.time;
-
-            point.x = pixelPos.x / resolution.Item1;
-            point.y = pixelPos.y / resolution.Item2;
-            point.z = pixelPos.z;
-
-            point_3D.x = pos.x;
-            point_3D.y = pos.y;
-            point_3D.z = pos.z;
-
-            gesture.Add(point);
-            gesture3D.Add(point_3D);
         }
         // Trigger press end
         else if (trigger_down_last)
         {
-            trail.SetActive(false);
-            GestureRecognition.Gesture_Meta result = gestureRecognition.recognize_gesture(gesture, gesture3D);
-            identifiedGesture = result.type;
-            foreach (var spell in GetComponents<ISpell>())
+            if (drawingGesture)
             {
-                if (identifiedGesture == spell.SpellGesture)
+                drawingGesture = false;
+                trail.SetActive(false);
+                if (gesture.Count > 0 && gesture3D.Count > 0)
                 {
-                    spellReady = true;
-                    selectedSpell = spell;
-                    selectedSpell.OnAimStart();
+                    GestureRecognition.Gesture_Meta result = gestureRecognition.recognize_gesture(gesture, gesture3D);
+                    identifiedGesture = result.type;
+                    print("Identified gesture: " + identifiedGesture);
+                    foreach (var spell in GetComponents<ISpell>())
+                    {
+                        // A bit of an ugly check
+                        MonoBehaviour spellComp = (MonoBehaviour)spell;
+                        if (spellComp.enabled)
+                        {
+                            if (identifiedGesture == spell.SpellGesture)
+                            {
+                                aimingSpell = true;
+                                selectedSpell = spell;
+                                selectedSpell.OnAimStart();
+                                staffOrb.mainColor = selectedSpell.OrbColor;
+                            }    
+                        }
+                    }
+                }
+                gesture.Clear();
+                gesture3D.Clear();
+                if (!aimingSpell)
+                {
+                    if (staffOrb)
+                    {
+                        staffOrb.mainColor = inactiveStaffColor;
+                    }
                 }
             }
-            gesture.Clear();
-            gesture3D.Clear();
         }
 
 

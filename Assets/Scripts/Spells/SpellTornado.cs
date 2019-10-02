@@ -4,7 +4,13 @@ using UnityEngine;
 
 public class SpellTornado : MonoBehaviour, ISpell
 {
-    public GestureRecognition.Gesture SpellGesture => GestureRecognition.Gesture.circle_ccw;
+    [SerializeField]
+    GestureRecognition.Gesture gesture;
+	public GestureRecognition.Gesture SpellGesture => gesture;
+    [SerializeField]
+    Color color = Color.white;
+	public Color OrbColor => color;
+
 
     public GameObject bullet, bulletEmitter;
     public Transform playerTrans;
@@ -36,7 +42,7 @@ public class SpellTornado : MonoBehaviour, ISpell
 
     void Start()
     {
- 
+
     }
 
     void Update()
