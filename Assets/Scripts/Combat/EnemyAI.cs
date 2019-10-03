@@ -108,9 +108,13 @@ public class EnemyAI : MonoBehaviour
             agent.destination = currentTargetPosition;
             if (teleportEffectPrefab)
 			{
-				var newObj = Instantiate(teleportEffectPrefab);
-				newObj.transform.position = transform.position;
-				Destroy(newObj, 5);
+                NavMeshHit hit;
+                if (NavMesh.SamplePosition(currentTargetPosition, out hit, 5, NavMesh.AllAreas))
+                {
+                    var newObj = Instantiate(teleportEffectPrefab);
+                    newObj.transform.position = hit.position;
+                    Destroy(newObj, 5);
+                }
 			}
         }
     }

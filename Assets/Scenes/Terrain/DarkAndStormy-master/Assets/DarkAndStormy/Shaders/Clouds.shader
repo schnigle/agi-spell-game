@@ -39,6 +39,9 @@
 		_Speed ("Speed", float) = 1
 
 		_LightSpread ("Light Spread PFPF", Vector) = (2.0,1.0,50.0,3.0)
+
+		_SkyColor("Sky Color", Color) = (1.0,1.0,1.0,1)
+		_StormFactor("Storm Factor", Range(0, 1)) = 1
 	}
 	SubShader
 	{
@@ -92,6 +95,9 @@
 
 			float _ColPow;
 			float _ColFactor;
+
+			float4 _SkyColor;
+			float _StormFactor;
 
 			struct v2f
 			{
@@ -217,7 +223,7 @@
 				uv += uvStep;
 				clouds = SampleClouds(uv, lightTransTotal, 1.0 );
 				accColor += clouds * ( 1.0 - accColor.w );
-
+				accColor = lerp(_SkyColor, accColor, _StormFactor);
 				// return the color!
 				return accColor;
 			}
