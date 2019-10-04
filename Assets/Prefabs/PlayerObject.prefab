@@ -218,7 +218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gesture: 0
-  color: {r: 1, g: 1, b: 1, a: 1}
+  color: {r: 0, g: 1, b: 0.63107514, a: 1}
   trajectory: {fileID: 5234696679803921362}
   effectPrefab: {fileID: 8166681735931906920, guid: 2b4c82c43a4981f4eaf9caac59446dd1,
     type: 3}
@@ -413,9 +413,9 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
-      key2: {r: 1, g: 1, b: 1, a: 0}
+      key0: {r: 0, g: 0.8793845, b: 1, a: 0}
+      key1: {r: 0, g: 0.8793845, b: 1, a: 1}
+      key2: {r: 0, g: 0.94729495, b: 1, a: 1}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
@@ -430,8 +430,8 @@ TrailRenderer:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 59560
-      atime2: 65535
+      atime1: 1157
+      atime2: 61295
       atime3: 65535
       atime4: 0
       atime5: 0
@@ -439,7 +439,7 @@ TrailRenderer:
       atime7: 0
       m_Mode: 0
       m_NumColorKeys: 2
-      m_NumAlphaKeys: 3
+      m_NumAlphaKeys: 4
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
@@ -811,39 +811,39 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.010690925
       objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
+    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: m_VertexStreams.Array.size
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
+    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: m_UseCustomVertexStreams
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
+    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: m_VertexStreams.Array.data[1]
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
+    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: m_VertexStreams.Array.data[2]
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
+    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
       propertyPath: m_VertexStreams.Array.size
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
+    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
       propertyPath: m_UseCustomVertexStreams
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
+    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
       propertyPath: m_VertexStreams.Array.data[1]
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
+    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
       propertyPath: m_VertexStreams.Array.data[2]
       value: 4
       objectReference: {fileID: 0}
@@ -993,6 +993,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 159396, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 420908, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1037,10 +1041,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1000014254142504, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 20000014031267948, guid: 4d293c8e162f3874b982baadd71153d2,
         type: 3}
       propertyPath: m_Depth
@@ -1051,15 +1051,15 @@ PrefabInstance:
       propertyPath: m_HDR
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 159396, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
+    - target: {fileID: 147176, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000014254142504, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 124034, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 147176, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
@@ -1157,6 +1157,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 1318462475825722627, guid: f466903ec98758a469cff1f8080da8b6,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: f466903ec98758a469cff1f8080da8b6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1226,11 +1231,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 59.183197
-      objectReference: {fileID: 0}
-    - target: {fileID: 1318462475825722627, guid: f466903ec98758a469cff1f8080da8b6,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f466903ec98758a469cff1f8080da8b6, type: 3}

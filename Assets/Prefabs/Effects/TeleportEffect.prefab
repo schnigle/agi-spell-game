@@ -4773,6 +4773,7 @@ GameObject:
   - component: {fileID: 5724952308131805929}
   - component: {fileID: 1493560798838032214}
   - component: {fileID: 8573257162068150067}
+  - component: {fileID: 8617404055302502719}
   m_Layer: 0
   m_Name: TeleportEffect
   m_TagString: Untagged
@@ -4985,7 +4986,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      maxColor: {r: 0, g: 1, b: 0.6313726, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -9534,3 +9535,15 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &8617404055302502719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8166681735931906920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69cad530c565c714491a326c21accb90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
