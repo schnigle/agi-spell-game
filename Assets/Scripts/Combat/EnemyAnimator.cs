@@ -18,6 +18,7 @@ public class EnemyAnimator : MonoBehaviour
     {
         animator.SetBool("walking", actor.agent.velocity.magnitude > 0.5f);
         animator.SetBool("ragdolling", actor.isRagdolling);
+        animator.SetFloat("walk speed", actor.agent.speed);
     }
 
     public void PlayCastAnimation(string animation, float prepTime, float unleashTime)

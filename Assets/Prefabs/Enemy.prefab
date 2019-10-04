@@ -174,7 +174,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 2
+  m_Speed: 5
   m_Acceleration: 16
   avoidancePriority: 50
   m_AngularSpeed: 200
@@ -278,11 +278,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wizard
       objectReference: {fileID: 0}
-    - target: {fileID: -6057140222963153312, guid: 3124a0966cb8fe14abf046caf489ed8b,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 546e7dae69edf994ebbda3244880b998, type: 2}
     - target: {fileID: -4216859302048453862, guid: 3124a0966cb8fe14abf046caf489ed8b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -353,6 +348,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.4
       objectReference: {fileID: 0}
+    - target: {fileID: -6057140222963153312, guid: 3124a0966cb8fe14abf046caf489ed8b,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 546e7dae69edf994ebbda3244880b998, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3124a0966cb8fe14abf046caf489ed8b, type: 3}
 --- !u!4 &5889530197630066303 stripped

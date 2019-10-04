@@ -329,9 +329,9 @@ public class EnemyAI : MonoBehaviour
         Vector2 flatPosition = new Vector2(transform.position.x, transform.position.z);
         Vector2 flatTargetPosition = new Vector2(target.x, target.z);
         float distance = Mathf.Max(Vector2.Distance(flatPosition, flatTargetPosition), 10);
-        float r = Random.Range(distance * 0.8f, distance);
+        float r = Random.Range(distance * 0.6f, distance);
         var angle = Mathf.Atan2(transform.position.z - target.z, transform.position.x- target.x);
-        var maxAngleDelta = Mathf.PI/32;
+        var maxAngleDelta = Mathf.PI/16;
         float theta = Random.Range(angle - maxAngleDelta, angle + maxAngleDelta);
         target.x += r * Mathf.Cos(theta);
         target.z += r * Mathf.Sin(theta);
