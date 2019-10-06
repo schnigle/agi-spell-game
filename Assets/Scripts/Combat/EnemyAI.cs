@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+[System.Serializable]
+public class AISpellColorSet
+{
+    public Color attack = Color.white;
+    public Color teleport = Color.white;
+    public Color shield = Color.white;
+}
+
 public class EnemyAI : MonoBehaviour
 {
     public enum EnemySpell { attack, teleport, shield }
@@ -35,6 +43,14 @@ public class EnemyAI : MonoBehaviour
     Shield shieldPrefab;
     [SerializeField]
     GameObject teleportEffectPrefab;
+    [SerializeField]
+    StaffOrb staffOrb;
+    [SerializeField]
+    Color inactiveOrbColor = Color.black;
+    [SerializeField]
+    Color activeOrbColor = Color.cyan;
+    [SerializeField]
+    AISpellColorSet spellColorSet;
 
     EnemySpell preparedSpell;
     Vector3 currentTargetPosition;
@@ -98,6 +114,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (!isRagdolling)
         {
+            staffOrb.mainColor = spellColorSet.teleport;
             if (teleportEffectPrefab)
 			{
 				var newObj = Instantiate(teleportEffectPrefab);
@@ -133,6 +150,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (!isRagdolling && player != null && shieldPrefab)
         {
+            staffOrb.mainColor = spellColorSet.shield;
             var shield = Instantiate(shieldPrefab);
             shield.transform.position = transform.position + transform.forward * 3 + Vector3.up * 1;
             shield.transform.rotation = transform.rotation;
@@ -160,6 +178,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (!isRagdolling && player != null && projectilePrefab)
         {
+            staffOrb.mainColor = spellColorSet.attack;
             var projStartPos = transform.position + Vector3.up*2;
             var currentFireAngle = GetAttackAngle();
             // Only fire if AI is within range
@@ -199,6 +218,7 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        staffOrb.mainColor = Color.black;
         // Quick fix to find the player in a "pluggable" way
         player = GameObject.FindGameObjectWithTag("Player");
         if (player)
@@ -299,6 +319,7 @@ public class EnemyAI : MonoBehaviour
         else
         {
             agent.speed = defaultSpeed;
+            staffOrb.mainColor = inactiveOrbColor;
         }
 
         UpdateStaffLine();
@@ -314,6 +335,7 @@ public class EnemyAI : MonoBehaviour
             if (isCasting && preparationProgress > lowerPrepLimit && preparationProgress < upperPrepLimit && preparationProgress < 1)
             {
                 staffTrail.enabled = true;
+                staffOrb.mainColor = activeOrbColor;
             }
             else
             {

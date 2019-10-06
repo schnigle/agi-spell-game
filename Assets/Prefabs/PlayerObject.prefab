@@ -950,6 +950,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5225808752590584062, guid: 9f13c2f29f8189a4ea6de8f17cef9020,
         type: 3}
+      propertyPath: previewPositions
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5225808752590584062, guid: 9f13c2f29f8189a4ea6de8f17cef9020,
+        type: 3}
       propertyPath: velocity
       value: 10000
       objectReference: {fileID: 0}
@@ -1026,7 +1031,32 @@ PrefabInstance:
     - target: {fileID: 5225808752590584063, guid: 9f13c2f29f8189a4ea6de8f17cef9020,
         type: 3}
       propertyPath: m_Parameters.widthMultiplier
-      value: 0.03
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5225808752590584063, guid: 9f13c2f29f8189a4ea6de8f17cef9020,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.037036307
+      objectReference: {fileID: 0}
+    - target: {fileID: 5225808752590584063, guid: 9f13c2f29f8189a4ea6de8f17cef9020,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].inSlope
+      value: 0.43369603
+      objectReference: {fileID: 0}
+    - target: {fileID: 5225808752590584063, guid: 9f13c2f29f8189a4ea6de8f17cef9020,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].outSlope
+      value: 0.43369603
+      objectReference: {fileID: 0}
+    - target: {fileID: 5225808752590584063, guid: 9f13c2f29f8189a4ea6de8f17cef9020,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].outWeight
+      value: 0.1707989
+      objectReference: {fileID: 0}
+    - target: {fileID: 5225808752590584063, guid: 9f13c2f29f8189a4ea6de8f17cef9020,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.a
+      value: 0.54901963
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f13c2f29f8189a4ea6de8f17cef9020, type: 3}
