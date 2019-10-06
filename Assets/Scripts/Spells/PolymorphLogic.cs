@@ -31,22 +31,13 @@ public class PolymorphLogic : MonoBehaviour
         Physics.IgnoreCollision(colliderToIgnore, GetComponent<Collider>());
     }
 
-
-
-
     void OnCollisionEnter(Collision col)
     {
-
         ContactPoint contact = col.contacts[0];
         Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
         Vector3 pos = contact.point;
         
-
-
-
         latesthitObject = col.gameObject;
-
-
         if (hitPrefab != null)
         {
             var hitVFX = Instantiate(hitPrefab, pos, rot);
@@ -62,7 +53,7 @@ public class PolymorphLogic : MonoBehaviour
             }
         }
 
-        if (latesthitObject.tag == "Actor")
+        if (latesthitObject.GetComponent<Rigidbody>() != null)
         {
             
             Destroy(latesthitObject);
@@ -70,27 +61,6 @@ public class PolymorphLogic : MonoBehaviour
             Debug.Log(pos);
 
         }
-
-        //var nearby = Physics.OverlapSphere(pos, 5);
-        /*foreach (var item in nearby)
-        {
-            Rigidbody rigidbody = null;
-            if (item.tag == "Actor")
-            {
-                //print("Death good");
-                var enemy = item.GetComponent<EnemyAI>();
-                item.GetComponent<FloatLogic>().enabled = true;
-                enemy.isRagdolling = true;
-
-            }
-            Component levitate = item.GetComponent<FloatLogic>();
-            if (levitate != null)
-            {
-                Debug.Log(latesthitObject);
-                item.GetComponent<FloatLogic>().enabled = true;
-            }
-        }*/
-
         Destroy(gameObject);
     }
 }
