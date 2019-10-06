@@ -16,6 +16,10 @@ public class TeleportSpell : MonoBehaviour, ISpell
     TrajectoryPreview trajectory;
 	[SerializeField]
 	GameObject effectPrefab;
+	[SerializeField]
+	LayerMask groundMask;
+	[SerializeField]
+	new Transform collider;
 
 	public void OnAimEnd()
 	{
@@ -30,12 +34,12 @@ public class TeleportSpell : MonoBehaviour, ISpell
 	public void UnleashSpell()
 	{
         RaycastHit hit;
-        if(Physics.Raycast(trajectory.transform.position, trajectory.transform.forward, out hit))
+        if(Physics.Raycast(trajectory.transform.position, trajectory.transform.forward, out hit, 500, groundMask))
         {
             if (effectPrefab)
 			{
 				var newObj = Instantiate(effectPrefab);
-				newObj.transform.position = transform.position;
+				newObj.transform.position = collider.position - Vector3.up;
 				Destroy(newObj, 5);
 			}
 			// setting transform.position directly does not seem to work with character controller
@@ -43,7 +47,7 @@ public class TeleportSpell : MonoBehaviour, ISpell
 			if (effectPrefab)
 			{
 				var newObj = Instantiate(effectPrefab);
-				newObj.transform.position = transform.position;
+				newObj.transform.position = collider.position;
 				Destroy(newObj, 5);
 			}
         }

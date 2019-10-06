@@ -38,6 +38,8 @@ public class PlayerScript : MonoBehaviour
     Color activeStaffColor = Color.cyan;
     [SerializeField]
     StaffOrb staffOrb;
+    [SerializeField]
+    new GameObject collider;
 
     public PlayerData GetPlayerData()
     {
@@ -55,7 +57,6 @@ public class PlayerScript : MonoBehaviour
 
         controller = GetComponent<CharacterController>();
 
-        hand = rightStick.GetComponent<Valve.VR.InteractionSystem.Hand>();
         if(playerData == null)
             playerData = new PlayerData();
 
@@ -78,14 +79,11 @@ public class PlayerScript : MonoBehaviour
             Debug.Log("No VR headset has been identified. Defaulting to main screen dimensions.");
             resolution = new Tuple<int, int>(Screen.width, Screen.height);
         }
+        controller.detectCollisions = false;
     }
 
     private Tuple<int, int> resolution;
 
-    public SteamVR_Action_Boolean grabPinch; //Grab Pinch is the trigger, select from inspecter
-    public SteamVR_Input_Sources inputSource = SteamVR_Input_Sources.Any;//which controller
-
-    private Valve.VR.InteractionSystem.Hand hand;
     GestureRecognition gestureRecognition = new GestureRecognition();
     // Update is called once per frame
     bool trigger_down_last = false;
@@ -212,5 +210,7 @@ public class PlayerScript : MonoBehaviour
         controller.Move(moveVector * Time.deltaTime);
 
         trigger_down_last = trigger_down;
+
+        collider.transform.position = VRcamera.transform.position - Vector3.up*0.8f;
     }
 }
