@@ -260,7 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8475ae73032e05144af31b5f698dace0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gesture: 0
+  gesture: 4
   color: {r: 0, g: 1, b: 0.63107514, a: 1}
   trajectory: {fileID: 5234696679803921362}
   effectPrefab: {fileID: 8166681735931906920, guid: 2b4c82c43a4981f4eaf9caac59446dd1,
@@ -336,7 +336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bf4c8595f2c84d4d95814490fe6e419, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gesture: 4
+  gesture: 0
   color: {r: 0.6792453, g: 0.43329215, b: 0.24670699, a: 1}
   bullet: {fileID: 108504, guid: ea8ceeb304a55074e931ab330b6d749e, type: 3}
   bulletEmitter: {fileID: 5135887435890056227}
@@ -449,11 +449,11 @@ TrailRenderer:
       - serializedVersion: 3
         time: 1
         value: 0.06666565
-        inSlope: -0.31822178
-        outSlope: -0.31822178
+        inSlope: -3.6894784
+        outSlope: -3.6894784
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0.15177423
+        inWeight: 0.0925926
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -788,6 +788,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Staff orb
       objectReference: {fileID: 0}
+    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 343326201, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: InitialModule.startColor.maxColor.g
       value: 0
@@ -866,54 +881,39 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.010690925
       objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
+    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: m_VertexStreams.Array.size
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
+    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
       propertyPath: m_UseCustomVertexStreams
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
+    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
       propertyPath: m_VertexStreams.Array.data[1]
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
+    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
       propertyPath: m_VertexStreams.Array.data[2]
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
+    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: m_VertexStreams.Array.size
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
+    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: m_UseCustomVertexStreams
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
+    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: m_VertexStreams.Array.data[1]
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
+    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: m_VertexStreams.Array.data[2]
       value: 4
       objectReference: {fileID: 0}
