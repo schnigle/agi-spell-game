@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PolymorphLogic : MonoBehaviour
 {
-    public GameObject muzzlePrefab, hitPrefab, critter;
+    public GameObject muzzlePrefab, hitPrefab, critter, critter2;
     private GameObject latesthitObject;
 
     void Start()
@@ -55,9 +55,27 @@ public class PolymorphLogic : MonoBehaviour
 
         if (latesthitObject.GetComponent<Rigidbody>() != null)
         {
+            float rng = Random.value;
+            Debug.Log(rng);
             
-            Destroy(latesthitObject);
-            Instantiate(critter, pos, Quaternion.identity);
+            if (rng > 0.45 && rng < 0.55)
+            {
+
+                latesthitObject.transform.localScale += new Vector3(5, 5, 5);
+            }
+
+            else if (rng < 0.45)
+            {
+                Destroy(latesthitObject);
+                Instantiate(critter, pos, Quaternion.identity);
+            }
+            else if(rng > 0.55)
+            {
+                Destroy(latesthitObject);
+                Instantiate(critter2, pos, Quaternion.identity);
+            }
+            
+            
             Debug.Log(pos);
 
         }

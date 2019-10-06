@@ -16,6 +16,8 @@ MonoBehaviour:
   hitPrefab: {fileID: 4308658998904027059, guid: 8560b67eb3085dd4498cee3b9dc9e94e,
     type: 3}
   critter: {fileID: 4322340937989672897, guid: 8802eb9e36952cb4c9b8408a79e16b74, type: 3}
+  critter2: {fileID: 4427073233964008136, guid: 1bdbcfea0b4b9704f9ff79ac17110d73,
+    type: 3}
 --- !u!1001 &2832906721369765729
 PrefabInstance:
   m_ObjectHideFlags: 0
