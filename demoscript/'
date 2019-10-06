@@ -73,8 +73,6 @@ namespace gestures
             lambda,
             pi,
             fish_r,
-            theta,
-            nabla,
             unknown
         };
 
@@ -85,8 +83,8 @@ namespace gestures
         private Dictionary<int, Gesture[]> gesture_len_map = 
                 new Dictionary<int, Gesture[]> {
             [1] = new Gesture[] {Gesture.hline_lr, Gesture.hline_rl, Gesture.vline_du, Gesture.vline_ud},        
-            [2] = new Gesture[] {Gesture.gamma, Gesture.lambda},
-            [3] = new Gesture[] {Gesture.delta, Gesture.zeta, Gesture.fish_r, Gesture.pi, Gesture.nabla},        
+            [2] = new Gesture[] {Gesture.gamma, lambda},
+            [3] = new Gesture[] {Gesture.delta, Gesture.zigzag_z, Gesture.fish_r, Gesture.pi},        
             [4] = new Gesture[] {Gesture.square_cw, Gesture.diamond_cw, Gesture.sigma}        
         };
   
@@ -100,17 +98,12 @@ namespace gestures
             [Gesture.hline_rl] = false,
             [Gesture.vline_ud] = false,
             [Gesture.vline_du] = false,
-            [Gesture.delta] = true,
-            [Gesture.zeta] = false,
+            [Gesture.eqlat_triangle_cw] = true,
+            [Gesture.zigzag_z] = false,
             [Gesture.fish_r] = false,
             [Gesture.square_cw] = true,
             [Gesture.diamond_cw] = true,
-            [Gesture.sigma] = false,
-            [Gesture.gamma] = false,
-            [Gesture.lambda] = false,
-            [Gesture.pi] = false,
-            [Gesture.theta] = false,
-            [Gesture.nabla] = true
+            [Gesture.sigma] = false
         };
 
         // Hard coded linear segment compositions for gestures. 
@@ -127,12 +120,12 @@ namespace gestures
                     (float)(Math.PI), 
                     (float)(0.5f*Math.PI) 
             },
-            [Gesture.delta] = new float[] {
+            [Gesture.eqlat_triangle_cw] = new float[] {
                     (float)((5.0f/3.0f)*Math.PI), 
                     (float)(Math.PI), 
                     (float)((1.0f/3.0f)*Math.PI)
             },
-            [Gesture.zeta] = new float[] {
+            [Gesture.zigzag_z] = new float[] {
                     0.0f, 
                     (float)((5.0f/4.0f)*Math.PI), 
                     0.0f
@@ -153,24 +146,6 @@ namespace gestures
                     (float)((7.0f/4.0f)*Math.PI),
                     (float)(0.5f*Math.PI),
                     (float)((5.0f/4.0f)*Math.PI)
-            },
-            [Gesture.nabla] = new float[] {
-                    0.0f,
-                    (float)((4.0f/3.0f)*Math.PI),
-                    (float)((2.0f/3.0f)*Math.PI)
-            },
-            [Gesture.pi] = new float[] {
-                    (float)(0.5f*Math.PI), 
-                    0.0f, 
-                    (float)(1.5f*Math.PI) 
-            },
-            [Gesture.gamma] = new float[] {
-                    (float)(Math.PI), 
-                    (float)(1.5f*Math.PI) 
-            },
-            [Gesture.lambda] = new float[] {
-                    (float)((1.0f/3.0f)*Math.PI),
-                    (float)((5.0f/3.0f)*Math.PI) 
             }
         };
 
