@@ -510,8 +510,8 @@ namespace gestures
             for (int i = 0; i < angles.Length; i++) {
                 float angle = angles[i];
                 float current_avg = current_angle_sum / current_len;
-                float dx = gesture[i+1].x - gesture[i].x;
-                float dy = gesture[i+1].y - gesture[i].y;
+                float dx = (gesture[i+1].x - gesture[i].x) / (bounds.max_x - bounds.min_x);
+                float dy = (gesture[i+1].y - gesture[i].y) / (bounds.max_y - bounds.min_y);
                 float current_weight = (float)(Math.Sqrt(dx*dx + dy*dy));
 
                 // adjust if angle is close to 2*PI    
@@ -807,7 +807,11 @@ namespace gestures
                 // likely a gesture of one or more line segments
                 List<LinearSegment> segments = find_linear_segments(global_angles, sparse_gesture, bounds);
                 Console.WriteLine(segments.Count);
-                
+               
+                foreach (var s in segments) {
+                    Console.WriteLine(s.val + " " + s.weight);
+                }
+    
                 //Gesture[] candidate_gestures = gesture_len_map[segments.Count]; 
                 Gesture[] candidate_gestures;
                 gesture_len_map.TryGetValue(segments.Count, out candidate_gestures);
