@@ -64,8 +64,10 @@ public class PolymorphLogic : MonoBehaviour
 
         if (latesthitObject.tag == "Actor")
         {
-            Debug.Log(latesthitObject.transform);
+            
             Destroy(latesthitObject);
+            Instantiate(critter, pos, Quaternion.identity);
+            Debug.Log(pos);
 
         }
 

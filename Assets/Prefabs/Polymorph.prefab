@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   muzzlePrefab: {fileID: 0}
   hitPrefab: {fileID: 0}
-  critter: {fileID: 0}
+  critter: {fileID: 4322340937989672897, guid: 8802eb9e36952cb4c9b8408a79e16b74, type: 3}
 --- !u!1001 &2832906721369765729
 PrefabInstance:
   m_ObjectHideFlags: 0
