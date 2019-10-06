@@ -232,11 +232,13 @@ namespace gestures
             public int len;
             public int start_idx, end_idx;
             public float val;
-            public LinearSegment(int len, int start_idx, int end_idx, float val) {
+            public float weight;
+            public LinearSegment(int len, int start_idx, int end_idx, float val, float weight) {
                 this.len = len;
                 this.start_idx = start_idx;
                 this.end_idx = end_idx;
                 this.val = val; 
+                this.weight = weight;
             }
         }
 
@@ -451,21 +453,67 @@ namespace gestures
         }
 
         /*
+         * Struct describing a line in polar coordinates with weight and index.
+         */
+        public struct HoughPoint {
+            public float r, phi, weight;
+            public int i;
+            public HoughPoint(float r, float phi, int i, float weight) {
+                this.r = r;
+                this.phi = phi;
+                this.i = i;
+                this.weight = weight;
+            }
+        }
+
+        /*
+         * Hough transform.
+         */
+        private HoughPoint[] hough_transform(List<Point_2D> gesture) {
+            HoughPoint[] houghpoints = new HoughPoint[gesture.Count - 1];
+            for(int i = 0; i < houghpoints.Length; i++) {
+                Point_2D a = gesture[i];
+                Point_2D b = gesture[i+1];
+                float dy = b.y - a.y;
+                float dx = b.x - a.x;
+                float a_r = (float)Math.Sqrt(a.x*a.x + a.y*a.y);
+                float b_r = (float)Math.Sqrt(b.x*b.x + b.y*b.y);
+                float a_phi = (float)Math.Atan2(a.y, a.x);
+                float b_phi = (float)Math.Atan2(b.y, b.x);
+                float phi_0 = (float)((Math.Abs(b.x - a.x) < 0.001) ? Math.PI/2 : Math.Atan2(dy, dx));
+                phi_0 += (float)(2*Math.PI);
+                phi_0 %= (float)(2*Math.PI);
+                float d = (float)(a_r * Math.Sin(a_phi - phi_0));
+                houghpoints[i] = new HoughPoint(d, phi_0, i, (float)Math.Sqrt(dx*dx + dy*dy));
+            }
+            return houghpoints;
+        }
+
+
+        /*
          * Extracts linear features from an array of angles. The angles 
          * correspond to the direction vectors of the first n - 1 points
          * of a gesture with n points.
          */
-        private List<LinearSegment> find_linear_segments(float[] angles) {
+        private List<LinearSegment> find_linear_segments(
+                float[] angles,
+                List<Point_2D> gesture,
+                Bounds bounds
+        ) {
             List<LinearSegment> segments = new List<LinearSegment>();
             int current_seg = 0;
             float current_angle_sum = 0;
             int current_len = 0;
             int current_start_idx = 0;
+            float current_weight_sum = 0.0f;
 
             for (int i = 0; i < angles.Length; i++) {
                 float angle = angles[i];
                 float current_avg = current_angle_sum / current_len;
-                
+                float dx = gesture[i+1].x - gesture[i].x;
+                float dy = gesture[i+1].y - gesture[i].y;
+                float current_weight = (float)(Math.Sqrt(dx*dx + dy*dy));
+
                 // adjust if angle is close to 2*PI    
                 if(angle - current_avg > Math.PI){
                     angle -= (float) (2*Math.PI);
@@ -484,14 +532,17 @@ namespace gestures
                                 current_len,        // len
                                 current_start_idx,  // start_idx
                                 i - 1,              // end_idx
-                                current_avg         // val
+                                current_avg,        // val
+                                current_weight_sum  // weight
                             )
                         );
                     }
                     current_len = 1;
                     current_angle_sum = angle;
                     current_start_idx = i;
+                    current_weight_sum = current_weight;
                 } else {
+                    current_weight_sum += current_weight;
                     current_angle_sum += angle;
                     current_len++;
                 } 
@@ -512,8 +563,8 @@ namespace gestures
         ) {
             float[] reference = reference_segments[gesture_label];
             int j = 0; // to iterate through reference.
-            int k = 0; // number of times we've offset the start.
-
+            int k = 0; // number of times we've offset the start. 
+            float score = 0;
             
             //if (reference.Length > segs.Count)
             if (reference.Length != segs.Count)
@@ -540,19 +591,27 @@ namespace gestures
                 }
 
                 // compare to reference.
-                if (Math.Abs(val - reference[j]) > ANGLE_DEVIATION_THRESH) {
+                float deviation = Math.Abs(val - reference[j]);
+                if (deviation > ANGLE_DEVIATION_THRESH) {
                     if(!allow_alt_start || k > reference.Length)
                         return false;
                     k++;
                     i = -1;
+                    score = 0;
                 }
+
                 
                 // segment accepted. Proceed to next reference segment.
+                score += (ANGLE_DEVIATION_THRESH - deviation);
                 j++;
                 j %= reference.Length;
             }
 
+
             // segments accepted.
+            score /= reference.Length;
+            Console.WriteLine(score);
+            
             return true;
         }
 
@@ -746,14 +805,19 @@ namespace gestures
                 else if(z_neg_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.z) > 0.2) ret.type = Gesture.pull;
             } else if (ret.type == Gesture.unknown) {
                 // likely a gesture of one or more line segments
-                List<LinearSegment> segments = find_linear_segments(global_angles);
+                List<LinearSegment> segments = find_linear_segments(global_angles, sparse_gesture, bounds);
                 Console.WriteLine(segments.Count);
-                Gesture[] candidate_gestures = gesture_len_map[segments.Count]; 
-                foreach (Gesture g in candidate_gestures) {
-                    if (matches_linear_segments(segments, g, sparse_gesture, 
-                                alt_start_allowed_map[g])){
-                        ret.type = g;
-                        break;
+                
+                //Gesture[] candidate_gestures = gesture_len_map[segments.Count]; 
+                Gesture[] candidate_gestures;
+                gesture_len_map.TryGetValue(segments.Count, out candidate_gestures);
+                if(candidate_gestures != null){
+                    foreach (Gesture g in candidate_gestures) {
+                        if (matches_linear_segments(segments, g, sparse_gesture, 
+                                    alt_start_allowed_map[g])){
+                            ret.type = g;
+                            break;
+                        }
                     }
                 }
             }
@@ -763,6 +827,11 @@ namespace gestures
             float time = watch.ElapsedMilliseconds;
             Console.WriteLine(time + "ms");
             Console.WriteLine(ret.type);
+
+            //HoughPoint[] hh = hough_transform(sparse_gesture);
+            //foreach(var h in hh) {
+            //    Console.WriteLine(h.i + ": " /*+ h.r + " "*/ + h.phi + " @ " + h.weight);
+            //}
            
         }    
 
