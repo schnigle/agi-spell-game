@@ -38,6 +38,7 @@ namespace gestures
                                                                   // segmenting a gesture.
         public const int SEGMENTATION_LENGTH_THRESH =             // - Segments with fewer # of points than this will
                 10 / SPARSIFY_GRANULARITY;                        // be ignored.
+        public const float SEGMENTATION_WEIGHT_THRESH = 0.5f;
 
         // Determines how sensitive we want to be in regards to thresholds
         // on an axis. 0.5f means doubling the thresholds.
@@ -523,7 +524,8 @@ namespace gestures
 
                 float deviation = Math.Abs(angle - current_avg);
                 if (deviation > SEGMENTATION_ANGLE_THRESH || i == angles.Length - 1) {
-                    if(current_len > SEGMENTATION_LENGTH_THRESH){
+                    if(current_len > SEGMENTATION_LENGTH_THRESH && 
+                            current_weight_sum > SEGMENTATION_WEIGHT_THRESH){
                         current_avg += (float) (2*Math.PI);
                         current_avg %= (float) (2*Math.PI);
                         current_seg++;
