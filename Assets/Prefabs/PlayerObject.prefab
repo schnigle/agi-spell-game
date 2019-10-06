@@ -290,7 +290,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gesture: 4
-  color: {r: 1, g: 0.78125, b: 0.504717, a: 1}
+  color: {r: 0.6792453, g: 0.43329215, b: 0.24670699, a: 1}
   bullet: {fileID: 108504, guid: ea8ceeb304a55074e931ab330b6d749e, type: 3}
   bulletEmitter: {fileID: 5135887435890056227}
   playerTrans: {fileID: 9198214471464328}
@@ -311,8 +311,8 @@ MonoBehaviour:
   controller: {fileID: 9198215730637290}
   VRCamera: {fileID: 29168198241054498}
   cameraLookSpeed: 15
-  armLength: 0.5
-  scepterRotationOffset: 5
+  armLength: 0.2
+  scepterRotationOffset: 50
 --- !u!1 &9198214722480833
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,9 +413,9 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0, g: 0.8793845, b: 1, a: 0}
+      key0: {r: 0, g: 0.8793845, b: 1, a: 1}
       key1: {r: 0, g: 0.8793845, b: 1, a: 1}
-      key2: {r: 0, g: 0.94729495, b: 1, a: 1}
+      key2: {r: 0, g: 0.94729495, b: 1, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
@@ -430,8 +430,8 @@ TrailRenderer:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 1157
-      atime2: 61295
+      atime1: 61295
+      atime2: 65535
       atime3: 65535
       atime4: 0
       atime5: 0
@@ -439,7 +439,7 @@ TrailRenderer:
       atime7: 0
       m_Mode: 0
       m_NumColorKeys: 2
-      m_NumAlphaKeys: 4
+      m_NumAlphaKeys: 3
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
@@ -741,6 +741,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Staff orb
       objectReference: {fileID: 0}
+    - target: {fileID: 343326201, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 343326201, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7171259511691074946, guid: a22d43ef481cdef40a26ba4c9138644d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -810,6 +818,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 0.010690925
+      objectReference: {fileID: 0}
+    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: m_VertexStreams.Array.size
@@ -1058,6 +1081,10 @@ PrefabInstance:
     - target: {fileID: 1000014254142504, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000014254142504, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
+      propertyPath: m_TagString
+      value: MainCamera
       objectReference: {fileID: 0}
     - target: {fileID: 124034, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_Layer

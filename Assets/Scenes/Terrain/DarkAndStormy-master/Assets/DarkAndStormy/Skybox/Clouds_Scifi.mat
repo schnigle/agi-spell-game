@@ -113,7 +113,7 @@ Material:
     - _Scale: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _Speed: 0.002
+    - _Speed: 0.003
     - _SrcBlend: 1
     - _Steps: 70
     - _StormFactor: 1

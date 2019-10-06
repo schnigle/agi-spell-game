@@ -112,6 +112,7 @@ public class PlayerScript : MonoBehaviour
                     trail.GetComponent<TrailRenderer>().Clear();
                     if (staffOrb)
                     {
+                        staffOrb.StartDraw();
                         staffOrb.mainColor = activeStaffColor;
                     }
                 }
@@ -124,6 +125,7 @@ public class PlayerScript : MonoBehaviour
                     if (staffOrb)
                     {
                         staffOrb.mainColor = inactiveStaffColor;
+                        staffOrb.iconEnabled = false;
                     }
                 }
             }
@@ -160,6 +162,7 @@ public class PlayerScript : MonoBehaviour
             {
                 drawingGesture = false;
                 trail.SetActive(false);
+                staffOrb.EndDraw();
                 if (gesture.Count > 0 && gesture3D.Count > 0)
                 {
                     GestureRecognition.Gesture_Meta result = gestureRecognition.recognize_gesture(gesture, gesture3D);
@@ -177,7 +180,8 @@ public class PlayerScript : MonoBehaviour
                                 selectedSpell = spell;
                                 selectedSpell.OnAimStart();
                                 staffOrb.mainColor = selectedSpell.OrbColor;
-                            }    
+                                staffOrb.iconEnabled = true;
+                            }
                         }
                     }
                 }
