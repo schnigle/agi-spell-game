@@ -29,6 +29,18 @@ public class GestureRecognition
     public const float Z_DEPTH_THRESH = 0.3f;           // If depth of gesture is larger than this, consider
                                                         // gestures with depth as candidates.
 
+    // Constants for segmentation. 
+    public const float SEGMENT_MIN_EUQLIDIAN_DISTANCE = 0.0f; // - Segments are ignored if the euqlidian distance
+                                                              // between the first and last point are less than
+                                                              // this. - NOT IMPLEMENTED (I THINK?)
+    public const int SPARSIFY_GRANULARITY = 2;                // - How many nodes we skip in for each iteration in
+                                                              // the sparsify function.
+    public const float SEGMENTATION_ANGLE_THRESH = 0.5f;      // - Threshold for directional devitation used when
+                                                              // segmenting a gesture.
+    public const int SEGMENTATION_LENGTH_THRESH =             // - Segments with fewer # of points than this will
+            8 / SPARSIFY_GRANULARITY;                         // be ignored.
+    public const float SEGMENTATION_WEIGHT_THRESH = 0.3f;
+
     // Determines how sensitive we want to be in regards to thresholds
     // on an axis. 0.5f means doubling the thresholds.
     public const float X_GESTURE_THRESH_MULTIPLIER = 1f;
@@ -37,8 +49,9 @@ public class GestureRecognition
 
     // Constants for lowpass filter.
     public const bool LP_ENABLE = true;
-    public const int LP_KERNEL_SIZE = 2;
+    public const int LP_KERNEL_SIZE = 3;
     public const float LP_SIGMA = 2.0f;
+
 
     /*
      * The types of gestures.
@@ -53,8 +66,132 @@ public class GestureRecognition
         vline_du,
         push,
         pull,
+        square_cw,
+        delta,
+        spiral_cw,
+        zeta,
+        diamond_cw,
+        sigma,
+        gamma,
+        lambda,
+        pi,
+        fish_r,
+        theta,
+        nabla,
         unknown
     };
+
+    /*
+     * Map from segmented gesture length (# of segments) to 
+     * list of possible gestures.
+     */
+    private Dictionary<int, Gesture[]> gesture_len_map = 
+            new Dictionary<int, Gesture[]> {
+        [1] = new Gesture[] {Gesture.hline_lr, Gesture.hline_rl, Gesture.vline_du, Gesture.vline_ud},        
+        [2] = new Gesture[] {Gesture.gamma, Gesture.lambda},
+        [3] = new Gesture[] {Gesture.delta, Gesture.zeta, Gesture.fish_r, Gesture.pi, Gesture.nabla},        
+        [4] = new Gesture[] {Gesture.square_cw, Gesture.diamond_cw, Gesture.sigma}        
+    };
+  
+    /*
+     * Map from Gesture type to a boolean value stating whether alternative
+     * starting points are allowed.
+     */ 
+    private Dictionary<Gesture, bool> alt_start_allowed_map = 
+            new Dictionary<Gesture, bool> {
+        [Gesture.hline_lr] = false,
+        [Gesture.hline_rl] = false,
+        [Gesture.vline_ud] = false,
+        [Gesture.vline_du] = false,
+        [Gesture.delta] = true,
+        [Gesture.zeta] = false,
+        [Gesture.fish_r] = false,
+        [Gesture.square_cw] = true,
+        [Gesture.diamond_cw] = true,
+        [Gesture.sigma] = false,
+        [Gesture.gamma] = false,
+        [Gesture.lambda] = false,
+        [Gesture.pi] = false,
+        [Gesture.theta] = false,
+        [Gesture.nabla] = true
+    };
+
+    // "strictness" multipliers for individual segments. Larger value = more permissive & vice versa.
+    private Dictionary<Gesture, float[]> reference_segments_multipliers =
+            new Dictionary<Gesture, float[]>
+    {
+        [Gesture.delta] = new float[] {1.2f, 1.0f, 1.2f},
+        [Gesture.zeta] = new float[] {1.0f, 1.5f, 1.0f},
+        [Gesture.diamond_cw] = new float[] {1.5f, 1.5f, 1.5f, 1.5f},
+        [Gesture.sigma] = new float[] {1.0f, 1.5f, 1.5f, 1.0f},
+        [Gesture.fish_r] = new float[] {1.2f, 1.0f, 1.2f},
+        [Gesture.nabla] = new float[] {1.0f, 1.2f, 1.2f},
+        [Gesture.lambda] = new float[] {1.0f, 1.0f},
+        [Gesture.square_cw] = new float[] {1.0f, 1.0f, 1.0f, 1.0f}
+    };
+
+    // Hard coded linear segment compositions for gestures. 
+    private Dictionary<Gesture, float[]> reference_segments = 
+            new Dictionary<Gesture, float[]>
+    {
+        [Gesture.hline_lr] = new float[] {0.0f},
+        [Gesture.hline_rl] = new float[] {(float)Math.PI},
+        [Gesture.vline_ud] = new float[] {(float)(1.5f*Math.PI)},
+        [Gesture.vline_du] = new float[] {(float)(0.5f*Math.PI)},
+        [Gesture.square_cw] = new float[] {
+                0.0f, 
+                (float)(1.5f*Math.PI), 
+                (float)(Math.PI), 
+                (float)(0.5f*Math.PI) 
+        },
+        [Gesture.delta] = new float[] {
+                (float)((5.0f/3.0f)*Math.PI), 
+                (float)(Math.PI), 
+                (float)((1.0f/3.0f)*Math.PI)
+        },
+        [Gesture.zeta] = new float[] {
+                0.0f, 
+                (float)((5.0f/4.0f)*Math.PI), 
+                0.0f
+        },
+        [Gesture.diamond_cw] = new float[] {
+                (float)((7.0f/4.0f)*Math.PI),
+                (float)((5.0f/4.0f)*Math.PI),
+                (float)((3.0f/4.0f)*Math.PI),
+                (float)((1.0f/4.0f)*Math.PI),
+        },
+        [Gesture.sigma] = new float[] {
+                (float)(Math.PI),
+                (float)((7.0f/4.0f)*Math.PI),
+                (float)((5.0f/4.0f)*Math.PI),
+                0.0f,
+        },
+        [Gesture.fish_r] = new float[] {
+                (float)((7.0f/4.0f)*Math.PI),
+                (float)(0.5f*Math.PI),
+                (float)((5.0f/4.0f)*Math.PI)
+        },
+        [Gesture.nabla] = new float[] {
+                0.0f,
+                (float)((4.0f/3.0f)*Math.PI),
+                (float)((2.0f/3.0f)*Math.PI)
+        },
+        [Gesture.pi] = new float[] {
+                (float)(0.5f*Math.PI), 
+                0.0f, 
+                (float)(1.5f*Math.PI) 
+        },
+        [Gesture.gamma] = new float[] {
+                (float)(Math.PI), 
+                (float)(1.5f*Math.PI) 
+        },
+        [Gesture.lambda] = new float[] {
+                (float)((1.0f/3.0f)*Math.PI),
+                (float)((5.0f/3.0f)*Math.PI) 
+        }
+    };
+
+
 
     /*
      * Contains information about the performed gesture.
@@ -62,6 +199,7 @@ public class GestureRecognition
     public struct Gesture_Meta
     {
         public Gesture type;
+        public float score;
         public float angle_sum;
         public Point_3D avg_vel_vector;
         public Bounds bounds;
@@ -101,6 +239,32 @@ public class GestureRecognition
         public float x, y, z;
     }
 
+    /*
+     * Struct describing a line segment.
+     *
+     * @len number of points in the segment
+     * @start_idx index of first point in segment
+     * @end_idx index of last point in segment
+     * @val associated value - for our purposes an angle describing the direction
+     */
+    private struct LinearSegment
+    {
+        public int len;
+        public int start_idx, end_idx;
+        public float val;
+        public float weight;
+        public LinearSegment(int len, int start_idx, int end_idx, float val, float weight) {
+            this.len = len;
+            this.start_idx = start_idx;
+            this.end_idx = end_idx;
+            this.val = val; 
+            this.weight = weight;
+        }
+    }
+
+    /*
+     * Returns the normalized vector of a 2D vector.
+     */
     private Point_2D normalize(Point_2D vec2, bool ignore_z) {
         Point_2D ret;
         float norm = vec2_norm(vec2, ignore_z);
@@ -111,11 +275,17 @@ public class GestureRecognition
         return ret; 
     }
 
+    /*
+     * Returns the norm of a 3D vector.
+     */
     private float vec3_norm(Point_3D vec)
     {
         return (float)Math.Sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
     }
 
+    /*
+     * Returns the norm of a 2D vector.
+     */
     private float vec2_norm(Point_2D vec, bool ignore_z)
     {
         return (float)Math.Sqrt(
@@ -240,6 +410,235 @@ public class GestureRecognition
         v.z /= (gesture3d.Count - 1);
 
         return v;
+    }
+
+    /*
+     * Calculates forward derivative for a list of vectors (Point_2D).
+     * Discards last vector.
+     */
+    private List<Point_2D> derive_vector_list(ref List<Point_2D> list) {
+        List<Point_2D> d_list = new List<Point_2D>();
+        for(int i = 0; i < list.Count - 1; i++) {
+            float dx = list[i+1].x - list[i].x;
+            float dy = list[i+1].y - list[i].y;
+            float dz = list[i+1].z - list[i].z;
+            float dt = list[i+1].time - list[i].time;
+            d_list.Add(new Point_2D(list[i].time, dx/dt, dy/dt, dz/dt));
+        }
+        return d_list;
+    }
+
+    /*
+     * Calculates norms for a list of vectors (Point_2D).
+     */
+    private float[] vector_list_norms(ref List<Point_2D> list, bool ignore_z) {
+        float[] norms = new float[list.Count];
+        for(int i = 0; i < norms.Length; i++) {
+            float norm = (float) Math.Sqrt(
+                    list[i].x * list[i].x +
+                    list[i].y * list[i].y +
+                    ((ignore_z) ? 0 : list[i].z * list[i].z)
+            );
+            norms[i] = norm;
+        }
+        return norms;
+    }
+
+    /*
+     * Ignores some gesture points based on SPARSIFY_GRANULARITY.
+     */
+    private List<Point_2D> sparsify(ref List<Point_2D> gesture) {
+        List<Point_2D> sparse_gesture = new List<Point_2D>();
+        for(int i = 0; i < gesture.Count; i += SPARSIFY_GRANULARITY) {
+            sparse_gesture.Add(gesture[i]);
+        }
+        return sparse_gesture;
+    }
+
+    /*
+     * Returns an array of angles describing the direction vectors
+     * of the first n - 1 points of a gesture with n points.
+     */
+    private float[] vector_list_angles(ref List<Point_2D> gesture) {
+        float[] angles = new float[gesture.Count - 1];
+        Point_2D e1 = new Point_2D(0, 1, 0, 0);
+        for(int i = 0; i < angles.Length; i++) {
+            Point_2D a = gesture[i];
+            Point_2D b = gesture[i+1];
+            float dx = b.x - a.x;
+            float dy = b.y - a.y;
+            angles[i] = (float) ((Math.Atan2(dy, dx) + 2*Math.PI) % (2*Math.PI));
+        }
+       return angles; 
+    }
+
+    /*
+     * Struct describing a line in polar coordinates with weight and index.
+     */
+    public struct HoughPoint {
+        public float r, phi, weight;
+        public int i;
+        public HoughPoint(float r, float phi, int i, float weight) {
+            this.r = r;
+            this.phi = phi;
+            this.i = i;
+            this.weight = weight;
+        }
+    }
+
+    /*
+     * Hough transform.
+     */
+    private HoughPoint[] hough_transform(List<Point_2D> gesture) {
+        HoughPoint[] houghpoints = new HoughPoint[gesture.Count - 1];
+        for(int i = 0; i < houghpoints.Length; i++) {
+            Point_2D a = gesture[i];
+            Point_2D b = gesture[i+1];
+            float dy = b.y - a.y;
+            float dx = b.x - a.x;
+            float a_r = (float)Math.Sqrt(a.x*a.x + a.y*a.y);
+            float b_r = (float)Math.Sqrt(b.x*b.x + b.y*b.y);
+            float a_phi = (float)Math.Atan2(a.y, a.x);
+            float b_phi = (float)Math.Atan2(b.y, b.x);
+            float phi_0 = (float)((Math.Abs(b.x - a.x) < 0.001) ? Math.PI/2 : Math.Atan2(dy, dx));
+            phi_0 += (float)(2*Math.PI);
+            phi_0 %= (float)(2*Math.PI);
+            float d = (float)(a_r * Math.Sin(a_phi - phi_0));
+            houghpoints[i] = new HoughPoint(d, phi_0, i, (float)Math.Sqrt(dx*dx + dy*dy));
+        }
+        return houghpoints;
+    }
+
+
+    /*
+     * Extracts linear features from an array of angles. The angles 
+     * correspond to the direction vectors of the first n - 1 points
+     * of a gesture with n points.
+     */
+    private List<LinearSegment> find_linear_segments(
+            float[] angles,
+            List<Point_2D> gesture,
+            Bounds bounds
+    ) {
+        List<LinearSegment> segments = new List<LinearSegment>();
+        int current_seg = 0;
+        float current_angle_sum = 0;
+        int current_len = 0;
+        int current_start_idx = 0;
+        float current_weight_sum = 0.0f;
+
+        for (int i = 0; i < angles.Length; i++) {
+            float angle = angles[i];
+            float current_avg = current_angle_sum / current_len;
+            float dx = (gesture[i+1].x - gesture[i].x) / (bounds.max_x - bounds.min_x);
+            float dy = (gesture[i+1].y - gesture[i].y) / (bounds.max_y - bounds.min_y);
+            float current_weight = (float)(Math.Sqrt(dx*dx + dy*dy));
+
+            // adjust if angle is close to 2*PI    
+            if(angle - current_avg > Math.PI){
+                angle -= (float) (2*Math.PI);
+            } else if (angle - current_avg < -Math.PI) {
+                angle += (float) (2*Math.PI);
+            }
+
+            float deviation = Math.Abs(angle - current_avg);
+            if (deviation > SEGMENTATION_ANGLE_THRESH || i == angles.Length - 1) {
+                if(current_len > SEGMENTATION_LENGTH_THRESH && 
+                        current_weight_sum > SEGMENTATION_WEIGHT_THRESH){
+                    current_avg += (float) (2*Math.PI);
+                    current_avg %= (float) (2*Math.PI);
+                    current_seg++;
+                    segments.Add(
+                        new LinearSegment(
+                            current_len,        // len
+                            current_start_idx,  // start_idx
+                            i - 1,              // end_idx
+                            current_avg,        // val
+                            current_weight_sum  // weight
+                        )
+                    );
+                }
+                current_len = 1;
+                current_angle_sum = angle;
+                current_start_idx = i;
+                current_weight_sum = current_weight;
+            } else {
+                current_weight_sum += current_weight;
+                current_angle_sum += angle;
+                current_len++;
+            } 
+        }
+
+        return segments;
+    }
+
+    /*
+     * Returns true if the segmented gesture described by @segs matches
+     * the reference segments of the gesture described by @gesture_label.
+     */
+    private bool matches_linear_segments(
+            List<LinearSegment> segs,
+            Gesture gesture_label,
+            List<Point_2D> gesture,
+            bool allow_alt_start
+    ) {
+        float[] reference = reference_segments[gesture_label];
+        //float[] mults = reference_segments_multipliers[gesture_label];
+        float[] mults;
+        reference_segments_multipliers.TryGetValue(gesture_label, out mults);
+        if (mults == null)
+            mults = new float[] {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f}; // should be enough? right?
+        int j = 0; // to iterate through reference.
+        int k = 0; // number of times we've offset the start. 
+        float score = 0;
+        
+        //if (reference.Length > segs.Count)
+        if (reference.Length != segs.Count)
+            return false;
+    
+        for (int i = 0; i < segs.Count; i++) {
+            float x0 = gesture[segs[i].start_idx].x;
+            float y0 = gesture[segs[i].start_idx].y;
+            float x1 = gesture[segs[i].end_idx].x;
+            float y1 = gesture[segs[i].end_idx].y;
+            float dx = x1 - x0;
+            float dy = y1 - y0;
+            float euq_len = (float) Math.Sqrt(dx*dx + dy*dy);
+            if (euq_len < SEGMENT_MIN_EUQLIDIAN_DISTANCE)
+               continue;
+
+
+            // adjust if angle is close to 2*PI.
+            float val = segs[i].val;
+            if (val - reference[j] > Math.PI) {
+                val -= (float)(2*Math.PI); 
+            } else if (val - reference[j] < -Math.PI) {
+                val += (float)(2*Math.PI); 
+            }
+
+            // compare to reference.
+            float deviation = Math.Abs(val - reference[j]);
+            if (deviation > ANGLE_DEVIATION_THRESH * mults[i]) {
+                if(!allow_alt_start || k > reference.Length)
+                    return false;
+                k++;
+                i = -1;
+                score = 0;
+            }
+
+            
+            // segment accepted. Proceed to next reference segment.
+            score += (ANGLE_DEVIATION_THRESH - deviation);
+            j++;
+            j %= reference.Length;
+        }
+
+
+        // segments accepted.
+        score /= reference.Length;
+        Console.WriteLine(score);
+        
+        return true;
     }
 
     /*
@@ -380,7 +779,11 @@ public class GestureRecognition
         ret.avg_vel_vector = avg_vel_vec3;
         ret.angle_sum = angle_sum;
         ret.bounds = bounds;
- 
+
+        List<Point_2D> sparse_gesture = sparsify(ref gesture);
+        float[] global_angles = vector_list_angles(ref sparse_gesture);
+
+        // ************************ Classify gesture **************************
         float vel_vec_norm = vec2_norm(avg_vel_vec2, false);
         float x_pos_dev = angle(avg_vel_vec2, new Point_2D(0,1,0,0),  false);
         float y_pos_dev = angle(avg_vel_vec2, new Point_2D(0,0,1,0),  false);
@@ -395,23 +798,37 @@ public class GestureRecognition
                 && gesture_depth > gesture_width;
 
         if(vel_vec_norm < VEL_VEC_NORM_THRESH && Math.Abs(angle_sum) > 6*ANGLE_SUM_THRESH) {
-            // likely a circle (so far)
+            // likely a circle
             float min_angle = (float) ((2 - ANGLE_SUM_THRESH) * Math.PI);
             float max_angle = (float) ((2 + ANGLE_SUM_THRESH) * Math.PI); 
             if (angle_sum > min_angle && angle_sum < max_angle) ret.type = Gesture.circle_ccw;
-            if (angle_sum < -min_angle && angle_sum > -max_angle) ret.type = Gesture.circle_cw;
+            else if (angle_sum < -min_angle && angle_sum > -max_angle) ret.type = Gesture.circle_cw;
+            else if (angle_sum > -6*Math.PI) ret.type = Gesture.spiral_cw;
         } else if (vel_vec_norm > VEL_VEC_NORM_THRESH && z_gesture || gesture_depth > Z_DEPTH_THRESH) {
-            // likely something else 
+            // likely a gesture with depth 
             if     (z_pos_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.z) > 0.2) ret.type = Gesture.push;
             else if(z_neg_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.z) > 0.2) ret.type = Gesture.pull;
-        } else if (vel_vec_norm > VEL_VEC_NORM_THRESH) {
-            if     (x_pos_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.x) > 0.2) ret.type = Gesture.hline_lr;
-            else if(x_neg_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.x) > 0.2) ret.type = Gesture.hline_rl;
-            else if(y_pos_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.y) > 0.2) ret.type = Gesture.vline_du;
-            else if(y_neg_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.y) > 0.2) ret.type = Gesture.vline_ud;
-
+        } else if (ret.type == Gesture.unknown) {
+            // likely a gesture of one or more line segments
+            List<LinearSegment> segments = find_linear_segments(global_angles, sparse_gesture, bounds);
+            Console.WriteLine(segments.Count);
+           
+            Gesture[] candidate_gestures;
+            gesture_len_map.TryGetValue(segments.Count, out candidate_gestures);
+            if(candidate_gestures != null){
+                foreach (Gesture g in candidate_gestures) {
+                    if (matches_linear_segments(segments, g, sparse_gesture, 
+                                alt_start_allowed_map[g])){
+                        ret.type = g;
+                        break;
+                    }
+                }
+            }
         }
 
+        
+        // MonoBehaviour.print(ret.type);
+        
         return ret;
     }
 }
