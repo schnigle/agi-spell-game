@@ -68,7 +68,7 @@ public class GestureRecognition
         pull,
         square_cw,
         delta,
-        spiral_cw,
+        spiral_ccw,
         zeta,
         diamond_cw,
         sigma,
@@ -803,7 +803,7 @@ public class GestureRecognition
             float max_angle = (float) ((2 + ANGLE_SUM_THRESH) * Math.PI); 
             if (angle_sum > min_angle && angle_sum < max_angle) ret.type = Gesture.circle_ccw;
             else if (angle_sum < -min_angle && angle_sum > -max_angle) ret.type = Gesture.circle_cw;
-            else if (angle_sum > -6*Math.PI) ret.type = Gesture.spiral_cw;
+            else if (angle_sum > 6*Math.PI) ret.type = Gesture.spiral_ccw;
         } else if (vel_vec_norm > VEL_VEC_NORM_THRESH && z_gesture || gesture_depth > Z_DEPTH_THRESH) {
             // likely a gesture with depth 
             if     (z_pos_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.z) > 0.2) ret.type = Gesture.push;
@@ -827,7 +827,7 @@ public class GestureRecognition
         }
 
         
-        // MonoBehaviour.print(ret.type);
+        //MonoBehaviour.print(ret.type);
         
         return ret;
     }
