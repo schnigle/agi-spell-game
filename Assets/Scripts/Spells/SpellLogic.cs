@@ -52,11 +52,7 @@ public class SpellLogic : MonoBehaviour
         AudioSource.PlayClipAtPoint(explosion_clip, pos);
 
         Debug.Log(col.gameObject.name);
-        if(col.gameObject.tag== "Floatyobject"){
-          latesthitObject = col.gameObject;
-          latesthitObject.GetComponent<FloatLogic>().enabled = true;
 
-        }
 
         if(hitPrefab != null)
         {
