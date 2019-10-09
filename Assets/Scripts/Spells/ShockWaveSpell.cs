@@ -22,7 +22,7 @@ public class ShockWaveSpell : MonoBehaviour
     public void UnleashSpell()
     {
         GameObject tempBull;
-        tempBull = Instantiate(bullet, bulletEmitter.transform.forward.normalized * 0.5f + bulletEmitter.transform.position, playerTrans.rotation) as GameObject;
+        tempBull = Instantiate(bullet, bulletEmitter.transform.forward.normalized * 0.7f + bulletEmitter.transform.position, playerTrans.rotation) as GameObject;
         Rigidbody tempBody;
         Destroy(tempBull, waitTime);
     }
