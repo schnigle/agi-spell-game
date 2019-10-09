@@ -7,7 +7,6 @@ public class SpellLogic : MonoBehaviour
 
     public GameObject muzzlePrefab, hitPrefab;
     public int force = 100;
-    bool hit = false;
     private GameObject latesthitObject;
 
     public AudioClip explosion_clip;
