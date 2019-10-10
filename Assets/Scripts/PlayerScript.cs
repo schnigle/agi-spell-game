@@ -41,6 +41,8 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     new GameObject collider;
 
+    Transform gestureReferenceTransform;
+
     public PlayerData GetPlayerData()
     {
         if (playerData == null)
@@ -80,6 +82,8 @@ public class PlayerScript : MonoBehaviour
             resolution = new Tuple<int, int>(Screen.width, Screen.height);
         }
         controller.detectCollisions = false;
+        gestureReferenceTransform = new GameObject().transform;
+        gestureReferenceTransform.name = "Gesture Reference Transform";
     }
 
     private Tuple<int, int> resolution;
@@ -113,6 +117,8 @@ public class PlayerScript : MonoBehaviour
                         staffOrb.StartDraw();
                         staffOrb.mainColor = activeStaffColor;
                     }
+                    gestureReferenceTransform.transform.position = VRcamera.transform.position;
+                    gestureReferenceTransform.transform.rotation = VRcamera.transform.rotation;
                 }
                 if(aimingSpell && selectedSpell != null)
                 {
@@ -131,16 +137,32 @@ public class PlayerScript : MonoBehaviour
             {
                 // Record gesture
                 var pos = trail.transform.position;
-                var pixelPos = VRcamera.WorldToScreenPoint(pos);
+                // Constant used to scale the transformed position closer to screen space scale. May not be very necessary. 
+                const float transformScaleFactor = 2;
+                // Transform the world space position to be relative to the reference transform.
+                // The reference transform is a copy of the position and orientation of the 
+                // camera in the beginning of the gesture.
+                var transformedPos = gestureReferenceTransform.InverseTransformPoint(pos) * transformScaleFactor;
+                // print("transformed position: " + transformedPos);
 
                 var point = new GestureRecognition.Point_2D();
                 var point_3D = new GestureRecognition.Point_3D();
                 point.time = Time.time;
                 point_3D.time = point.time;
 
-                point.x = pixelPos.x / resolution.Item1;
-                point.y = pixelPos.y / resolution.Item2;
-                point.z = pixelPos.z;
+                // var r = transformedPos.magnitude;
+                // var sphericalCoords = new Vector3
+                // (
+                //     Mathf.Acos(transformedPos.z / r) * (transformedPos.x > 0 ? 1 : -1),
+                //     Mathf.Atan2(transformedPos.y, transformedPos.z),
+                //     r
+                // );
+                // print("spherical coords: " + sphericalCoords);
+                // transformedPos = sphericalCoords;
+
+                point.x = transformedPos.x;
+                point.y = transformedPos.y;
+                point.z = transformedPos.z;
 
 
                 point_3D.x = pos.x;
