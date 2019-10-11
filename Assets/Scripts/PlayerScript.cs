@@ -134,7 +134,7 @@ public class PlayerScript : MonoBehaviour
         var sphericalCoords = new Vector3
         (
             Mathf.Atan2(transformedPosition.x, transformedPosition.z) * transformScaleFactor,
-            Mathf.Acos(transformedPosition.y / r) - Mathf.PI / 2 * transformScaleFactor,
+            -(Mathf.Acos(transformedPosition.y / r) - Mathf.PI / 2) * transformScaleFactor,
             r
         );
         return sphericalCoords;
