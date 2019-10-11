@@ -14,6 +14,7 @@ public class ShockWaveSpell : MonoBehaviour
     public GameObject bullet, bulletEmitter;
     public Transform playerTrans;
     public float shockForce = 5.0f;
+    public float radius = 10f;
     private const float waitTime = 5.0f;
 
     [SerializeField]
@@ -27,7 +28,17 @@ public class ShockWaveSpell : MonoBehaviour
         Vector3 pos = bulletEmitter .transform.position;
 
 
-        var nearby = Physics.OverlapSphere(pos, 8);
+        Vector3 explosionPos = transform.position;
+
+        Collider[] colliders = Physics.OverlapSphere(explosionPos, radius);
+        foreach (Collider hit in colliders){
+          Rigidbody rb = hit.GetComponent<Rigidbody>();
+          if (rb != null)
+          rb.AddExplosionForce(shockForce, explosionPos, radius, 3.0F);
+                }
+
+
+/*        var nearby = Physics.OverlapSphere(pos, 8);
         foreach(var item in nearby)
         {
             Rigidbody rigidbody = null;
@@ -42,8 +53,7 @@ public class ShockWaveSpell : MonoBehaviour
             {
                 var direction = (rigidbody.transform.position - pos).normalized;
                 rigidbody.AddForce((5 - Vector3.Distance(rigidbody.position, pos)) * (direction) * 200 * shockForce, ForceMode.Impulse);
-            }
-        }
+            }*/
         Rigidbody tempBody;
         Destroy(tempBull, waitTime);
     }
