@@ -41,6 +41,10 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     new GameObject collider;
 
+    enum CoordinateSpace { screen, cameraStartTransform, sphericalCoordinates }
+    [SerializeField]
+    CoordinateSpace gestureCoordinateSpace = CoordinateSpace.cameraStartTransform;
+
     Transform gestureReferenceTransform;
 
     public PlayerData GetPlayerData()
@@ -94,6 +98,42 @@ public class PlayerScript : MonoBehaviour
     List<GestureRecognition.Point_2D> gesture = new List<GestureRecognition.Point_2D>();
     List<GestureRecognition.Point_3D> gesture3D = new List<GestureRecognition.Point_3D>();
 
+    Vector3 WorldToScreenSpace(Vector3 worldPosition)
+    {
+            var pixelPos = VRcamera.WorldToScreenPoint(worldPosition);
+            return new Vector3(
+                pixelPos.x / resolution.Item1,
+                pixelPos.y / resolution.Item2,
+                pixelPos.z
+            );
+    }
+
+    Vector3 WorldToReferenceSpace(Vector3 worldPosition)
+    {
+        // Constant used to scale the transformed position closer to screen space scale. May not be very necessary.
+        const float transformScaleFactor = 2;
+        // Transform the world space position to be relative to the reference transform.
+        // The reference transform is a copy of the position and orientation of the
+        // camera in the beginning of the gesture.
+        var transformedPosition = gestureReferenceTransform.InverseTransformPoint(worldPosition) * transformScaleFactor;
+        // Currently having trouble with depth using these coordinates
+        transformedPosition.z = 0;
+        return transformedPosition;
+    }
+
+    Vector3 WorldToSphericalCoordinates(Vector3 worldPosition)
+    {
+        var transformedPosition = WorldToReferenceSpace(worldPosition);
+        var r = transformedPosition.magnitude;
+        var sphericalCoords = new Vector3
+        (
+            Mathf.Acos(transformedPosition.z / r) * (transformedPosition.x > 0 ? 1 : -1),
+            Mathf.Atan2(transformedPosition.y, transformedPosition.z),
+            r
+        );
+        return sphericalCoords;
+    }
+
     void Update()
     {
         if (Input.GetKeyDown("r"))
@@ -136,38 +176,35 @@ public class PlayerScript : MonoBehaviour
             if (drawingGesture)
             {
                 // Record gesture
-                var pos = trail.transform.position;
-                // Constant used to scale the transformed position closer to screen space scale. May not be very necessary. 
-                const float transformScaleFactor = 2;
-                // Transform the world space position to be relative to the reference transform.
-                // The reference transform is a copy of the position and orientation of the 
-                // camera in the beginning of the gesture.
-                var transformedPos = gestureReferenceTransform.InverseTransformPoint(pos) * transformScaleFactor;
-                // print("transformed position: " + transformedPos);
+                var orbPosition = trail.transform.position;
+                Vector3 transformedPosition;
+                if (gestureCoordinateSpace == CoordinateSpace.cameraStartTransform)
+                {
+                    transformedPosition = WorldToReferenceSpace(orbPosition);
+                }
+                else if (gestureCoordinateSpace == CoordinateSpace.sphericalCoordinates)
+                {
+                    transformedPosition = WorldToSphericalCoordinates(orbPosition);
+                }
+                else
+                {
+                    transformedPosition = WorldToScreenSpace(orbPosition);
+                }
+                print("transformed position: " + transformedPosition);
 
                 var point = new GestureRecognition.Point_2D();
                 var point_3D = new GestureRecognition.Point_3D();
                 point.time = Time.time;
                 point_3D.time = point.time;
 
-                // var r = transformedPos.magnitude;
-                // var sphericalCoords = new Vector3
-                // (
-                //     Mathf.Acos(transformedPos.z / r) * (transformedPos.x > 0 ? 1 : -1),
-                //     Mathf.Atan2(transformedPos.y, transformedPos.z),
-                //     r
-                // );
-                // print("spherical coords: " + sphericalCoords);
-                // transformedPos = sphericalCoords;
-
-                point.x = transformedPos.x;
-                point.y = transformedPos.y;
-                point.z = transformedPos.z;
+                point.x = transformedPosition.x;
+                point.y = transformedPosition.y;
+                point.z = transformedPosition.z;
 
 
-                point_3D.x = pos.x;
-                point_3D.y = pos.y;
-                point_3D.z = pos.z;
+                point_3D.x = orbPosition.x;
+                point_3D.y = orbPosition.y;
+                point_3D.z = orbPosition.z;
 
                 // print(point.x + ", " + point.y);
                 gesture.Add(point);
