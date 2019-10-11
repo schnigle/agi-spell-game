@@ -123,12 +123,18 @@ public class PlayerScript : MonoBehaviour
 
     Vector3 WorldToSphericalCoordinates(Vector3 worldPosition)
     {
+        const float transformScaleFactor = 1.5f;
         var transformedPosition = gestureReferenceTransform.InverseTransformPoint(worldPosition);
+        /*
+            x: side
+            y: up
+            z: forward
+         */
         var r = transformedPosition.magnitude;
         var sphericalCoords = new Vector3
         (
-            Mathf.Acos(transformedPosition.z / r) * (transformedPosition.x > 0 ? 1 : -1),
-            Mathf.Atan2(transformedPosition.y, transformedPosition.z),
+            Mathf.Atan2(transformedPosition.x, transformedPosition.z) * transformScaleFactor,
+            Mathf.Acos(transformedPosition.y / r) - Mathf.PI / 2 * transformScaleFactor,
             r
         );
         return sphericalCoords;
