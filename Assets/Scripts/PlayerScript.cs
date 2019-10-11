@@ -44,6 +44,8 @@ public class PlayerScript : MonoBehaviour
     enum CoordinateSpace { screen, cameraStartTransform, sphericalCoordinates }
     [SerializeField]
     CoordinateSpace gestureCoordinateSpace = CoordinateSpace.cameraStartTransform;
+    [SerializeField]
+    bool ignoreGestureDepth;
 
     Transform gestureReferenceTransform;
 
@@ -117,7 +119,6 @@ public class PlayerScript : MonoBehaviour
         // camera in the beginning of the gesture.
         var transformedPosition = gestureReferenceTransform.InverseTransformPoint(worldPosition) * transformScaleFactor;
         // Currently having trouble with depth using these coordinates
-        transformedPosition.z = 0;
         return transformedPosition;
     }
 
@@ -195,6 +196,10 @@ public class PlayerScript : MonoBehaviour
                 else
                 {
                     transformedPosition = WorldToScreenSpace(orbPosition);
+                }
+                if (ignoreGestureDepth)
+                {
+                    transformedPosition.z = 0;
                 }
                 print("transformed position: " + transformedPosition);
 
