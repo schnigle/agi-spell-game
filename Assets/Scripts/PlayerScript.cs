@@ -123,7 +123,7 @@ public class PlayerScript : MonoBehaviour
 
     Vector3 WorldToSphericalCoordinates(Vector3 worldPosition)
     {
-        var transformedPosition = WorldToReferenceSpace(worldPosition);
+        var transformedPosition = gestureReferenceTransform.InverseTransformPoint(worldPosition);
         var r = transformedPosition.magnitude;
         var sphericalCoords = new Vector3
         (
