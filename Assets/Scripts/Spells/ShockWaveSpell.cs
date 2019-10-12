@@ -25,16 +25,29 @@ public class ShockWaveSpell : MonoBehaviour
         GameObject tempBull;
         tempBull = Instantiate(bullet, bulletEmitter.transform.forward.normalized * 0.5f + bulletEmitter.transform.position, playerTrans.rotation) as GameObject;
 
-        Vector3 pos = bulletEmitter .transform.position;
+        Vector3 pos = bulletEmitter.transform.position;
 
 
         Vector3 explosionPos = transform.position;
 
-        Collider[] colliders = Physics.OverlapSphere(explosionPos, radius);
+        Collider[] colliders = Physics.OverlapSphere(pos, radius);
         foreach (Collider hit in colliders){
-          Rigidbody rb = hit.GetComponent<Rigidbody>();
-          if (rb != null)
-          rb.AddExplosionForce(shockForce, explosionPos, radius, 3.0F);
+
+            if (hit.tag == "Actor")
+            {
+                var enemy = hit.GetComponent<EnemyAI>();
+                enemy.isRagdolling = true;
+            }
+
+
+            Rigidbody rb = hit.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.AddExplosionForce(120*shockForce, pos, radius, 3.0F, ForceMode.Impulse);
+                Debug.Log(explosionPos);
+                Debug.Log(rb);
+            }
+          
                 }
 
 
