@@ -11,8 +11,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.64, y: 0.10999998, z: 0.0053406097}
-  m_Center: {x: -0.29000002, y: 0.044999994, z: -0.007329694}
+  m_Size: {x: 0.64000005, y: 0.10999998, z: 0.02299882}
+  m_Center: {x: -0.29000005, y: 0.044999998, z: -0.016158804}
 --- !u!1001 &2437132648283019614
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26,6 +26,16 @@ PrefabInstance:
       value: FloorPlanks Variant
       objectReference: {fileID: 0}
     - target: {fileID: -927199367670048503, guid: cf58382df3119e944a9bfd67d08edbd9,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 8051415255134806348, guid: cf58382df3119e944a9bfd67d08edbd9,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 6697505082866633849, guid: cf58382df3119e944a9bfd67d08edbd9,
         type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
@@ -105,16 +115,6 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 8c400d631a0346449abd8ad52699edc2, type: 2}
-    - target: {fileID: 6697505082866633849, guid: cf58382df3119e944a9bfd67d08edbd9,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 8051415255134806348, guid: cf58382df3119e944a9bfd67d08edbd9,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
     - target: {fileID: 8304545770963488453, guid: cf58382df3119e944a9bfd67d08edbd9,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
