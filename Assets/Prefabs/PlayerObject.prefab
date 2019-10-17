@@ -110,6 +110,8 @@ MonoBehaviour:
   activeStaffColor: {r: 0.3254717, g: 0.87749594, b: 1, a: 1}
   staffOrb: {fileID: 9135859571140515644}
   collider: {fileID: 837267574}
+  gestureCoordinateSpace: 1
+  ignoreGestureDepth: 0
 --- !u!143 &9198214471464335
 CharacterController:
   m_ObjectHideFlags: 0
