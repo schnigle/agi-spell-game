@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class OrbSpell : MonoBehaviour, ISpell
 {
     [SerializeField]
@@ -30,6 +32,17 @@ public class OrbSpell : MonoBehaviour, ISpell
         Destroy(tempBull, waitTime);
     }
 
+    public void RedoSpell(Vector3 emitPos, float targetMag)
+    {
+        GameObject tempBull;
+        tempBull = Instantiate(bullet, emitPos, playerTrans.rotation) as GameObject;
+        Rigidbody tempBody;
+        tempBody = tempBull.GetComponent<Rigidbody>();
+        var scrip = tempBull.GetComponent<SpellLogicOrb>();
+        scrip.targetMag = targetMag*3.0f;
+        Destroy(tempBull, waitTime);
+    }
+
     public void OnAimStart()
     {
         trajectory?.gameObject.SetActive(true);
@@ -51,6 +64,30 @@ public class OrbSpell : MonoBehaviour, ISpell
         {
             UnleashSpell();
         }
+        var orbs =  GameObject.FindGameObjectsWithTag("blackorb");
 
+        foreach(var orbA in orbs)
+        {
+            var scriptA = orbA.GetComponent<SpellLogicOrb>();
+            if(scriptA != null && !scriptA.marked)
+                foreach (var orbB in orbs)
+                {
+                    var scriptB = orbB.GetComponent<SpellLogicOrb>();
+                    if (scriptB != null && !scriptB.marked && orbA.gameObject != orbB.gameObject)
+                    {
+                        var trA = orbA.GetComponent<Transform>();
+                        var trB = orbB.GetComponent<Transform>();
+                        if (Vector3.Distance(trA.position, trB.position) < 2.0f)
+                        {
+                            scriptA.marked = true;
+                            scriptB.marked = true;
+                            scriptA.dieAnim = true;
+                            scriptB.dieAnim = true;
+                            RedoSpell(orbA.transform.position, Mathf.Max(scriptA.targetMag, scriptB.targetMag));
+                        }
+
+                    }
+                }
+        }
     }
 }

@@ -40,7 +40,7 @@ WindZone:
   m_GameObject: {fileID: 4290925732586147337}
   m_Enabled: 1
   m_Mode: 1
-  m_Radius: 12
+  m_Radius: 3
   m_WindMain: 1
   m_WindTurbulence: 2
   m_WindPulseMagnitude: 0.5
@@ -9634,7 +9634,7 @@ GameObject:
   - component: {fileID: 2538492084043853331}
   m_Layer: 11
   m_Name: BlackOrb
-  m_TagString: Untagged
+  m_TagString: blackorb
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14412,8 +14412,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4290925732692964558}
   serializedVersion: 2
-  m_Mass: 0.05
-  m_Drag: 0.5
+  m_Mass: 0.1
+  m_Drag: 1.5
   m_AngularDrag: 0.5
   m_UseGravity: 0
   m_IsKinematic: 0
