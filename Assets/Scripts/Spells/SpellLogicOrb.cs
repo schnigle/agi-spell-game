@@ -114,6 +114,7 @@ public class SpellLogicOrb : MonoBehaviour
                 && objects[i].GetComponent<Rigidbody>() != null)
             {
 
+
                 if("blackorb" == objects[i].gameObject.tag)
                 {
                     var tmpScript = objects[i].gameObject.GetComponent<SpellLogicOrb>();
@@ -143,6 +144,17 @@ public class SpellLogicOrb : MonoBehaviour
         }
     }
 
+   /* private void OnCollisionEnter(Collision c)
+    {
+        if (c.other.name.ToString().Contains("Terrain"))
+        {
+            var lowPoint = transform.position;
+            lowPoint.y -= radius / 2.0f;
+            Vector3 dir = c.contacts[0].point - lowPoint;
+            transform.Translate(dir, Space.Self);
+        }
+    }*/
+
     void PullObjectsIn()
     {
         foreach (GameObject thing in objectsToPullIn)
@@ -157,6 +169,8 @@ public class SpellLogicOrb : MonoBehaviour
             }
         }
     }
+
+
 
 
     ///////////////////////////////////////////
@@ -204,6 +218,22 @@ public class SpellLogicOrb : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, 50f, transform.position.z), GetComponent<Rigidbody>().mass * Time.deltaTime * pullInSpeed);
         }
 
+    }
+
+    bool IsGrounded()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position+ new Vector3(0,-targetMag*2,0), -Vector3.up, out hit, radius*2))
+        {
+            //Debug.Log(hit);
+            //Debug.Log("grounded");
+            //Debug.DrawLine(transform.position, hit.point, Color.green);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     void Update()
@@ -255,7 +285,13 @@ public class SpellLogicOrb : MonoBehaviour
 
         //Debug.Log("TIME: " + timeLeft);
 
-       // float number = Random.Range(0.3f, 1.0f);
-      //  dissolvMat.SetFloat("Vector1_BC86B7E7", number);
+        // float number = Random.Range(0.3f, 1.0f);
+        //  dissolvMat.SetFloat("Vector1_BC86B7E7", number);
+
+        if (!IsGrounded())
+        {
+            rigidbody.AddForce(new Vector3(0, 2*rigidbody.mass, 0));
+        }
+
     }
 }
