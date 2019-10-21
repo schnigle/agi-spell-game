@@ -23,12 +23,27 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: cf58382df3119e944a9bfd67d08edbd9,
         type: 3}
       propertyPath: m_Name
-      value: FloorPlanks (5)
+      value: FloorPlanks (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: cf58382df3119e944a9bfd67d08edbd9,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 8051415255134806348, guid: cf58382df3119e944a9bfd67d08edbd9,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 6697505082866633849, guid: cf58382df3119e944a9bfd67d08edbd9,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: cf58382df3119e944a9bfd67d08edbd9,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.453479
+      value: -4.880528
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: cf58382df3119e944a9bfd67d08edbd9,
         type: 3}
