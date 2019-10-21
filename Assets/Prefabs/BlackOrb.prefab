@@ -14395,7 +14395,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   muzzlePrefab: {fileID: 1856981849721026, guid: 4679b7d4913ed45dcadbf24be51fcd6d,
     type: 3}
-  hitPrefab: {fileID: 4290925732692964558, guid: 57a490155b1688540b9e57d5c6d62ddb,
+  hitPrefab: {fileID: 4308658998904027059, guid: 8560b67eb3085dd4498cee3b9dc9e94e,
     type: 3}
   marked: 0
   targetMag: 1

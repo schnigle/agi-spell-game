@@ -17,7 +17,7 @@ public class OrbSpell : MonoBehaviour, ISpell
 	public GameObject bullet, bulletEmitter;
     public Transform playerTrans;
     public float forwardForce = 250.0f;
-    private const float waitTime = 15.0f;
+    private const float waitTime = 10.0f;
 
     [SerializeField]
     TrajectoryPreview trajectory;
@@ -28,8 +28,12 @@ public class OrbSpell : MonoBehaviour, ISpell
         tempBull = Instantiate(bullet, bulletEmitter.transform.forward.normalized * 0.5f + bulletEmitter.transform.position, playerTrans.rotation) as GameObject;
         Rigidbody tempBody;
         tempBody = tempBull.GetComponent<Rigidbody>();
+        var scrip = tempBull.GetComponent<SpellLogicOrb>();
         tempBody.AddForce(bulletEmitter.transform.forward * forwardForce);
         Destroy(tempBull, waitTime);
+
+        scrip.setMaxTime(waitTime);
+        scrip.setStartTime(Time.time * 1000.0f);
     }
 
     public void RedoSpell(Vector3 emitPos, float targetMag)
@@ -39,8 +43,11 @@ public class OrbSpell : MonoBehaviour, ISpell
         Rigidbody tempBody;
         tempBody = tempBull.GetComponent<Rigidbody>();
         var scrip = tempBull.GetComponent<SpellLogicOrb>();
-        scrip.targetMag = targetMag*3.0f;
+        scrip.targetMag = Mathf.Min(targetMag*2.5f, 10.0f);
         Destroy(tempBull, waitTime);
+
+        scrip.setMaxTime(waitTime);
+        scrip.setStartTime(Time.time * 1000.0f);
     }
 
     public void OnAimStart()

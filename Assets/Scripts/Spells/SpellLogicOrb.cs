@@ -14,6 +14,21 @@ public class SpellLogicOrb : MonoBehaviour
     public float targetMag = 1.0f;
     public bool dieAnim = false;
 
+    public Material dissolvMat;
+
+    float startTime = 0;
+    float maxTime = 0;
+
+    public void setStartTime(float startTime)
+    {
+        this.startTime = startTime;
+    }
+
+    public void setMaxTime(float maxTime)
+    {
+        this.maxTime = maxTime;
+    }
+
     void Start()
     {
         objectsToPullIn = new List<GameObject>();
@@ -38,6 +53,21 @@ public class SpellLogicOrb : MonoBehaviour
 
         playerPos = GameObject.Find("PlayerObject").GetComponent<Transform>().position;
         rigidbody = GetComponent<Rigidbody>();
+
+
+        var ps = GetComponentsInChildren<Transform>();
+        foreach (var x in ps)
+        {
+            if (!dieAnim)
+            {
+                if (x.name == "_DarkOrb")
+                {
+                    var tmpMat = x.GetComponent<Renderer>().material;
+                    dissolvMat = tmpMat;
+                }
+            }
+        }
+
 
     }
 
@@ -202,6 +232,20 @@ public class SpellLogicOrb : MonoBehaviour
             }
         }
 
+        float nowTime = Time.time * 1000.0f;
+        float passedTime = nowTime - startTime;
+        float timeLeft = (maxTime*1000.0f) - passedTime;
 
+        const float endTime = 1500.0f;
+        if(!marked && timeLeft < endTime)
+        {
+            float tempTime = 1.0f - ((endTime - timeLeft) / endTime);
+            dissolvMat.SetFloat("Vector1_BC86B7E7", tempTime);
+        }
+
+        //Debug.Log("TIME: " + timeLeft);
+
+       // float number = Random.Range(0.3f, 1.0f);
+      //  dissolvMat.SetFloat("Vector1_BC86B7E7", number);
     }
 }
