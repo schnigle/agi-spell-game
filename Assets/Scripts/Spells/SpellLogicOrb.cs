@@ -18,6 +18,7 @@ public class SpellLogicOrb : MonoBehaviour
 
     float startTime = 0;
     float maxTime = 0;
+    const float endTime = 1500.0f;
 
     public void setStartTime(float startTime)
     {
@@ -27,6 +28,19 @@ public class SpellLogicOrb : MonoBehaviour
     public void setMaxTime(float maxTime)
     {
         this.maxTime = maxTime;
+    }
+
+    public float getTimeLeft()
+    {
+        float nowTime = Time.time * 1000.0f;
+        float passedTime = nowTime - startTime;
+        float timeLeft = (maxTime * 1000.0f) - passedTime;
+        return timeLeft;
+    }
+
+    public bool endStarted()
+    {
+        return getTimeLeft() < endTime;
     }
 
     void Start()
@@ -232,11 +246,7 @@ public class SpellLogicOrb : MonoBehaviour
             }
         }
 
-        float nowTime = Time.time * 1000.0f;
-        float passedTime = nowTime - startTime;
-        float timeLeft = (maxTime*1000.0f) - passedTime;
-
-        const float endTime = 1500.0f;
+        float timeLeft = getTimeLeft();
         if(!marked && timeLeft < endTime)
         {
             float tempTime = 1.0f - ((endTime - timeLeft) / endTime);

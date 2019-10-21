@@ -76,11 +76,11 @@ public class OrbSpell : MonoBehaviour, ISpell
         foreach(var orbA in orbs)
         {
             var scriptA = orbA.GetComponent<SpellLogicOrb>();
-            if(scriptA != null && !scriptA.marked)
+            if(scriptA != null && !scriptA.marked && !scriptA.endStarted())
                 foreach (var orbB in orbs)
                 {
                     var scriptB = orbB.GetComponent<SpellLogicOrb>();
-                    if (scriptB != null && !scriptB.marked && orbA.gameObject != orbB.gameObject)
+                    if (scriptB != null && !scriptB.marked && orbA.gameObject != orbB.gameObject && !scriptB.endStarted())
                     {
                         var trA = orbA.GetComponent<Transform>();
                         var trB = orbB.GetComponent<Transform>();
