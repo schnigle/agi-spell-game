@@ -14397,6 +14397,9 @@ MonoBehaviour:
     type: 3}
   hitPrefab: {fileID: 4290925732692964558, guid: 57a490155b1688540b9e57d5c6d62ddb,
     type: 3}
+  marked: 0
+  targetMag: 1
+  dieAnim: 0
   pullInSpeed: 0.1
   rotateSpeed: 2.25
   radius: 20
