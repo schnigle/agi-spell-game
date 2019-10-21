@@ -33,6 +33,48 @@ ModelImporter:
   - first:
       74: 1263452873884794285
     second: Wizard|spell_line_lr
+  - first:
+      74: 3622649015944210411
+    second: Wizard|spell_delta
+  - first:
+      74: 8538622257837619292
+    second: Wizard|spell_diamond_cw
+  - first:
+      74: 1145078638103231759
+    second: Wizard|spell_fish_r
+  - first:
+      74: 5350995701241033862
+    second: Wizard|spell_gamma
+  - first:
+      74: 7592790999960097633
+    second: Wizard|spell_lamda
+  - first:
+      74: 2858480497946151950
+    second: Wizard|spell_line_du
+  - first:
+      74: -6528887687192328604
+    second: Wizard|spell_line_rl
+  - first:
+      74: -9111849537950714071
+    second: Wizard|spell_line_ud
+  - first:
+      74: 8515766011731980144
+    second: Wizard|spell_nabla
+  - first:
+      74: -6893207654789431599
+    second: Wizard|spell_nabla.001
+  - first:
+      74: 4950284740176314026
+    second: Wizard|spell_pi
+  - first:
+      74: -5175010922191356868
+    second: Wizard|spell_sigma
+  - first:
+      74: -5487998635661773304
+    second: Wizard|spell_square_cw
+  - first:
+      74: 5133812266800475644
+    second: Wizard|spell_zeta
   externalObjects:
   - first:
       type: UnityEngine:Material

@@ -71,6 +71,7 @@ public class EnemyAI : MonoBehaviour
                 agent.enabled = false;
                 body.isKinematic = false;
                 isRising = false;
+                GetComponent<EnemyAnimator>().PlayCastAnimation("idle", 1, 1);
             }
             else
             {
@@ -106,7 +107,7 @@ public class EnemyAI : MonoBehaviour
             targetPosition.x += r * Mathf.Cos(theta);
             targetPosition.z += r * Mathf.Sin(theta);
             currentTargetPosition = targetPosition;
-            StartPrepareAnimation("spell circle cw");
+            StartPrepareAnimation("spell line ud");
         }
     }
 
@@ -142,7 +143,7 @@ public class EnemyAI : MonoBehaviour
         {
             currentTargetPosition = player.transform.position;
             preparedSpell = EnemySpell.shield;
-            StartPrepareAnimation("spell circle ccw");
+            StartPrepareAnimation("spell circle cw");
         }
     }
 
@@ -169,7 +170,7 @@ public class EnemyAI : MonoBehaviour
             if (!float.IsNaN(currentFireAngle))
             {
                 preparedSpell = EnemySpell.attack;
-                StartPrepareAnimation("spell line lr");
+                StartPrepareAnimation("spell fish r");
             }
         }
     }
