@@ -92,7 +92,11 @@ public class TeleportSpell : MonoBehaviour, ISpell
     // Update is called once per frame
     void Update()
     {
-		// RaycastHit hit;
-		// RaycastArc(trajectory.transform.position, trajectory.transform.forward, out hit, 500, groundMask);
+        if (Input.GetKeyDown("j"))
+        {
+            UnleashSpell();
+        }
+        // RaycastHit hit;
+        // RaycastArc(trajectory.transform.position, trajectory.transform.forward, out hit, 500, groundMask);
     }
 }
