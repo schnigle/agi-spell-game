@@ -89,7 +89,7 @@ public class Spellbook : MonoBehaviour
     {
         if (VRIsActive)
         {
-            return SteamVR_Input.GetState("Trackpad", SteamVR_Input_Sources.LeftHand);
+            return SteamVR_Input.GetState("TrackpadActive", SteamVR_Input_Sources.LeftHand);
         }
         else
         {
