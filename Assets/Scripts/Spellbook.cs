@@ -117,6 +117,8 @@ public class Spellbook : MonoBehaviour
                 var eff = Instantiate(newPageEffect, transform.position + transform.up * 0.5f, Quaternion.Euler(transform.rotation.eulerAngles + newPageEffect.transform.rotation.eulerAngles));
                 eff.transform.parent = transform;
                 emissionTimeRemaining = emissionTime;
+                int nLookups = Mathf.CeilToInt(spellPageTextures.Count / 2f);
+                targetPage = nLookups - 1;
             }
         }
     }
@@ -129,6 +131,10 @@ public class Spellbook : MonoBehaviour
         page3.material.SetColor("_EmissionColor", emissionColor * emissionMultiplier);
         page4.material.SetColor("_EmissionColor", emissionColor * emissionMultiplier);
         emissionTimeRemaining = Mathf.MoveTowards(emissionTimeRemaining, 0, Time.deltaTime);
+        // if (emissionTimeRemaining > 0)
+        // {
+        //     contLookup += Time.deltaTime / emissionTime;
+        // }
     }
 
     // Update is called once per frame
@@ -158,11 +164,11 @@ public class Spellbook : MonoBehaviour
         if (inputUp)
         {
             contLookup = contLookupWithInput;
+            targetPage = Mathf.Round(contLookup);
         }
         // Not holding
         if (!inputActive)
         {
-            targetPage = Mathf.Round(contLookup);
             contLookup = Mathf.Lerp(contLookup, targetPage, Time.deltaTime * 10);
             if (contLookup < 0.01f)
             {
