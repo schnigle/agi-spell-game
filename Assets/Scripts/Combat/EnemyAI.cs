@@ -15,6 +15,11 @@ public class EnemyAI : MonoBehaviour
 {
     public enum EnemySpell { attack, teleport, shield }
 
+    // audio
+    public AudioClip scream1;
+    public AudioClip scream2;
+    public int nClips;
+
     public NavMeshAgent agent { get; private set; }
     public Rigidbody body { get; private set; }
     /// True if the actor is currently trying to get up (and return to NavMesh) after being a ragdoll
@@ -72,6 +77,12 @@ public class EnemyAI : MonoBehaviour
                 body.isKinematic = false;
                 isRising = false;
                 GetComponent<EnemyAnimator>().PlayCastAnimation("idle", 1, 1);
+                int rand = Random.Range(0, nClips);
+                switch (rand) {
+                    case 0: this.gameObject.GetComponent<AudioSource>().clip = scream1; break;
+                    case 1: this.gameObject.GetComponent<AudioSource>().clip = scream2; break;
+                }
+                this.gameObject.GetComponent<AudioSource>().Play();
             }
             else
             {

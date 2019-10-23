@@ -18,6 +18,7 @@ public class PlayerScript : MonoBehaviour
 
     // audio
     public AudioClip ambient_sounds;
+    public AudioClip spell_successful_sound;
     public AudioSource self_audio_source;
 
     Vector3 moveVector;
@@ -60,6 +61,7 @@ public class PlayerScript : MonoBehaviour
     void Start()
     {
         //audio
+        self_audio_source = GetComponent<AudioSource>();
         self_audio_source.clip = ambient_sounds;
         self_audio_source.Play();
 
@@ -244,11 +246,14 @@ public class PlayerScript : MonoBehaviour
                         {
                             if (identifiedGesture == spell.SpellGesture)
                             {
-                                aimingSpell = true;
+								aimingSpell = true;
                                 selectedSpell = spell;
                                 selectedSpell.OnAimStart();
                                 staffOrb.mainColor = selectedSpell.OrbColor;
                                 staffOrb.iconEnabled = true;
+
+                                // Matched spell - play sound
+                                self_audio_source.PlayOneShot(spell_successful_sound, 1.0f);
                             }
                         }
                     }
