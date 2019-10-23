@@ -16,9 +16,7 @@ public class EnemyAI : MonoBehaviour
     public enum EnemySpell { attack, teleport, shield }
 
     // audio
-    public AudioClip scream1;
-    public AudioClip scream2;
-    public int nClips;
+    private AudioClip[] screams;
 
     public NavMeshAgent agent { get; private set; }
     public Rigidbody body { get; private set; }
@@ -76,11 +74,8 @@ public class EnemyAI : MonoBehaviour
                 agent.enabled = false;
                 body.isKinematic = false;
                 isRising = false;
-                int rand = Random.Range(0, nClips);
-                switch (rand) {
-                    case 0: this.gameObject.GetComponent<AudioSource>().clip = scream1; break;
-                    case 1: this.gameObject.GetComponent<AudioSource>().clip = scream2; break;
-                }
+                int rand_idx = Random.Range(0, screams.Length);
+                this.gameObject.GetComponent<AudioSource>().clip = screams[rand_idx];
                 this.gameObject.GetComponent<AudioSource>().Play();
             }
             else
@@ -229,6 +224,21 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        screams = new AudioClip[]{
+            Resources.Load<AudioClip>("audio/scream_1"),
+            Resources.Load<AudioClip>("audio/scream_2"),
+            Resources.Load<AudioClip>("audio/scream_3"),
+            Resources.Load<AudioClip>("audio/scream_4"),
+            Resources.Load<AudioClip>("audio/scream_5"),
+            Resources.Load<AudioClip>("audio/scream_6"),
+            Resources.Load<AudioClip>("audio/scream_7"),
+            Resources.Load<AudioClip>("audio/scream_8"),
+            Resources.Load<AudioClip>("audio/scream_9"),
+            Resources.Load<AudioClip>("audio/scream_10"),
+            Resources.Load<AudioClip>("audio/scream_11"),
+            Resources.Load<AudioClip>("audio/scream_12")
+        };
+        
         staffOrb.mainColor = Color.black;
         // Quick fix to find the player in a "pluggable" way
         player = GameObject.FindGameObjectWithTag("Player");
