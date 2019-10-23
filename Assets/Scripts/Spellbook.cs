@@ -13,6 +13,8 @@ public class Spellbook : MonoBehaviour
     SkinnedMeshRenderer page3;
     [SerializeField]
     MeshRenderer page4;
+    [SerializeField]
+    float pageTurnRate = 1.5f;
     float flipPageProgress = 0;
     Vector3 flipPageOriginalScale;
 
@@ -77,11 +79,11 @@ public class Spellbook : MonoBehaviour
         if (VRIsActive)
         {
             Vector2 trackpadPos = SteamVR_Input.GetVector2("Trackpad", SteamVR_Input_Sources.LeftHand);
-            return trackpadPos.x * 1.5f;
+            return trackpadPos.x * pageTurnRate;
         }
         else
         {
-            return Input.mousePosition.x / Screen.width * 1.5f;
+            return (Input.mousePosition.x / Screen.width) * pageTurnRate;
         }
     }
 
@@ -115,6 +117,7 @@ public class Spellbook : MonoBehaviour
         if (inputActive)
         {
             inputDelta = Mathf.Clamp(-(GetInputValue() - inputStartPosition), -1f, 1f);
+            // inputDelta = -(GetInputValue() - inputStartPosition);
             contLookupWithInput = Mathf.Clamp(contLookup + inputDelta, 0, nLookups-1);
             visibleLookup = Mathf.FloorToInt(contLookupWithInput);
             flipPageProgress = contLookupWithInput % 1;
@@ -136,8 +139,9 @@ public class Spellbook : MonoBehaviour
             visibleLookup = Mathf.FloorToInt(contLookup);
             flipPageProgress = contLookup % 1;
         }
-        // var blendValue = sinFlip * sinFlip;
-        var blendValue = 1-flipPageProgress;
+        var sinFlip = Mathf.Sin((1-flipPageProgress)*Mathf.PI/2);
+        var blendValue = sinFlip * sinFlip;
+        // var blendValue = 1-flipPageProgress;
         if (page2 && page4)
         {
             page2.SetBlendShapeWeight(0, blendValue * 100);
