@@ -2,28 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpellLogic : MonoBehaviour
+public class PolymorphLogic : MonoBehaviour
 {
-
-    public GameObject muzzlePrefab, hitPrefab;
-    public int force = 100;
+    public GameObject muzzlePrefab, hitPrefab, critter, critter2;
     private GameObject latesthitObject;
-
-    public AudioClip explosion_clip;
-    public AudioSource hit_pos_source;
-
 
     void Start()
     {
-        hit_pos_source.clip = explosion_clip;
-       //hit = false;
         if (muzzlePrefab != null)
         {
             var muzzleVFX = Instantiate(muzzlePrefab, transform.position, Quaternion.identity);
             muzzleVFX.transform.forward = gameObject.transform.forward;
 
             var psMuzzle = muzzleVFX.GetComponent<ParticleSystem>();
-            if(psMuzzle != null)
+            if (psMuzzle != null)
             {
                 Destroy(muzzleVFX, psMuzzle.main.duration);
             }
@@ -39,25 +31,18 @@ public class SpellLogic : MonoBehaviour
         Physics.IgnoreCollision(colliderToIgnore, GetComponent<Collider>());
     }
 
-
     void OnCollisionEnter(Collision col)
     {
-
         ContactPoint contact = col.contacts[0];
         Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
         Vector3 pos = contact.point;
-
-        print("kalas");
-        AudioSource.PlayClipAtPoint(explosion_clip, pos);
-
-        Debug.Log(col.gameObject.name);
-
-
-        if(hitPrefab != null)
+        
+        latesthitObject = col.gameObject;
+        if (hitPrefab != null)
         {
             var hitVFX = Instantiate(hitPrefab, pos, rot);
             var psHit = hitVFX.GetComponent<ParticleSystem>();
-            if(psHit != null)
+            if (psHit != null)
             {
                 Destroy(hitVFX, psHit.main.duration);
             }
@@ -68,24 +53,32 @@ public class SpellLogic : MonoBehaviour
             }
         }
 
-        var nearby = Physics.OverlapSphere(pos, 5);
-        foreach(var item in nearby)
+        if (latesthitObject.GetComponent<Rigidbody>() != null)
         {
-            Rigidbody rigidbody = null;
-            if(item.tag == "Actor")
+            float rng = Random.value;
+            Debug.Log(rng);
+            
+            if (rng > 0.45 && rng < 0.55)
             {
-                //print("Death good");
-                var enemy = item.GetComponent<EnemyAI>();
-                enemy.isRagdolling = true;
-            }
-            rigidbody = item.GetComponent<Rigidbody>();
-            if (rigidbody != null)
-            {
-                var direction = (rigidbody.transform.position - pos).normalized;
-                rigidbody.AddForce((5 - Vector3.Distance(rigidbody.position, pos)) * (direction) * 200, ForceMode.Impulse);
-            }
-        }
 
+                latesthitObject.transform.localScale += new Vector3(5, 5, 5);
+            }
+
+            else if (rng < 0.45)
+            {
+                Destroy(latesthitObject);
+                Instantiate(critter, pos, Quaternion.identity);
+            }
+            else if(rng > 0.55)
+            {
+                Destroy(latesthitObject);
+                Instantiate(critter2, pos, Quaternion.identity);
+            }
+            
+            
+            Debug.Log(pos);
+
+        }
         Destroy(gameObject);
     }
 }
