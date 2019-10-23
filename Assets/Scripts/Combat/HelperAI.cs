@@ -178,7 +178,7 @@ public class HelperAI : MonoBehaviour
     }
 
     float playerFlagDist;
-    GameObject getFlagClosestToPlayer()
+    public GameObject getFlagClosestToPlayer()
     {
         playerFlagDist = float.MaxValue;
         GameObject chosenFlag = null;
@@ -287,7 +287,14 @@ public class HelperAI : MonoBehaviour
         //Vector2 flatPosition = new Vector2(transform.position.x, transform.position.z);
         // Vector2 flatTargetPosition = new Vector2(target.x, target.z);
         // float distance = Mathf.Max(Vector2.Distance(flatPosition, flatTargetPosition), 10);
+
         target.y = transform.position.y;
+        if(Vector3.Distance(player.transform.position,target) < 2)
+        {
+            target.z += 2;
+            target.y += 1;
+        }
+
         agent.destination = target;
     }
 
