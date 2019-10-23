@@ -2,15 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spell : MonoBehaviour, ISpell
+public class Spell : SpellBase
 {
-    [SerializeField]
-    GestureRecognition.Gesture gesture;
-	public GestureRecognition.Gesture SpellGesture => gesture;
-    [SerializeField]
-    Color color = Color.white;
-	public Color OrbColor => color;
-
     // audio
     public AudioClip cast_clip;
     private AudioSource projectile_source;
@@ -44,7 +37,7 @@ public class Spell : MonoBehaviour, ISpell
         timer += Time.deltaTime;
     }
 
-    public void UnleashSpell()
+    public override void UnleashSpell()
     {
         // cast audio  
         wand_source.time = 0.0f;
@@ -61,7 +54,7 @@ public class Spell : MonoBehaviour, ISpell
         Destroy(tempBull, waitTime);
     }
 
-	public void OnAimStart()
+	public override void OnAimStart()
 	{
 		trajectory?.gameObject.SetActive(true);
 
@@ -69,7 +62,7 @@ public class Spell : MonoBehaviour, ISpell
         wand_source.clip = cast_clip;
     }
 
-	public void OnAimEnd()
+	public override void OnAimEnd()
 	{
 		trajectory?.gameObject.SetActive(false);
 	}

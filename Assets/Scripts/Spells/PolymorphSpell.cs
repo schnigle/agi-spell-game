@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PolymorphSpell : MonoBehaviour
+public class PolymorphSpell : SpellBase
 {
-    [SerializeField]
-    GestureRecognition.Gesture gesture;
-    public GestureRecognition.Gesture SpellGesture => gesture;
-
 
     private float timer = 0.0f;
     private const float waitTime = 10.0f;
@@ -37,7 +33,7 @@ public class PolymorphSpell : MonoBehaviour
         timer += Time.deltaTime;
     }
 
-    public void UnleashSpell()
+    public override void UnleashSpell()
     {
         GameObject tempBull;
         tempBull = Instantiate(bullet, bulletEmitter.transform.forward.normalized * 0.5f + bulletEmitter.transform.position, playerTrans.rotation) as GameObject;
@@ -49,12 +45,12 @@ public class PolymorphSpell : MonoBehaviour
         Destroy(tempBull, waitTime);
     }
 
-    public void OnAimStart()
+    public override void OnAimStart()
     {
         trajectory?.gameObject.SetActive(true);
     }
 
-    public void OnAimEnd()
+    public override void OnAimEnd()
     {
         trajectory?.gameObject.SetActive(false);
     }

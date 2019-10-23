@@ -64,6 +64,8 @@ GameObject:
   - component: {fileID: 2102614419}
   - component: {fileID: 2102614418}
   - component: {fileID: 1332466040}
+  - component: {fileID: 2002801911342880469}
+  - component: {fileID: 8108542016686255591}
   m_Layer: 8
   m_Name: PlayerObject
   m_TagString: Untagged
@@ -103,15 +105,17 @@ MonoBehaviour:
   VRcamera: {fileID: 29168198241054498}
   trajectory: {fileID: 5234696679803921365}
   trail: {fileID: 9198214722480833}
-  ambient_sounds: {fileID: 8300000, guid: 27704e94aa0c3bd41a23d47c2f4c8ba2, type: 3}
+  ambient_sounds: {fileID: 8300000, guid: c962ab1eaae2e07479f5bd2cebfc3be2, type: 3}
+  spell_successful_sound: {fileID: 8300000, guid: 93af15da63ff6db4380bf2a191e0d8ba,
+    type: 3}
   self_audio_source: {fileID: 2102614423}
   rightInput: 2
   inactiveStaffColor: {r: 0.01, g: 0.01, b: 0.01, a: 1}
   activeStaffColor: {r: 0.3254717, g: 0.87749594, b: 1, a: 1}
   staffOrb: {fileID: 9135859571140515644}
   collider: {fileID: 837267574}
-  gestureCoordinateSpace: 1
-  ignoreGestureDepth: 0
+  gestureCoordinateSpace: 2
+  ignoreGestureDepth: 1
 --- !u!143 &9198214471464335
 CharacterController:
   m_ObjectHideFlags: 0
@@ -142,17 +146,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d09d764cafe0da74895b7dbb9d92ddc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gesture: 2
-  color: {r: 1, g: 0.27020738, b: 0.19215685, a: 1}
-  summon_clip: {fileID: 8300000, guid: 4a9f37e7b0190274a82e71d83f82fb97, type: 3}
-  hold_clip: {fileID: 0}
-  cast_clip: {fileID: 8300000, guid: 4e535a0574f291d498b04bbac931a168, type: 3}
-  projectile_source: {fileID: 0}
-  wand_source: {fileID: 571129361}
+  SpellGesture: 17
+  OrbColor: {r: 1, g: 0.2834998, b: 0.1462264, a: 1}
+  PageTexture: {fileID: 0}
+  SpellIcon: {fileID: 0}
+  cast_clip: {fileID: 8300000, guid: 41a43c4f12b5d954fbcae1220fad32ff, type: 3}
+  wand_source: {fileID: 1920981830}
   bullet: {fileID: 970754734791704334, guid: 8ba15b87d13f3fe469eca6b170b10242, type: 3}
   bulletEmitter: {fileID: 5135887435890056227}
   playerTrans: {fileID: 9198214471464328}
-  forwardForce: 100
+  forwardForce: 250
   trajectory: {fileID: 5234696679803921362}
 --- !u!82 &2102614423
 AudioSource:
@@ -262,8 +265,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8475ae73032e05144af31b5f698dace0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gesture: 4
-  color: {r: 0, g: 1, b: 0.63107514, a: 1}
+  SpellGesture: 4
+  OrbColor: {r: 0, g: 1, b: 0.65682125, a: 1}
+  PageTexture: {fileID: 0}
+  SpellIcon: {fileID: 0}
   trajectory: {fileID: 5234696679803921362}
   effectPrefab: {fileID: 8166681735931906920, guid: 2b4c82c43a4981f4eaf9caac59446dd1,
     type: 3}
@@ -283,12 +288,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e016260083e3d504faa68e03097f38da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gesture: 3
-  color: {r: 0.4953642, g: 0, b: 1, a: 1}
+  SpellGesture: 13
+  OrbColor: {r: 0.53181934, g: 0, b: 1, a: 1}
+  PageTexture: {fileID: 0}
+  SpellIcon: {fileID: 0}
   bullet: {fileID: 4290925732692964558, guid: 9f484891000566644baea7d2ed7a9233, type: 3}
   bulletEmitter: {fileID: 5135887435890056227}
   playerTrans: {fileID: 9198214471464328}
   forwardForce: 250
+  cast_clip: {fileID: 8300000, guid: 0456df7afff73fb46b858f2355d6c553, type: 3}
+  projectile_clip: {fileID: 8300000, guid: 6f52dec3e5830ed4598d3c0a4fe2a9bf, type: 3}
+  wand_source: {fileID: 1920981830}
   trajectory: {fileID: 5234696679803921362}
 --- !u!114 &2102614420
 MonoBehaviour:
@@ -302,8 +312,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0d99266d12d14742812e8e01445c99a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gesture: 1
-  color: {r: 0.6556604, g: 0.8947473, b: 1, a: 1}
+  SpellGesture: 1
+  OrbColor: {r: 0.495283, g: 0.7897211, b: 1, a: 1}
+  PageTexture: {fileID: 0}
+  SpellIcon: {fileID: 0}
   shieldPrefab: {fileID: 4270273, guid: d1113ec2ef252e642bf9be13bda47900, type: 3}
   staffKnob: {fileID: 5323722686164765034}
   shieldDistance: 2
@@ -319,13 +331,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14cc3935078a2e943bf7b2bb6186b988, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gesture: 5
-  color: {r: 1, g: 0, b: 0.49108696, a: 1}
+  SpellGesture: 16
+  OrbColor: {r: 1, g: 0, b: 0.50872326, a: 1}
+  PageTexture: {fileID: 0}
+  SpellIcon: {fileID: 0}
   bullet: {fileID: 8800007297753371116, guid: b8a37da71f7b08f4b9124ea5aca12a08, type: 3}
   bulletEmitter: {fileID: 5135887435890056227}
   playerTrans: {fileID: 9198214471464328}
-  forwardForce: 100
+  forwardForce: 250
   trajectory: {fileID: 5234696679803921362}
+  cast_clip: {fileID: 8300000, guid: 41a43c4f12b5d954fbcae1220fad32ff, type: 3}
+  wand_source: {fileID: 1920981830}
 --- !u!114 &2102614418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -338,8 +354,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bf4c8595f2c84d4d95814490fe6e419, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gesture: 0
-  color: {r: 0.6792453, g: 0.43329215, b: 0.24670699, a: 1}
+  SpellGesture: 10
+  OrbColor: {r: 0.735849, g: 0.39179504, b: 0.2672659, a: 1}
+  PageTexture: {fileID: 0}
+  SpellIcon: {fileID: 0}
   bullet: {fileID: 108504, guid: ea8ceeb304a55074e931ab330b6d749e, type: 3}
   bulletEmitter: {fileID: 5135887435890056227}
   playerTrans: {fileID: 9198214471464328}
@@ -362,6 +380,48 @@ MonoBehaviour:
   cameraLookSpeed: 15
   armLength: 0.5
   scepterRotationOffset: 5
+--- !u!114 &2002801911342880469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9198214471464330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beb7a332f4f70d140b92e2c55c138335, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SpellGesture: 9
+  OrbColor: {r: 0.49512804, g: 1, b: 0, a: 1}
+  PageTexture: {fileID: 0}
+  SpellIcon: {fileID: 0}
+  bullet: {fileID: 6723708922091333261, guid: a8c127eb5661ea44a87331dbcfe15c63, type: 3}
+  bulletEmitter: {fileID: 5135887435890056227}
+  playerTrans: {fileID: 9198214471464328}
+  forwardForce: 120
+  trajectory: {fileID: 5234696679803921362}
+--- !u!114 &8108542016686255591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9198214471464330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763ce6cad2b6ca44bbf6270653370d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SpellGesture: 14
+  OrbColor: {r: 0, g: 0.42142296, b: 1, a: 1}
+  PageTexture: {fileID: 0}
+  SpellIcon: {fileID: 0}
+  bullet: {fileID: 1269777111792482526, guid: 40c2ae5c4d7ef6b4186d2e3c951b9b77, type: 3}
+  bulletEmitter: {fileID: 5135887435890056227}
+  playerTrans: {fileID: 9198214471464328}
+  shockForce: 10
+  radius: 10
 --- !u!1 &9198214722480833
 GameObject:
   m_ObjectHideFlags: 0
@@ -550,7 +610,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9198215730657702}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
@@ -778,6 +838,102 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   priority: 0
+--- !u!82 &1920981830
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7171259511545693579}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &195975176
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -789,21 +945,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Staff orb
-      objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.b
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 343326201, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: InitialModule.startColor.maxColor.g
@@ -883,51 +1024,72 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.010690925
       objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
+    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
         type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: m_VertexStreams.Array.size
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
+    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: m_UseCustomVertexStreams
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
+    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: m_VertexStreams.Array.data[1]
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
+    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: m_VertexStreams.Array.data[2]
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
+    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
       propertyPath: m_VertexStreams.Array.size
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
+    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
       propertyPath: m_UseCustomVertexStreams
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
+    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
       propertyPath: m_VertexStreams.Array.data[1]
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
+    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
       propertyPath: m_VertexStreams.Array.data[2]
       value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
+--- !u!1 &7171259511545693579 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7171259511691074947, guid: a22d43ef481cdef40a26ba4c9138644d,
+    type: 3}
+  m_PrefabInstance: {fileID: 195975176}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &9135859571140515644 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9135859571212980020, guid: a22d43ef481cdef40a26ba4c9138644d,
     type: 3}
   m_PrefabInstance: {fileID: 195975176}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 7171259511545693579}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd421cf5e896c864e8db1b254290feee, type: 3}
@@ -1197,6 +1359,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 9198215730775886}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &9198215730914124 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 402434, guid: 4d293c8e162f3874b982baadd71153d2,
+    type: 3}
+  m_PrefabInstance: {fileID: 9198215730775886}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &9887064297321318 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1000014254142504, guid: 4d293c8e162f3874b982baadd71153d2,
@@ -1212,12 +1380,6 @@ Transform:
 --- !u!20 &29168198241054498 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 20000014031267948, guid: 4d293c8e162f3874b982baadd71153d2,
-    type: 3}
-  m_PrefabInstance: {fileID: 9198215730775886}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &9198215730914124 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 402434, guid: 4d293c8e162f3874b982baadd71153d2,
     type: 3}
   m_PrefabInstance: {fileID: 9198215730775886}
   m_PrefabAsset: {fileID: 0}

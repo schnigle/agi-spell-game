@@ -31,7 +31,7 @@ public class PlayerScript : MonoBehaviour
     bool aimingSpell = false;
     bool drawingGesture = false;
     GestureRecognition.Gesture identifiedGesture;
-    ISpell selectedSpell = null;
+    SpellBase selectedSpell = null;
 
     [SerializeField]
     Color inactiveStaffColor = Color.black;
@@ -41,6 +41,8 @@ public class PlayerScript : MonoBehaviour
     StaffOrb staffOrb;
     [SerializeField]
     new GameObject collider;
+    [SerializeField]
+    Spellbook spellbook;
 
     enum CoordinateSpace { screen, cameraStartTransform, sphericalCoordinates }
     [SerializeField]
@@ -238,11 +240,9 @@ public class PlayerScript : MonoBehaviour
                     GestureRecognition.Gesture_Meta result = gestureRecognition.recognize_gesture(gesture, gesture3D);
                     identifiedGesture = result.type;
                     print("Identified gesture: " + identifiedGesture);
-                    foreach (var spell in GetComponents<ISpell>())
+                    foreach (var spell in GetComponents<SpellBase>())
                     {
-                        // A bit of an ugly check
-                        MonoBehaviour spellComp = (MonoBehaviour)spell;
-                        if (spellComp.enabled)
+                        if (spell.enabled)
                         {
                             if (identifiedGesture == spell.SpellGesture)
                             {
@@ -254,6 +254,12 @@ public class PlayerScript : MonoBehaviour
 
                                 // Matched spell - play sound
                                 self_audio_source.PlayOneShot(spell_successful_sound, 1.0f);
+
+                                // Add to spell book
+                                if (spellbook != null && spell.PageTexture != null && !spellbook.spellPageTextures.Contains(spell.PageTexture))
+                                {
+                                    spellbook.spellPageTextures.Add(spell.PageTexture);
+                                }
                             }
                         }
                     }

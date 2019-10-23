@@ -4,15 +4,8 @@ using UnityEngine;
 
 
 
-public class OrbSpell : MonoBehaviour, ISpell
+public class OrbSpell : SpellBase
 {
-    [SerializeField]
-    GestureRecognition.Gesture gesture;
-    public GestureRecognition.Gesture SpellGesture => gesture;
-    [SerializeField]
-    Color color = Color.white;
-    public Color OrbColor => color;
-
 	public GameObject bullet, bulletEmitter;
     public Transform playerTrans;
     public float forwardForce = 250.0f;
@@ -27,7 +20,7 @@ public class OrbSpell : MonoBehaviour, ISpell
     [SerializeField]
     TrajectoryPreview trajectory;
 
-    public void UnleashSpell()
+    public override void UnleashSpell()
     {
         // cast audio 
         wand_source.time = 0.0f;
@@ -70,7 +63,7 @@ public class OrbSpell : MonoBehaviour, ISpell
         scrip.setStartTime(Time.time * 1000.0f);
     }
 
-    public void OnAimStart()
+    public override void OnAimStart()
     {
         trajectory?.gameObject.SetActive(true);
 
@@ -78,7 +71,7 @@ public class OrbSpell : MonoBehaviour, ISpell
         wand_source.clip = cast_clip;
     }
 
-    public void OnAimEnd()
+    public override void OnAimEnd()
     {
         trajectory?.gameObject.SetActive(false);
     }

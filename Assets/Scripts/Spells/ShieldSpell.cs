@@ -2,15 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShieldSpell : MonoBehaviour, ISpell
+public class ShieldSpell : SpellBase
 {
-    [SerializeField]
-    GestureRecognition.Gesture gesture;
-	public GestureRecognition.Gesture SpellGesture => gesture;
-    [SerializeField]
-    Color color = Color.white;
-	public Color OrbColor => color;
-
     [SerializeField]
     Shield shieldPrefab = null;
     Shield instantiatedShield = null;
@@ -20,14 +13,14 @@ public class ShieldSpell : MonoBehaviour, ISpell
     float shieldDistance = 2;
     bool aimingShield = false;
 
-	public void OnAimEnd()
+	public override void OnAimEnd()
 	{
         instantiatedShield.SetTimer(10);
         aimingShield = false;
 		instantiatedShield = null;
 	}
 
-	public void OnAimStart()
+	public override void OnAimStart()
 	{
 		if (instantiatedShield)
         {
@@ -51,7 +44,7 @@ public class ShieldSpell : MonoBehaviour, ISpell
         }
     }
 
-	public void UnleashSpell()
+	public override void UnleashSpell()
 	{
 	}
 

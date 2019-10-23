@@ -2,16 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpellTornado : MonoBehaviour, ISpell
+public class SpellTornado : SpellBase
 {
-    [SerializeField]
-    GestureRecognition.Gesture gesture;
-	public GestureRecognition.Gesture SpellGesture => gesture;
-    [SerializeField]
-    Color color = Color.white;
-	public Color OrbColor => color;
-
-
     public GameObject bullet, bulletEmitter;
     public Transform playerTrans;
     public float forwardForce = 30.0f;
@@ -20,7 +12,7 @@ public class SpellTornado : MonoBehaviour, ISpell
     [SerializeField]
     TrajectoryPreview trajectory;
 
-    public void UnleashSpell()
+    public override void UnleashSpell()
     {
         GameObject tempBull;
         tempBull = Instantiate(bullet, bulletEmitter.transform.forward.normalized * 0.5f + bulletEmitter.transform.position, playerTrans.rotation) as GameObject;
@@ -30,12 +22,12 @@ public class SpellTornado : MonoBehaviour, ISpell
         Destroy(tempBull, waitTime);
     }
 
-    public void OnAimStart()
+    public override void OnAimStart()
     {
         trajectory?.gameObject.SetActive(true);
     }
 
-    public void OnAimEnd()
+    public override void OnAimEnd()
     {
         trajectory?.gameObject.SetActive(false);
     }

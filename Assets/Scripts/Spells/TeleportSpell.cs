@@ -3,16 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class TeleportSpell : MonoBehaviour, ISpell
+public class TeleportSpell : SpellBase
 {
-	[SerializeField]
-    GestureRecognition.Gesture gesture;
-	public GestureRecognition.Gesture SpellGesture => gesture;
-    [SerializeField]
-    Color color = Color.white;
-	public Color OrbColor => color;
-
-
 	[SerializeField]
     TrajectoryPreview trajectory;
 	[SerializeField]
@@ -24,19 +16,19 @@ public class TeleportSpell : MonoBehaviour, ISpell
 	// [SerializeField]
 	float velocity;
 
-	public void OnAimEnd()
+	public override void OnAimEnd()
 	{
 		trajectory?.gameObject.SetActive(false);
 		// trajectory.velocity = 10000;
 	}
 
-	public void OnAimStart()
+	public override void OnAimStart()
 	{
 		trajectory?.gameObject.SetActive(true);
 		// trajectory.velocity = velocity;
 	}
 
-	public void UnleashSpell()
+	public override void UnleashSpell()
 	{
         RaycastHit hit;
         if(Physics.Raycast(trajectory.transform.position, trajectory.transform.forward, out hit, 500, groundMask))
