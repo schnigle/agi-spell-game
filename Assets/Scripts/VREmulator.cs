@@ -35,8 +35,6 @@ public class VREmulator : MonoBehaviour
         }
     }
 
-    bool left, right;
-
     // Update is called once per frame
     void Update()
     {
@@ -51,33 +49,14 @@ public class VREmulator : MonoBehaviour
             {
                 cameraRotationAccel.x += 1;
             }
-            if (Input.GetKeyDown("a"))
+            if (Input.GetKey("a"))
             {
-                left = true;
-                //cameraRotationAccel.y -= 1;
+                cameraRotationAccel.y -= 1;
             }
-            if (Input.GetKeyDown("d"))
+            if (Input.GetKey("d"))
             {
-                right = true;
-                //cameraRotationAccel.y += 1;
+                cameraRotationAccel.y += 1;
             }
-            if (Input.GetKeyUp("a"))
-            {
-                left = false;
-            }
-            if (Input.GetKeyUp("d"))
-            {
-                right = false;
-            }
-            if (right)
-            {
-                cameraRotationAccel.y += 10;
-            }
-            if (left)
-            {
-                cameraRotationAccel.y -= 10;
-            }
-
             cameraRotationAccel *= cameraLookSpeed * Time.deltaTime;
             cameraRotationSpeed += cameraRotationAccel;
             cameraRotationSpeed = Vector3.Lerp(cameraRotationSpeed, Vector3.zero, Time.deltaTime * 10);
