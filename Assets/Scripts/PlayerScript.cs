@@ -311,8 +311,6 @@ public class PlayerScript : MonoBehaviour
             trail.GetComponent<TrailRenderer>().startColor = newcolor;
             trail.GetComponent<TrailRenderer>().material.color = newmatcolor;
             trail.GetComponent<TrailRenderer>().widthMultiplier = originalTrailWidthMultiplier * newAlpha * 2.0f;
-            print(newcolor);
-            print(newmatcolor);
 
             if(fadeCounter > 100)
                 trail.SetActive(false);
