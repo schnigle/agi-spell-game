@@ -7,6 +7,8 @@ public class VREmulator : MonoBehaviour
     [SerializeField]
     GameObject controller;
     [SerializeField]
+    GameObject spellbook;
+    [SerializeField]
     Camera VRCamera;
     [SerializeField]
     float cameraLookSpeed = 15;
@@ -67,6 +69,19 @@ public class VREmulator : MonoBehaviour
                 controller.transform.LookAt(VRCamera.transform.position);
                 controller.transform.rotation =  Quaternion.Euler(controller.transform.rotation.eulerAngles + new Vector3(180 + scepterRotationOffset, -scepterRotationOffset, 0));
                 
+            }
+            if (spellbook)
+            {
+                spellbook.transform.eulerAngles = new Vector3
+                (
+                    -20,
+                    VRCamera.transform.eulerAngles.y,
+                    spellbook.transform.eulerAngles.z
+                );
+                // spellbook.transform.rotation = VRCamera.transform.rotation;
+                var camDir = VRCamera.transform.forward;
+                camDir.y = 0;
+                spellbook.transform.position = transform.position + camDir + transform.up * 0.0f;
             }
         }
     }

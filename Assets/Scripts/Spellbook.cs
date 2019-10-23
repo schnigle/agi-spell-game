@@ -15,10 +15,11 @@ public class Spellbook : MonoBehaviour
     MeshRenderer page4;
     [SerializeField]
     float pageTurnRate = 1.5f;
+    [SerializeField]
+    GameObject newPageEffect;
     float flipPageProgress = 0;
     Vector3 flipPageOriginalScale;
 
-    public List<Texture> spellPageTextures = new List<Texture>();
     int visibleLookup = 0;
 
     float inputStartPosition;
@@ -31,6 +32,13 @@ public class Spellbook : MonoBehaviour
     bool wasInputActive;
     float targetPage;
     bool VRIsActive;
+    [SerializeField]
+    [ColorUsage(true, true)]
+    Color emissionColor = Color.white;
+    [SerializeField]
+    float emissionTime = 1;
+    float emissionTimeRemaining;
+    public List<Texture> spellPageTextures = new List<Texture>();
 
     // Start is called before the first frame update
     void Start()
@@ -99,6 +107,30 @@ public class Spellbook : MonoBehaviour
         }
     }
 
+    public void AddPage(Texture texture)
+    {
+        if (texture != null && !spellPageTextures.Contains(texture))
+        {
+            spellPageTextures.Add(texture);
+            if (newPageEffect)
+            {
+                var eff = Instantiate(newPageEffect, transform.position + transform.up * 0.5f, Quaternion.Euler(transform.rotation.eulerAngles + newPageEffect.transform.rotation.eulerAngles));
+                eff.transform.parent = transform;
+                emissionTimeRemaining = emissionTime;
+            }
+        }
+    }
+
+    void UpdateEmission()
+    {
+        float emissionMultiplier = Mathf.Clamp(emissionTimeRemaining, 0, 1);
+        page1.material.SetColor("_EmissionColor", emissionColor * emissionMultiplier);
+        page2.material.SetColor("_EmissionColor", emissionColor * emissionMultiplier);
+        page3.material.SetColor("_EmissionColor", emissionColor * emissionMultiplier);
+        page4.material.SetColor("_EmissionColor", emissionColor * emissionMultiplier);
+        emissionTimeRemaining = Mathf.MoveTowards(emissionTimeRemaining, 0, Time.deltaTime);
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -150,5 +182,6 @@ public class Spellbook : MonoBehaviour
             page3.SetBlendShapeWeight(1, Mathf.Sin(blendValue * Mathf.PI) * 100);
         }
         UpdatePageTextures();
+        UpdateEmission();
     }
 }

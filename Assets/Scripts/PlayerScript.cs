@@ -258,7 +258,7 @@ public class PlayerScript : MonoBehaviour
                                 // Add to spell book
                                 if (spellbook != null && spell.PageTexture != null && !spellbook.spellPageTextures.Contains(spell.PageTexture))
                                 {
-                                    spellbook.spellPageTextures.Add(spell.PageTexture);
+                                    spellbook.AddPage(spell.PageTexture);
                                 }
                             }
                         }
