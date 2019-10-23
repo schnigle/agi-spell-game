@@ -75,6 +75,9 @@ ModelImporter:
   - first:
       74: 5133812266800475644
     second: Wizard|spell_zeta
+  - first:
+      74: 6280038267115620683
+    second: Wizard|spell_gamma_lower
   externalObjects:
   - first:
       type: UnityEngine:Material
