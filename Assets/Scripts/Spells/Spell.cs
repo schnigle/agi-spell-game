@@ -49,6 +49,7 @@ public class Spell : SpellBase
         //tempBull.transform.Rotate(Vector3.left * 90);
         Rigidbody tempBody;
         tempBody = tempBull.GetComponent<Rigidbody>();
+        tempBody.collisionDetectionMode = CollisionDetectionMode.Continuous;
         // tempBody.transform.position = (bulletEmitter.transform.forward.normalized * 2+ tempBody.position);
         tempBody.AddForce(bulletEmitter.transform.forward * forwardForce);
         Destroy(tempBull, waitTime);

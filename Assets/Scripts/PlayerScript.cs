@@ -16,6 +16,14 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     GameObject trail;
 
+    // related to visual feedback when spell succeeded
+    private Color originalTrailColor;
+    private float originalTrailTime;
+    private Color originalTrailMaterialColor;
+    private float trailAlphaDelta = 0.03f;
+    private int fadeCounter = 0;
+    private float originalTrailWidthMultiplier;
+
     // audio
     public AudioClip ambient_sounds;
     public AudioClip spell_successful_sound;
@@ -62,6 +70,13 @@ public class PlayerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // trail
+        originalTrailColor = trail.GetComponent<TrailRenderer>().startColor;
+        originalTrailTime = trail.GetComponent<TrailRenderer>().time;
+        originalTrailMaterialColor = trail.GetComponent<TrailRenderer>().material.color;
+        originalTrailWidthMultiplier = trail.GetComponent<TrailRenderer>().widthMultiplier;
+        print(originalTrailColor);
+
         //audio
         self_audio_source = GetComponent<AudioSource>();
         self_audio_source.clip = ambient_sounds;
@@ -163,6 +178,14 @@ public class PlayerScript : MonoBehaviour
                     drawingGesture = true;
                     trail.SetActive(true);
                     trail.GetComponent<TrailRenderer>().Clear();
+
+                    // reset values from trail fade
+                    trail.GetComponent<TrailRenderer>().startColor = originalTrailColor;
+                    trail.GetComponent<TrailRenderer>().material.color = originalTrailMaterialColor;
+                    trail.GetComponent<TrailRenderer>().widthMultiplier = originalTrailWidthMultiplier;
+                    trail.GetComponent<TrailRenderer>().emitting = true;
+                    trail.GetComponent<TrailRenderer>().time = originalTrailTime;
+
                     if (staffOrb)
                     {
                         staffOrb.StartDraw();
@@ -205,7 +228,7 @@ public class PlayerScript : MonoBehaviour
                 {
                     transformedPosition.z = 0;
                 }
-                print("transformed position: " + transformedPosition);
+                // print("transformed position: " + transformedPosition);
 
                 var point = new GestureRecognition.Point_2D();
                 var point_3D = new GestureRecognition.Point_3D();
@@ -233,7 +256,6 @@ public class PlayerScript : MonoBehaviour
             if (drawingGesture)
             {
                 drawingGesture = false;
-                trail.SetActive(false);
                 staffOrb.EndDraw();
                 if (gesture.Count > 0 && gesture3D.Count > 0)
                 {
@@ -263,6 +285,14 @@ public class PlayerScript : MonoBehaviour
                             }
                         }
                     }
+
+                    // If no spell matched just terminate the trail. Else "fade" the trail. 
+                    if (!aimingSpell) {
+                        trail.SetActive(false);
+                    } else {
+                        trail.GetComponent<TrailRenderer>().emitting = false;
+                        fadeCounter = 0;
+                    }
                 }
                 gesture.Clear();
                 gesture3D.Clear();
@@ -276,6 +306,21 @@ public class PlayerScript : MonoBehaviour
             }
         }
 
+        // fade trail
+        if (trail.activeSelf && !drawingGesture) {
+            fadeCounter++;
+            float newAlpha = Mathf.Sin(fadeCounter/21.2f) + 1.0f;
+            Color newcolor = trail.GetComponent<TrailRenderer>().startColor;
+            Color newmatcolor = trail.GetComponent<TrailRenderer>().material.color;
+            newcolor.a = newAlpha;
+            newmatcolor.a = newAlpha;
+            trail.GetComponent<TrailRenderer>().startColor = newcolor;
+            trail.GetComponent<TrailRenderer>().material.color = newmatcolor;
+            trail.GetComponent<TrailRenderer>().widthMultiplier = originalTrailWidthMultiplier * newAlpha * 2.0f;
+
+            if(fadeCounter > 100)
+                trail.SetActive(false);
+        }
 
         //REeset the MoveVector
         moveVector = Vector3.zero;
