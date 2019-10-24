@@ -16,6 +16,10 @@ public class TeleportSpell : SpellBase
 	// [SerializeField]
 	float velocity;
 
+    // audio
+    public AudioClip cast_clip;
+    public AudioSource wand_source;
+
 	public override void OnAimEnd()
 	{
 		trajectory?.gameObject.SetActive(false);
@@ -49,6 +53,11 @@ public class TeleportSpell : SpellBase
 				Destroy(newObj, 5);
 			}
         }
+
+        // audio
+        wand_source.clip = cast_clip;
+        wand_source.volume = 0.15f;
+        wand_source.Play();
 
 	}
 

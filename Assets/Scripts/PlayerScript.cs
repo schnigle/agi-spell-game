@@ -265,7 +265,6 @@ public class PlayerScript : MonoBehaviour
                     GestureRecognition.Gesture_Meta result = gestureRecognition.recognize_gesture(gesture, gesture3D);
                     identifiedGesture = result.type;
                     print("Identified gesture: " + identifiedGesture);
-                    print(result.angle_sum);
                     foreach (var spell in GetComponents<SpellBase>())
                     {
                         if (spell.enabled)
@@ -297,7 +296,7 @@ public class PlayerScript : MonoBehaviour
                             var startEffect = Instantiate(spellFailEffect);
                             startEffect.transform.position = trailRend.GetPosition(i);
                         }
-                        self_audio_source.PlayOneShot(spell_unsuccessful_sound, 1f);
+                        self_audio_source.PlayOneShot(spell_unsuccessful_sound, 0.5f);
 
                     }
 
