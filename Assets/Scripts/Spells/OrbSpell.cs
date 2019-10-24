@@ -78,7 +78,6 @@ public class OrbSpell : SpellBase
 
     void Start()
     {
-        projectile_source.clip = projectile_clip;
     }
 
     void Update()
