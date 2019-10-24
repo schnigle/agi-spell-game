@@ -15,6 +15,7 @@ public class EnemyAI : MonoBehaviour
 {
     public enum EnemySpell { attack, teleport, shield }
 
+    public bool isHostile = true;
     // audio
     private AudioClip[] screams;
 
@@ -58,6 +59,8 @@ public class EnemyAI : MonoBehaviour
     EnemySpell preparedSpell;
     Vector3 currentTargetPosition;
 
+    EnemyAnimator animator;
+
     const float projectileSpawnHeight = 1f;
 
     private bool _isRagdolling;
@@ -74,7 +77,7 @@ public class EnemyAI : MonoBehaviour
                 agent.enabled = false;
                 body.isKinematic = false;
                 isRising = false;
-                GetComponent<EnemyAnimator>().PlayCastAnimation("idle", 1, 1);
+                animator.PlayCastAnimation("idle", 1, 1);
                 int rand_idx = Random.Range(0, screams.Length);
                 this.gameObject.GetComponent<AudioSource>().clip = screams[rand_idx];
                 this.gameObject.GetComponent<AudioSource>().Play();
@@ -98,7 +101,7 @@ public class EnemyAI : MonoBehaviour
             castTimeRemaining = spellUnleashTime + spellPrepTime;
             isCasting = true;
             hasUnleashedSpell = false;
-            GetComponent<EnemyAnimator>().PlayCastAnimation(animation, spellPrepTime, spellUnleashTime);
+            animator.PlayCastAnimation(animation, spellPrepTime, spellUnleashTime);
     }
 
     void PrepareTeleport()
@@ -212,6 +215,7 @@ public class EnemyAI : MonoBehaviour
 
     void Awake()
     {
+        animator = GetComponent<EnemyAnimator>();
         agent = GetComponent<NavMeshAgent>();
         body = GetComponent<Rigidbody>();
         if (staffTrail == null)
@@ -276,8 +280,16 @@ public class EnemyAI : MonoBehaviour
             isRagdolling = false;
         }
 
+        // Animation properties
+        if (animator)
+        {
+            animator.ragdolling = isRagdolling;
+            animator.speed = agent.speed;
+            animator.walking = agent.velocity.sqrMagnitude > 0.5f * 0.5f;
+        }
+
         // Move towards player and attack them
-        if (player)
+        if (player && isHostile)
         {
             if (agent.enabled && agent.remainingDistance < 0.1f)
             {

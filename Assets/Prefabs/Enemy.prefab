@@ -199,7 +199,7 @@ NavMeshAgent:
   m_AngularSpeed: 200
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 0
+  m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 0
@@ -217,6 +217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c61d2eec0e6c9b34996be881754effa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isHostile: 1
   projectilePrefab: {fileID: 3692036914013115446, guid: 91fd865d7edb5c14fada3b9fef1dd6e1,
     type: 3}
   spellPrepTime: 2
