@@ -63,6 +63,14 @@ public class EnemyAI : MonoBehaviour
 
     const float projectileSpawnHeight = 1f;
 
+    [SerializeField]
+    float sightRange = 20;
+    [SerializeField]
+    LayerMask sightObstacleMask;
+
+    float sightCheckTimer = 1;
+    bool foundPlayer;
+
     private bool _isRagdolling;
     /// True if the actor is currently in "ragdoll" mode (which means that it acts as a non-kinematic rigidbody while having its movement disabled)
     public bool isRagdolling
@@ -291,9 +299,22 @@ public class EnemyAI : MonoBehaviour
         // Move towards player and attack them
         if (player && isHostile)
         {
-            if (agent.enabled && agent.remainingDistance < 0.1f)
+            if (!foundPlayer)
             {
-                if (!isCasting)
+                sightCheckTimer -= Time.deltaTime;
+                if (sightCheckTimer <= 0)
+                {
+                    sightCheckTimer = Random.Range(0.8f, 1.2f);
+                    bool sightCheck = CanSeePlayer();
+                    if (sightCheck)
+                    {
+                        foundPlayer = true;
+                    }
+                }
+            }
+            if (foundPlayer && agent.enabled && agent.remainingDistance < 0.1f)
+            {
+                if (!isCasting && CanSeePlayer())
                 {
                     int rand = Random.Range(0, 3);
                     if (rand == 0)
@@ -357,6 +378,15 @@ public class EnemyAI : MonoBehaviour
         }
 
         UpdateStaffLine();
+    }
+
+    bool CanSeePlayer()
+    {
+        Vector3 origin = transform.position + Vector3.up * 1.5f;
+        Vector3 direction = player.transform.position - origin;
+        float distance = Mathf.Min(Vector3.Distance(origin, player.transform.position), sightRange);
+        direction.Normalize();
+        return !Physics.Raycast(origin, direction, distance, sightObstacleMask);
     }
 
     void UpdateStaffLine()

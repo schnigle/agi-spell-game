@@ -234,6 +234,10 @@ MonoBehaviour:
     attack: {r: 1, g: 0.27020738, b: 0.19215685, a: 1}
     teleport: {r: 0, g: 1, b: 0.63107514, a: 1}
     shield: {r: 0.6556604, g: 0.8947473, b: 1, a: 1}
+  sightRange: 20
+  sightObstacleMask:
+    serializedVersion: 2
+    m_Bits: 4097
 --- !u!136 &3306375032083718169
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -276,6 +280,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f84d44191dac804cbe6916ebbb00759, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ragdolling: 0
+  speed: 0
+  walking: 0
 --- !u!114 &3413795224703225847
 MonoBehaviour:
   m_ObjectHideFlags: 0
