@@ -110,6 +110,8 @@ MonoBehaviour:
   ambient_sounds: {fileID: 8300000, guid: c962ab1eaae2e07479f5bd2cebfc3be2, type: 3}
   spell_successful_sound: {fileID: 8300000, guid: 93af15da63ff6db4380bf2a191e0d8ba,
     type: 3}
+  spell_unsuccessful_sound: {fileID: 8300000, guid: dc730fab1103fec4bbf76f7141492340,
+    type: 3}
   self_audio_source: {fileID: 2102614423}
   rightInput: 2
   inactiveStaffColor: {r: 0.01, g: 0.01, b: 0.01, a: 1}
@@ -117,6 +119,8 @@ MonoBehaviour:
   staffOrb: {fileID: 9135859571140515644}
   collider: {fileID: 837267574}
   spellbook: {fileID: 7893158500589503650}
+  spellFailEffect: {fileID: 7969932553223147594, guid: 02773195c59a4dc43afc8468dfca9988,
+    type: 3}
   gestureCoordinateSpace: 1
   ignoreGestureDepth: 1
 --- !u!143 &9198214471464335

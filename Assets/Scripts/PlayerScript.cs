@@ -27,6 +27,7 @@ public class PlayerScript : MonoBehaviour
     // audio
     public AudioClip ambient_sounds;
     public AudioClip spell_successful_sound;
+    public AudioClip spell_unsuccessful_sound;
     public AudioSource self_audio_source;
 
     Vector3 moveVector;
@@ -51,6 +52,8 @@ public class PlayerScript : MonoBehaviour
     new GameObject collider;
     [SerializeField]
     Spellbook spellbook;
+    [SerializeField]
+    GameObject spellFailEffect;
 
     enum CoordinateSpace { screen, cameraStartTransform, sphericalCoordinates }
     [SerializeField]
@@ -268,7 +271,7 @@ public class PlayerScript : MonoBehaviour
                         {
                             if (identifiedGesture == spell.SpellGesture)
                             {
-								aimingSpell = true;
+                                aimingSpell = true;
                                 selectedSpell = spell;
                                 selectedSpell.OnAimStart();
                                 staffOrb.mainColor = selectedSpell.OrbColor;
@@ -284,6 +287,17 @@ public class PlayerScript : MonoBehaviour
                                 }
                             }
                         }
+                    }
+                    if (selectedSpell == null && spellFailEffect != null)
+                    {
+                        var trailRend = trail.GetComponent<TrailRenderer>();
+                        for (int i = 0; i < trailRend.positionCount; i++)
+                        {
+                            var startEffect = Instantiate(spellFailEffect);
+                            startEffect.transform.position = trailRend.GetPosition(i);
+                        }
+                        self_audio_source.PlayOneShot(spell_unsuccessful_sound, 1f);
+
                     }
 
                     // If no spell matched just terminate the trail. Else "fade" the trail. 
