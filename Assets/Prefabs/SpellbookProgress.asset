@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97a66f0ec9d21a045aea0192add275e3, type: 3}
+  m_Name: SpellbookProgress
+  m_EditorClassIdentifier: 
+  spellTextures:
+  - {fileID: 2800000, guid: 6caa0337c42041744a0d4e45fd1d1410, type: 3}
+  - {fileID: 2800000, guid: accc11f8db4ed3d4389d60bb639981c5, type: 3}

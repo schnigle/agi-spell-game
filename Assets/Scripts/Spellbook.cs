@@ -38,7 +38,11 @@ public class Spellbook : MonoBehaviour
     [SerializeField]
     float emissionTime = 1;
     float emissionTimeRemaining;
-    public List<Texture> spellPageTextures = new List<Texture>();
+    public List<Texture> spellPageTextures => progressObject.spellTextures;
+    [SerializeField]
+    List<Texture> spellbookStartPages;
+    [SerializeField]
+    SpellbookProgress progressObject;
 
     // Start is called before the first frame update
     void Start()
@@ -109,17 +113,22 @@ public class Spellbook : MonoBehaviour
 
     public void AddPage(Texture texture)
     {
-        if (texture != null && !spellPageTextures.Contains(texture))
+        if (texture != null && !progressObject.spellTextures.Contains(texture))
         {
-            spellPageTextures.Add(texture);
-            if (newPageEffect)
-            {
-                var eff = Instantiate(newPageEffect, transform.position + transform.up * 0.5f, Quaternion.Euler(transform.rotation.eulerAngles + newPageEffect.transform.rotation.eulerAngles));
-                eff.transform.parent = transform;
-                emissionTimeRemaining = emissionTime;
-                int nLookups = Mathf.CeilToInt(spellPageTextures.Count / 2f);
-                targetPage = nLookups - 1;
-            }
+            progressObject.spellTextures.Add(texture);
+            int nLookups = Mathf.CeilToInt(spellPageTextures.Count / 2f);
+            targetPage = nLookups - 1;
+            TriggerEffect();
+        }
+    }
+
+    void TriggerEffect()
+    {
+        if (newPageEffect)
+        {
+            var eff = Instantiate(newPageEffect, transform.position + transform.up * 0.5f, Quaternion.Euler(transform.rotation.eulerAngles + newPageEffect.transform.rotation.eulerAngles));
+            eff.transform.parent = transform;
+            emissionTimeRemaining = emissionTime;
         }
     }
 
@@ -140,6 +149,14 @@ public class Spellbook : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Reset spellbook content
+        if (Input.GetKeyDown("b"))
+        {
+            spellPageTextures.Clear();
+            spellPageTextures.AddRange(spellbookStartPages);
+            targetPage = 0;
+            TriggerEffect();
+        }
         int nLookups = Mathf.CeilToInt(spellPageTextures.Count / 2f);
         float inputDelta = 0;
         bool inputActive = IsInputActive();
