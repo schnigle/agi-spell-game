@@ -59,8 +59,8 @@ public class VREmulator : MonoBehaviour
             {
                 cameraRotationAccel.y += 1;
             }
-            cameraRotationAccel *= cameraLookSpeed * Time.deltaTime;
-            cameraRotationSpeed += cameraRotationAccel;
+            cameraRotationAccel *= cameraLookSpeed;
+            cameraRotationSpeed += cameraRotationAccel * Time.deltaTime * Time.deltaTime * 60;
             cameraRotationSpeed = Vector3.Lerp(cameraRotationSpeed, Vector3.zero, Time.deltaTime * 10);
             VRCamera.transform.rotation = Quaternion.Euler(VRCamera.transform.rotation.eulerAngles + cameraRotationSpeed);
             if (controller)
