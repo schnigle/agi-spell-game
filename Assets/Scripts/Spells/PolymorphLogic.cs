@@ -7,6 +7,11 @@ public class PolymorphLogic : MonoBehaviour
     public GameObject muzzlePrefab, hitPrefab, critter, critter2;
     private GameObject latesthitObject;
 
+    // audio
+    public AudioClip hit_clip;
+    public AudioClip miss_clip;
+    public AudioSource hit_pos_source;
+
     void Start()
     {
         if (muzzlePrefab != null)
@@ -33,6 +38,7 @@ public class PolymorphLogic : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
+
         ContactPoint contact = col.contacts[0];
         Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
         Vector3 pos = contact.point;
@@ -53,8 +59,13 @@ public class PolymorphLogic : MonoBehaviour
             }
         }
 
+        
+
         if (latesthitObject.GetComponent<Rigidbody>() != null)
         {
+            // audio
+            AudioSource.PlayClipAtPoint(hit_clip, pos);
+
             float rng = Random.value;
             Debug.Log(rng);
             
@@ -78,7 +89,13 @@ public class PolymorphLogic : MonoBehaviour
             
             Debug.Log(pos);
 
+        } else 
+        {
+            // audio
+            AudioSource.PlayClipAtPoint(miss_clip, pos);
         }
+
+
         Destroy(gameObject);
     }
 }

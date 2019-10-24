@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PolymorphSpell : SpellBase
 {
+    // audio
+    public AudioClip cast_clip;
+    private AudioSource projectile_source;
+    public AudioSource wand_source;
 
     private float timer = 0.0f;
     private const float waitTime = 10.0f;
@@ -35,6 +39,11 @@ public class PolymorphSpell : SpellBase
 
     public override void UnleashSpell()
     {
+        // cast audio  
+        wand_source.time = 0.0f;
+        wand_source.volume = 0.15f;
+        wand_source.Play();
+
         GameObject tempBull;
         tempBull = Instantiate(bullet, bulletEmitter.transform.forward.normalized * 0.5f + bulletEmitter.transform.position, playerTrans.rotation) as GameObject;
         //tempBull.transform.Rotate(Vector3.left * 90);
@@ -47,6 +56,9 @@ public class PolymorphSpell : SpellBase
 
     public override void OnAimStart()
     {
+        //audio
+        wand_source.clip = cast_clip;
+
         trajectory?.gameObject.SetActive(true);
     }
 
