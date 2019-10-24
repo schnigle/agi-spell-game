@@ -265,6 +265,7 @@ public class PlayerScript : MonoBehaviour
                     GestureRecognition.Gesture_Meta result = gestureRecognition.recognize_gesture(gesture, gesture3D);
                     identifiedGesture = result.type;
                     print("Identified gesture: " + identifiedGesture);
+                    print(result.angle_sum);
                     foreach (var spell in GetComponents<SpellBase>())
                     {
                         if (spell.enabled)

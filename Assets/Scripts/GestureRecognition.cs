@@ -20,7 +20,7 @@ public class GestureRecognition
     public const float ANGLE_SUM_THRESH = 0.5f;         // - Used when determining circle type gestures. A circle
                                                         // is accepted when angle_sum ∈ [2*pi - angle_sum_thresh,
                                                         // 2*pi + angle_sum_thres].
-    public const float VEL_VEC_NORM_THRESH = 0.25f;     // - |vel_vec| < vel_vec_norm_thresh counts as zero
+    public const float VEL_VEC_NORM_THRESH = 0.25f;      // - |vel_vec| < vel_vec_norm_thresh counts as zero
                                                         // internally.
     public const float ANGLE_DEVIATION_THRESH = 0.5f;   // - Used for linear gesture segments. Angle deviation
                                                         // describes difference in angle between two vectors.
@@ -803,19 +803,14 @@ public class GestureRecognition
         bool z_gesture = gesture_depth > gesture_height 
                 && gesture_depth > gesture_width;
 
-        if(vel_vec_norm < VEL_VEC_NORM_THRESH && Math.Abs(angle_sum) > 6*ANGLE_SUM_THRESH) {
-            // likely a circle
-            float min_angle = (float) ((2 - ANGLE_SUM_THRESH) * Math.PI);
-            float max_angle = (float) ((2 + ANGLE_SUM_THRESH) * Math.PI); 
-            if (angle_sum > min_angle && angle_sum < max_angle) ret.type = Gesture.circle_ccw;
-            else if (angle_sum < -min_angle && angle_sum > -max_angle) ret.type = Gesture.circle_cw;
-            else if (angle_sum > 6*Math.PI) ret.type = Gesture.spiral_ccw;
-        } else if (vel_vec_norm > VEL_VEC_NORM_THRESH && z_gesture || gesture_depth > Z_DEPTH_THRESH) {
-            // likely a gesture with depth 
+        // likely a gesture with depth 
+        if (vel_vec_norm > VEL_VEC_NORM_THRESH && z_gesture || gesture_depth > Z_DEPTH_THRESH) {
             if     (z_pos_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.z) > 0.2) ret.type = Gesture.push;
             else if(z_neg_dev < ANGLE_DEVIATION_THRESH && Math.Abs(avg_vel_vec2.z) > 0.2) ret.type = Gesture.pull;
-        } else if (ret.type == Gesture.unknown) {
-            // likely a gesture of one or more line segments
+        } 
+        
+        // likely a gesture of one or more line segments
+        if (ret.type == Gesture.unknown) {
             List<LinearSegment> segments = find_linear_segments(global_angles, sparse_gesture, bounds);
             Console.WriteLine(segments.Count);
            
@@ -832,8 +827,15 @@ public class GestureRecognition
             }
         }
 
-        
-        //MonoBehaviour.print(ret.type);
+        // likely a circle
+        if (ret.type == Gesture.unknown) {
+             // likely a circle
+            float min_angle = (float) ((2 - ANGLE_SUM_THRESH) * Math.PI);
+            float max_angle = (float) ((2 + ANGLE_SUM_THRESH) * Math.PI); 
+            if (angle_sum > min_angle && angle_sum < max_angle) ret.type = Gesture.circle_ccw;
+            else if (angle_sum < -min_angle && angle_sum > -max_angle) ret.type = Gesture.circle_cw;
+            else if (angle_sum > 6*Math.PI) ret.type = Gesture.spiral_ccw;
+        }
         
         return ret;
     }
