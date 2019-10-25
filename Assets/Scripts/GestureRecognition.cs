@@ -17,7 +17,7 @@ public class GestureRecognition
                                                         // calculating angle.
     public const int MIN_GESTURE_SIZE = 30;             // - Minimum number of nodes in a gesture. Shorter nodes
                                                         // return unknown.
-    public const float ANGLE_SUM_THRESH = 0.18f;        // - Used when determining circle type gestures. A circle
+    public const float ANGLE_SUM_THRESH = 0.25f;        // - Used when determining circle type gestures. A circle
                                                         // is accepted when angle_sum ∈ [2*pi - angle_sum_thresh,
                                                         // 2*pi + angle_sum_thres].
     public const float VEL_VEC_NORM_THRESH = 0.25f;      // - |vel_vec| < vel_vec_norm_thresh counts as zero

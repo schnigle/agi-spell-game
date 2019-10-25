@@ -52,12 +52,12 @@ public class TeleportSpell : SpellBase
 				newObj.transform.position = collider.position;
 				Destroy(newObj, 5);
 			}
-        }
 
-        // audio
-        wand_source.clip = cast_clip;
-        wand_source.volume = 0.15f;
-        wand_source.Play();
+            // audio
+            wand_source.clip = cast_clip;
+            wand_source.volume = 0.15f;
+            wand_source.Play();
+        }
 
 	}
 
