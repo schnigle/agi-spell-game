@@ -135,6 +135,7 @@ public class Spellbook : MonoBehaviour
             emissionTimeRemaining = emissionTime;
             var main = eff.GetComponent<ParticleSystem>().main;
             main.startColor = color;
+            eff.GetComponentInChildren<Light>().color = color;
             emissionColor = color * 2f;
         }
     }
