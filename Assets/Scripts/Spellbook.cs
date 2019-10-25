@@ -91,6 +91,7 @@ public class Spellbook : MonoBehaviour
         if (VRIsActive)
         {
             Vector2 trackpadPos = SteamVR_Input.GetVector2("Trackpad", SteamVR_Input_Sources.LeftHand);
+            print(trackpadPos);
             return trackpadPos.x * pageTurnRate;
         }
         else
@@ -103,7 +104,10 @@ public class Spellbook : MonoBehaviour
     {
         if (VRIsActive)
         {
-            return SteamVR_Input.GetState("TrackpadActive", SteamVR_Input_Sources.LeftHand);
+            Vector2 trackpadPos = SteamVR_Input.GetVector2("Trackpad", SteamVR_Input_Sources.LeftHand);
+            print(trackpadPos); var thing = SteamVR_Input.GetState("TrackpadActive", SteamVR_Input_Sources.LeftHand);
+            print(thing);
+            return thing;
         }
         else
         {

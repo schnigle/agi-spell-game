@@ -1282,19 +1282,27 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9198214471464328}
     m_Modifications:
+    - target: {fileID: 159396, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 147176, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 147176, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 124034, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 146900, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_Name
       value: '[CameraRig]'
       objectReference: {fileID: 0}
     - target: {fileID: 146900, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 159396, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 124034, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
@@ -1359,14 +1367,6 @@ PrefabInstance:
     - target: {fileID: 1000014254142504, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_TagString
       value: MainCamera
-      objectReference: {fileID: 0}
-    - target: {fileID: 147176, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 147176, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 192944, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_Layer
@@ -1576,11 +1576,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9198215730841488}
     m_Modifications:
-    - target: {fileID: 2210085167564078719, guid: 252c02f5aa30a3542b58598e749bc04e,
-        type: 3}
-      propertyPath: m_Name
-      value: Spellbook
-      objectReference: {fileID: 0}
     - target: {fileID: 393606945, guid: 252c02f5aa30a3542b58598e749bc04e, type: 3}
       propertyPath: spellbookStartPages.Array.size
       value: 2
@@ -1619,6 +1614,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 49ceb4cef1c93424f9ca1de2ee0a14bc,
         type: 2}
+    - target: {fileID: 393606945, guid: 252c02f5aa30a3542b58598e749bc04e, type: 3}
+      propertyPath: pageTurnRate
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2210085167564078719, guid: 252c02f5aa30a3542b58598e749bc04e,
+        type: 3}
+      propertyPath: m_Name
+      value: Spellbook
+      objectReference: {fileID: 0}
     - target: {fileID: 2950021690393021548, guid: 252c02f5aa30a3542b58598e749bc04e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1632,7 +1636,7 @@ PrefabInstance:
     - target: {fileID: 2950021690393021548, guid: 252c02f5aa30a3542b58598e749bc04e,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 2950021690393021548, guid: 252c02f5aa30a3542b58598e749bc04e,
         type: 3}
@@ -1677,17 +1681,17 @@ PrefabInstance:
     - target: {fileID: 2950021690393021548, guid: 252c02f5aa30a3542b58598e749bc04e,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.35
+      value: 0.18
       objectReference: {fileID: 0}
     - target: {fileID: 2950021690393021548, guid: 252c02f5aa30a3542b58598e749bc04e,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.35
+      value: 0.18
       objectReference: {fileID: 0}
     - target: {fileID: 2950021690393021548, guid: 252c02f5aa30a3542b58598e749bc04e,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.35
+      value: 0.18
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 252c02f5aa30a3542b58598e749bc04e, type: 3}
