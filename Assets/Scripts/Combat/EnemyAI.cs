@@ -123,7 +123,18 @@ public class EnemyAI : MonoBehaviour
             float theta = Random.Range(0, Mathf.PI*2);
             targetPosition.x += r * Mathf.Cos(theta);
             targetPosition.z += r * Mathf.Sin(theta);
-            currentTargetPosition = targetPosition;
+            // currentTargetPosition = targetPosition;
+            Vector3 origin = transform.position + Vector3.up * 1.5f;
+            Vector3 direction = targetPosition - origin;
+            RaycastHit hit;
+            if (Physics.Raycast(origin, direction, out hit, Vector3.Distance(targetPosition, origin), sightObstacleMask))
+            {
+                currentTargetPosition = hit.point;
+            }
+            else
+            {
+                currentTargetPosition = targetPosition;
+            }
             StartPrepareAnimation("spell line ud");
         }
     }
