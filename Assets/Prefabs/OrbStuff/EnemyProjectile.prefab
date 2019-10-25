@@ -4899,6 +4899,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeTime: 100
   caster: {fileID: 0}
+  impactEffect: {fileID: 4308658998904027059, guid: 8560b67eb3085dd4498cee3b9dc9e94e,
+    type: 3}
+  impactClip: {fileID: 8300000, guid: dc730fab1103fec4bbf76f7141492340, type: 3}
+  shieldMask:
+    serializedVersion: 2
+    m_Bits: 8192
 --- !u!54 &3692036914013115443
 Rigidbody:
   m_ObjectHideFlags: 0
