@@ -71,6 +71,8 @@ public class EnemyAI : MonoBehaviour
     float sightCheckTimer = 1;
     bool foundPlayer;
 
+    Queue<float> recentVelocities = new Queue<float>();
+
     private bool _isRagdolling;
     /// True if the actor is currently in "ragdoll" mode (which means that it acts as a non-kinematic rigidbody while having its movement disabled)
     public bool isRagdolling
@@ -248,6 +250,14 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        var others = Transform.FindObjectsOfType<EnemyAI>();
+        foreach (var item in others)
+        {
+            if (item != this)
+            {
+                agent.destination = (transform.position + item.transform.position) / 2;
+            }
+        }
         screams = new AudioClip[]{
             Resources.Load<AudioClip>("audio/scream_1"),
             Resources.Load<AudioClip>("audio/scream_2"),
@@ -347,11 +357,11 @@ public class EnemyAI : MonoBehaviour
 
         if (isCasting)
         {
-            agent.speed = 0;
+            agent.velocity = Vector3.zero;
             if (player)
             {
                 // rotate towards player
-                var q = Quaternion.LookRotation(currentTargetPosition - transform.position);
+                var q = Quaternion.LookRotation(player.transform.position - transform.position);
                 var euler_q = q.eulerAngles;
                 euler_q.x = 0;
                 euler_q.z = 0;
@@ -387,8 +397,35 @@ public class EnemyAI : MonoBehaviour
             agent.speed = defaultSpeed;
             staffOrb.mainColor = inactiveOrbColor;
         }
-
+        CheckMoveProgress();
         UpdateStaffLine();
+    }
+
+    void CheckMoveProgress()
+    {
+        if (!isCasting && !isRagdolling && agent.enabled)
+        {
+            recentVelocities.Enqueue(agent.velocity.sqrMagnitude * Time.deltaTime);
+            if (recentVelocities.Count > 10)
+            {
+                recentVelocities.Dequeue();
+                float velocitySum = 0;
+                foreach (var item in recentVelocities)
+                {
+                    velocitySum += item / recentVelocities.Count;
+                }
+                if (velocitySum < 0.02f)
+                {
+                    print("move it");
+                    agent.destination = transform.position;
+                    recentVelocities.Clear();
+                }
+            }
+        }
+        else
+        {
+            recentVelocities.Clear();
+        }
     }
 
     bool CanSeePlayer()
