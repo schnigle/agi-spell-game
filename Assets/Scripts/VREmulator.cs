@@ -81,7 +81,7 @@ public class VREmulator : MonoBehaviour
                 // spellbook.transform.rotation = VRCamera.transform.rotation;
                 var camDir = VRCamera.transform.forward;
                 camDir.y = 0;
-                spellbook.transform.position = transform.position + camDir + transform.up * 0.0f;
+                spellbook.transform.position = transform.position + camDir * 0.4f + transform.up * 0.2f;
             }
         }
     }
