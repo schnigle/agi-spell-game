@@ -130,13 +130,13 @@ public class Spellbook : MonoBehaviour
     {
         if (newPageEffect)
         {
-            var eff = Instantiate(newPageEffect, transform.position + transform.up * 0.5f, Quaternion.Euler(transform.rotation.eulerAngles + newPageEffect.transform.rotation.eulerAngles));
+            var eff = Instantiate(newPageEffect, transform.position + transform.up * 0.05f, Quaternion.Euler(transform.rotation.eulerAngles + newPageEffect.transform.rotation.eulerAngles));
             eff.transform.parent = transform;
             emissionTimeRemaining = emissionTime;
             var main = eff.GetComponent<ParticleSystem>().main;
             main.startColor = color;
             eff.GetComponentInChildren<Light>().color = color;
-            emissionColor = color * 2f;
+            emissionColor = color * 3f;
         }
     }
 
