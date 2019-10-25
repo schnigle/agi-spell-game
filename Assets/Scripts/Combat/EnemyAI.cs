@@ -121,7 +121,7 @@ public class EnemyAI : MonoBehaviour
             preparedSpell = EnemySpell.teleport;
 
             Vector3 targetPosition = transform.position;
-            float r = 10;
+            float r = 20;
             float theta = Random.Range(0, Mathf.PI*2);
             targetPosition.x += r * Mathf.Cos(theta);
             targetPosition.z += r * Mathf.Sin(theta);
@@ -361,7 +361,12 @@ public class EnemyAI : MonoBehaviour
             if (player)
             {
                 // rotate towards player
-                var q = Quaternion.LookRotation(player.transform.position - transform.position);
+                var lookTarget = currentTargetPosition - transform.position;
+                if (lookTarget == Vector3.zero)
+                {
+                    lookTarget = transform.forward;
+                }
+                var q = Quaternion.LookRotation(lookTarget);
                 var euler_q = q.eulerAngles;
                 euler_q.x = 0;
                 euler_q.z = 0;
