@@ -77,7 +77,7 @@ public class StaffOrb : MonoBehaviour
         //     colorSwitchTimer -= Time.deltaTime;
         // }
         var orbColor = currentColor;
-        var orbColorFactor = 0.65f;
+        var orbColorFactor = 0.40f;
         orbColor.r *= orbColorFactor;
         orbColor.g *= orbColorFactor;
         orbColor.b *= orbColorFactor;

@@ -184,6 +184,7 @@ public class PlayerScript : MonoBehaviour
 
                     // reset values from trail fade
                     trail.GetComponent<TrailRenderer>().startColor = originalTrailColor;
+                    trail.GetComponent<TrailRenderer>().endColor = originalTrailColor;
                     trail.GetComponent<TrailRenderer>().material.color = originalTrailMaterialColor;
                     trail.GetComponent<TrailRenderer>().widthMultiplier = originalTrailWidthMultiplier;
                     trail.GetComponent<TrailRenderer>().emitting = true;
@@ -283,7 +284,7 @@ public class PlayerScript : MonoBehaviour
                                 // Add to spell book
                                 if (spellbook != null && spell.PageTexture != null && !spellbook.spellPageTextures.Contains(spell.PageTexture))
                                 {
-                                    spellbook.AddPage(spell.PageTexture);
+                                    spellbook.AddPage(spell.PageTexture, trail.GetComponent<TrailRenderer>().startColor);
                                 }
                             }
                         }
