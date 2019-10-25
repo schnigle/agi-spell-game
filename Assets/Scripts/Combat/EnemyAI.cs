@@ -337,16 +337,16 @@ public class EnemyAI : MonoBehaviour
             {
                 if (!isCasting && CanSeePlayer())
                 {
-                    int rand = Random.Range(0, 3);
-                    if (rand == 0)
+                    float rand = Random.Range(0, 100);
+                    if (rand < 50)
                     {
                         PrepareAttack();
                     }
-                    else if (rand == 1)
+                    else if (rand < 75)
                     {
                         PrepareShield();
                     }
-                    else if (rand == 2)
+                    else
                     {
                         PrepareTeleport();
                     }
