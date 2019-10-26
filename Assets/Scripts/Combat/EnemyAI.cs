@@ -259,8 +259,8 @@ public class EnemyAI : MonoBehaviour
             }
         }
         screams = new AudioClip[]{
-            Resources.Load<AudioClip>("audio/scream_1"),
-            Resources.Load<AudioClip>("audio/scream_2"),
+            //Resources.Load<AudioClip>("audio/scream_1"),
+            //Resources.Load<AudioClip>("audio/scream_2"),
             Resources.Load<AudioClip>("audio/scream_3"),
             Resources.Load<AudioClip>("audio/scream_4"),
             Resources.Load<AudioClip>("audio/scream_5"),
@@ -268,9 +268,9 @@ public class EnemyAI : MonoBehaviour
             Resources.Load<AudioClip>("audio/scream_7"),
             Resources.Load<AudioClip>("audio/scream_8"),
             Resources.Load<AudioClip>("audio/scream_9"),
-            Resources.Load<AudioClip>("audio/scream_10"),
-            Resources.Load<AudioClip>("audio/scream_11"),
-            Resources.Load<AudioClip>("audio/scream_12")
+            //Resources.Load<AudioClip>("audio/scream_10"),
+            //Resources.Load<AudioClip>("audio/scream_11"),
+            //Resources.Load<AudioClip>("audio/scream_12")
         };
         
         staffOrb.mainColor = Color.black;

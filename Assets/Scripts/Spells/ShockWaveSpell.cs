@@ -5,6 +5,10 @@ using UnityEngine;
 public class ShockWaveSpell : SpellBase
 {
 
+    // audio
+    public AudioClip cast_clip;
+    public AudioSource wand_source;
+
     public GameObject bullet, bulletEmitter;
     public Transform playerTrans;
     public float shockForce = 5.0f;
@@ -13,6 +17,9 @@ public class ShockWaveSpell : SpellBase
 
     public override void UnleashSpell()
     {
+        wand_source.volume = 0.25f;
+        wand_source.Play();
+
         GameObject tempBull;
         tempBull = Instantiate(bullet, bulletEmitter.transform.forward.normalized * 0.5f + bulletEmitter.transform.position, playerTrans.rotation) as GameObject;
 
@@ -45,6 +52,8 @@ public class ShockWaveSpell : SpellBase
 
     public override void OnAimStart()
     {
+        //audio
+        wand_source.clip = cast_clip;
     }
 
     public override void OnAimEnd()

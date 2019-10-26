@@ -297,7 +297,7 @@ public class PlayerScript : MonoBehaviour
                             var startEffect = Instantiate(spellFailEffect);
                             startEffect.transform.position = trailRend.GetPosition(i);
                         }
-                        self_audio_source.PlayOneShot(spell_unsuccessful_sound, 1f);
+                        self_audio_source.PlayOneShot(spell_unsuccessful_sound, 0.5f);
 
                     }
 
