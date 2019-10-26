@@ -42,6 +42,14 @@
       "requirement": "optional"
     },
     {
+      "name": "/actions/default/in/Trackpad",
+      "type": "vector2"
+    },
+    {
+      "name": "/actions/default/in/TrackpadActive",
+      "type": "boolean"
+    },
+    {
       "name": "/actions/default/out/Haptic",
       "type": "vibration"
     },
@@ -75,9 +83,12 @@
       "requirement": "optional"
     },
     {
-      "name": "/actions/SpellBooktut/in/PickSpell",
-      "type": "vector2",
-      "requirement": "mandatory"
+      "name": "/actions/SpellWaves/in/TrackpadActive",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/SpellWaves/in/Trackpad",
+      "type": "vector2"
     }
   ],
   "action_sets": [
@@ -98,8 +109,8 @@
       "usage": "single"
     },
     {
-      "name": "/actions/SpellBooktut",
-      "usage": "leftright"
+      "name": "/actions/SpellWaves",
+      "usage": "single"
     }
   ],
   "default_bindings": [

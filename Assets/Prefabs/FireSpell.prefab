@@ -85,6 +85,9 @@ MonoBehaviour:
   force: 100
   explosion_clip: {fileID: 8300000, guid: dc730fab1103fec4bbf76f7141492340, type: 3}
   hit_pos_source: {fileID: 3670609081433092232}
+  shieldMask:
+    serializedVersion: 2
+    m_Bits: 8192
 --- !u!82 &3670609081433092232
 AudioSource:
   m_ObjectHideFlags: 0

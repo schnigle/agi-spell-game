@@ -32,7 +32,7 @@ public class Spellbook : MonoBehaviour
     bool wasInputActive;
     float targetPage;
     bool VRIsActive;
-    [SerializeField]
+    // [SerializeField]
     [ColorUsage(true, true)]
     Color emissionColor = Color.white;
     [SerializeField]
@@ -95,7 +95,7 @@ public class Spellbook : MonoBehaviour
         }
         else
         {
-            return (Input.mousePosition.x / Screen.width) * pageTurnRate;
+            return (Input.mousePosition.x / Screen.width) * pageTurnRate * 2;
         }
     }
 
@@ -111,24 +111,28 @@ public class Spellbook : MonoBehaviour
         }
     }
 
-    public void AddPage(Texture texture)
+    public void AddPage(Texture texture, Color color)
     {
         if (texture != null && !progressObject.spellTextures.Contains(texture))
         {
             progressObject.spellTextures.Add(texture);
             int nLookups = Mathf.CeilToInt(spellPageTextures.Count / 2f);
             targetPage = nLookups - 1;
-            TriggerEffect();
+            TriggerEffect(color);
         }
     }
 
-    void TriggerEffect()
+    void TriggerEffect(Color color)
     {
         if (newPageEffect)
         {
-            var eff = Instantiate(newPageEffect, transform.position + transform.up * 0.5f, Quaternion.Euler(transform.rotation.eulerAngles + newPageEffect.transform.rotation.eulerAngles));
+            var eff = Instantiate(newPageEffect, transform.position + transform.up * 0.05f, Quaternion.Euler(transform.rotation.eulerAngles + newPageEffect.transform.rotation.eulerAngles));
             eff.transform.parent = transform;
             emissionTimeRemaining = emissionTime;
+            var main = eff.GetComponent<ParticleSystem>().main;
+            main.startColor = color;
+            eff.GetComponentInChildren<Light>().color = color;
+            emissionColor = color * 3f;
         }
     }
 
@@ -155,7 +159,7 @@ public class Spellbook : MonoBehaviour
             spellPageTextures.Clear();
             spellPageTextures.AddRange(spellbookStartPages);
             targetPage = 0;
-            TriggerEffect();
+            TriggerEffect(Color.red);
         }
         int nLookups = Mathf.CeilToInt(spellPageTextures.Count / 2f);
         float inputDelta = 0;

@@ -1,5 +1,7 @@
 {
-   "app_key" : "application.generated.unity.steamvr.exe",
+   "action_manifest_version" : 0,
+   "alias_info" : {},
+   "app_key" : "application.generated.unity.vr_project2.exe",
    "bindings" : {
       "/actions/buggy" : {
          "sources" : [
@@ -111,9 +113,15 @@
                "inputs" : {
                   "click" : {
                      "output" : "/actions/default/in/teleport"
+                  },
+                  "position" : {
+                     "output" : "/actions/default/in/trackpad"
+                  },
+                  "touch" : {
+                     "output" : "/actions/default/in/trackpadactive"
                   }
                },
-               "mode" : "button",
+               "mode" : "trackpad",
                "path" : "/user/hand/left/input/trackpad"
             },
             {
@@ -170,9 +178,15 @@
                "inputs" : {
                   "click" : {
                      "output" : "/actions/default/in/teleport"
+                  },
+                  "position" : {
+                     "output" : "/actions/default/in/trackpad"
+                  },
+                  "touch" : {
+                     "output" : "/actions/default/in/trackpadactive"
                   }
                },
-               "mode" : "button",
+               "mode" : "trackpad",
                "path" : "/user/hand/right/input/trackpad"
             },
             {
@@ -248,9 +262,40 @@
                "path" : "/user/hand/right/input/trackpad"
             }
          ]
+      },
+      "/actions/spellwaves" : {
+         "sources" : [
+            {
+               "inputs" : {
+                  "position" : {
+                     "output" : "/actions/spellwaves/in/trackpad"
+                  },
+                  "touch" : {
+                     "output" : "/actions/spellwaves/in/trackpadactive"
+                  }
+               },
+               "mode" : "trackpad",
+               "path" : "/user/hand/left/input/trackpad"
+            },
+            {
+               "inputs" : {
+                  "position" : {
+                     "output" : "/actions/spellwaves/in/trackpad"
+                  },
+                  "touch" : {
+                     "output" : "/actions/spellwaves/in/trackpadactive"
+                  }
+               },
+               "mode" : "trackpad",
+               "path" : "/user/hand/right/input/trackpad"
+            }
+         ]
       }
    },
+   "category" : "steamvr_input",
    "controller_type" : "vive_controller",
    "description" : "",
-   "name" : "vive_controller"
+   "name" : "Min VR_Project2 [Testing]-konfiguration för Vive Controller",
+   "options" : {},
+   "simulated_actions" : []
 }

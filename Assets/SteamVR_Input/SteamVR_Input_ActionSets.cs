@@ -25,7 +25,7 @@ namespace Valve.VR
         
         private static SteamVR_Input_ActionSet_mixedreality p_mixedreality;
         
-        private static SteamVR_Input_ActionSet_SpellBooktut p_SpellBooktut;
+        private static SteamVR_Input_ActionSet_SpellWaves p_SpellWaves;
         
         public static SteamVR_Input_ActionSet_default _default
         {
@@ -59,11 +59,11 @@ namespace Valve.VR
             }
         }
         
-        public static SteamVR_Input_ActionSet_SpellBooktut SpellBooktut
+        public static SteamVR_Input_ActionSet_SpellWaves SpellWaves
         {
             get
             {
-                return SteamVR_Actions.p_SpellBooktut.GetCopy<SteamVR_Input_ActionSet_SpellBooktut>();
+                return SteamVR_Actions.p_SpellWaves.GetCopy<SteamVR_Input_ActionSet_SpellWaves>();
             }
         }
         
@@ -73,13 +73,13 @@ namespace Valve.VR
             SteamVR_Actions.p_platformer = ((SteamVR_Input_ActionSet_platformer)(SteamVR_ActionSet.Create<SteamVR_Input_ActionSet_platformer>("/actions/platformer")));
             SteamVR_Actions.p_buggy = ((SteamVR_Input_ActionSet_buggy)(SteamVR_ActionSet.Create<SteamVR_Input_ActionSet_buggy>("/actions/buggy")));
             SteamVR_Actions.p_mixedreality = ((SteamVR_Input_ActionSet_mixedreality)(SteamVR_ActionSet.Create<SteamVR_Input_ActionSet_mixedreality>("/actions/mixedreality")));
-            SteamVR_Actions.p_SpellBooktut = ((SteamVR_Input_ActionSet_SpellBooktut)(SteamVR_ActionSet.Create<SteamVR_Input_ActionSet_SpellBooktut>("/actions/SpellBooktut")));
+            SteamVR_Actions.p_SpellWaves = ((SteamVR_Input_ActionSet_SpellWaves)(SteamVR_ActionSet.Create<SteamVR_Input_ActionSet_SpellWaves>("/actions/SpellWaves")));
             Valve.VR.SteamVR_Input.actionSets = new Valve.VR.SteamVR_ActionSet[] {
                     SteamVR_Actions._default,
                     SteamVR_Actions.platformer,
                     SteamVR_Actions.buggy,
                     SteamVR_Actions.mixedreality,
-                    SteamVR_Actions.SpellBooktut};
+                    SteamVR_Actions.SpellWaves};
         }
     }
 }

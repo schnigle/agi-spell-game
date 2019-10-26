@@ -12,6 +12,7 @@ public class SpellLogic : MonoBehaviour
     public AudioClip explosion_clip;
     public AudioSource hit_pos_source;
 
+    public LayerMask shieldMask;
 
     void Start()
     {
@@ -45,7 +46,7 @@ public class SpellLogic : MonoBehaviour
 
         ContactPoint contact = col.contacts[0];
         Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
-        Vector3 pos = contact.point;
+        Vector3 pos = GetComponent<Collider>().bounds.center;
 
         print("kalas");
         AudioSource.PlayClipAtPoint(explosion_clip, pos);
@@ -74,15 +75,17 @@ public class SpellLogic : MonoBehaviour
             Rigidbody rigidbody = null;
             if(item.tag == "Actor")
             {
-                //print("Death good");
-                var enemy = item.GetComponent<EnemyAI>();
-                enemy.isRagdolling = true;
+                if (!Physics.Raycast(transform.position, Vector3.Normalize(item.bounds.center - transform.position), Vector3.Distance(transform.position, item.bounds.center), shieldMask))
+                {
+                    var enemy = item.GetComponent<EnemyAI>();
+                    enemy.isRagdolling = true;
+                }
             }
             rigidbody = item.GetComponent<Rigidbody>();
             if (rigidbody != null)
             {
-                var direction = (rigidbody.transform.position - pos).normalized;
-                rigidbody.AddForce((5 - Vector3.Distance(rigidbody.position, pos)) * (direction) * 200, ForceMode.Impulse);
+                var direction = (item.bounds.center - pos).normalized;
+                rigidbody.AddForce((5 - Vector3.Distance(item.bounds.center, pos)) * (direction) * 200, ForceMode.Impulse);
             }
         }
 

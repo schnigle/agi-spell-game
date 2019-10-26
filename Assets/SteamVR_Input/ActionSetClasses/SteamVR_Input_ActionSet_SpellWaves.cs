@@ -14,14 +14,22 @@ namespace Valve.VR
     using UnityEngine;
     
     
-    public class SteamVR_Input_ActionSet_SpellBooktut : Valve.VR.SteamVR_ActionSet
+    public class SteamVR_Input_ActionSet_SpellWaves : Valve.VR.SteamVR_ActionSet
     {
         
-        public virtual SteamVR_Action_Vector2 PickSpell
+        public virtual SteamVR_Action_Boolean TrackpadActive
         {
             get
             {
-                return SteamVR_Actions.spellBooktut_PickSpell;
+                return SteamVR_Actions.spellWaves_TrackpadActive;
+            }
+        }
+        
+        public virtual SteamVR_Action_Vector2 Trackpad
+        {
+            get
+            {
+                return SteamVR_Actions.spellWaves_Trackpad;
             }
         }
     }

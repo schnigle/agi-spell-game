@@ -71,6 +71,8 @@ public class EnemyAI : MonoBehaviour
     float sightCheckTimer = 1;
     bool foundPlayer;
 
+    Queue<float> recentVelocities = new Queue<float>();
+
     private bool _isRagdolling;
     /// True if the actor is currently in "ragdoll" mode (which means that it acts as a non-kinematic rigidbody while having its movement disabled)
     public bool isRagdolling
@@ -119,11 +121,22 @@ public class EnemyAI : MonoBehaviour
             preparedSpell = EnemySpell.teleport;
 
             Vector3 targetPosition = transform.position;
-            float r = 10;
+            float r = 20;
             float theta = Random.Range(0, Mathf.PI*2);
             targetPosition.x += r * Mathf.Cos(theta);
             targetPosition.z += r * Mathf.Sin(theta);
-            currentTargetPosition = targetPosition;
+            // currentTargetPosition = targetPosition;
+            Vector3 origin = transform.position + Vector3.up * 1.5f;
+            Vector3 direction = targetPosition - origin;
+            RaycastHit hit;
+            if (Physics.Raycast(origin, direction, out hit, Vector3.Distance(targetPosition, origin), sightObstacleMask))
+            {
+                currentTargetPosition = hit.point;
+            }
+            else
+            {
+                currentTargetPosition = targetPosition;
+            }
             StartPrepareAnimation("spell line ud");
         }
     }
@@ -237,6 +250,14 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        var others = Transform.FindObjectsOfType<EnemyAI>();
+        foreach (var item in others)
+        {
+            if (item != this)
+            {
+                agent.destination = (transform.position + item.transform.position) / 2;
+            }
+        }
         screams = new AudioClip[]{
             //Resources.Load<AudioClip>("audio/scream_1"),
             //Resources.Load<AudioClip>("audio/scream_2"),
@@ -316,16 +337,16 @@ public class EnemyAI : MonoBehaviour
             {
                 if (!isCasting && CanSeePlayer())
                 {
-                    int rand = Random.Range(0, 3);
-                    if (rand == 0)
+                    float rand = Random.Range(0, 100);
+                    if (rand < 50)
                     {
                         PrepareAttack();
                     }
-                    else if (rand == 1)
+                    else if (rand < 75)
                     {
                         PrepareShield();
                     }
-                    else if (rand == 2)
+                    else
                     {
                         PrepareTeleport();
                     }
@@ -336,11 +357,16 @@ public class EnemyAI : MonoBehaviour
 
         if (isCasting)
         {
-            agent.speed = 0;
+            agent.velocity = Vector3.zero;
             if (player)
             {
                 // rotate towards player
-                var q = Quaternion.LookRotation(currentTargetPosition - transform.position);
+                var lookTarget = currentTargetPosition - transform.position;
+                if (lookTarget == Vector3.zero)
+                {
+                    lookTarget = transform.forward;
+                }
+                var q = Quaternion.LookRotation(lookTarget);
                 var euler_q = q.eulerAngles;
                 euler_q.x = 0;
                 euler_q.z = 0;
@@ -376,8 +402,35 @@ public class EnemyAI : MonoBehaviour
             agent.speed = defaultSpeed;
             staffOrb.mainColor = inactiveOrbColor;
         }
-
+        CheckMoveProgress();
         UpdateStaffLine();
+    }
+
+    void CheckMoveProgress()
+    {
+        if (!isCasting && !isRagdolling && agent.enabled)
+        {
+            recentVelocities.Enqueue(agent.velocity.sqrMagnitude * Time.deltaTime);
+            if (recentVelocities.Count > 10)
+            {
+                recentVelocities.Dequeue();
+                float velocitySum = 0;
+                foreach (var item in recentVelocities)
+                {
+                    velocitySum += item / recentVelocities.Count;
+                }
+                if (velocitySum < 0.02f)
+                {
+                    print("move it");
+                    agent.destination = transform.position;
+                    recentVelocities.Clear();
+                }
+            }
+        }
+        else
+        {
+            recentVelocities.Clear();
+        }
     }
 
     bool CanSeePlayer()
