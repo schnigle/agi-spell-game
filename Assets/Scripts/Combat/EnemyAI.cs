@@ -421,7 +421,6 @@ public class EnemyAI : MonoBehaviour
                 }
                 if (velocitySum < 0.02f)
                 {
-                    print("move it");
                     agent.destination = transform.position;
                     recentVelocities.Clear();
                 }
