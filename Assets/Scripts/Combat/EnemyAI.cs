@@ -55,6 +55,29 @@ public class EnemyAI : MonoBehaviour
     Color activeOrbColor = Color.cyan;
     [SerializeField]
     AISpellColorSet spellColorSet;
+    [SerializeField]
+    GameObject deathEffect;
+
+    public bool IsAlive { get; private set; } = true;
+
+    private float _health = 100;
+    public float Health
+    {
+        get { return _health; }
+        set { 
+            if (IsAlive)
+            {
+                _health = value;
+                if (_health <= 0)
+                {
+                    _health = 0;
+                    IsAlive = false;
+                    Death();
+                }
+            }
+        }
+    }
+    
 
     EnemySpell preparedSpell;
     Vector3 currentTargetPosition;
@@ -103,6 +126,16 @@ public class EnemyAI : MonoBehaviour
                     closestNavMeshRisePoint = hit.position;
                 }
             }
+        }
+    }
+
+    void Death()
+    {
+        gameObject.SetActive(false);
+        if (deathEffect)
+        {
+            var eff = Instantiate(deathEffect);
+            eff.transform.position = GetComponent<Collider>().bounds.center;
         }
     }
 

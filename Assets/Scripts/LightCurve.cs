@@ -23,6 +23,6 @@ public class LightCurve : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
-        light.intensity = curve.Evaluate(timer);
+        light.intensity = curve.Evaluate(timer) * defaultIntensity;
     }
 }

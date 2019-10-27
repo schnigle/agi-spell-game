@@ -79,6 +79,7 @@ public class SpellLogic : MonoBehaviour
                 {
                     var enemy = item.GetComponent<EnemyAI>();
                     enemy.isRagdolling = true;
+                    enemy.Health -= 40;
                 }
             }
             rigidbody = item.GetComponent<Rigidbody>();
