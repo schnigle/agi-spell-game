@@ -276,7 +276,11 @@ public class PlayerScript : MonoBehaviour
                                 selectedSpell = spell;
                                 selectedSpell.OnAimStart();
                                 staffOrb.mainColor = selectedSpell.OrbColor;
-                                staffOrb.iconEnabled = true;
+                                if (spell.SpellIcon != null)
+                                {
+                                    staffOrb.iconEnabled = true;
+                                    staffOrb.SetIcon(spell.SpellIcon);
+                                }
 
                                 // Matched spell - play sound
                                 self_audio_source.PlayOneShot(spell_successful_sound, 1.0f);

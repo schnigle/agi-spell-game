@@ -111,7 +111,7 @@ MonoBehaviour:
   ambient_sounds: {fileID: 8300000, guid: c962ab1eaae2e07479f5bd2cebfc3be2, type: 3}
   spell_successful_sound: {fileID: 8300000, guid: 93af15da63ff6db4380bf2a191e0d8ba,
     type: 3}
-  spell_unsuccessful_sound: {fileID: 8300000, guid: dc730fab1103fec4bbf76f7141492340,
+  spell_unsuccessful_sound: {fileID: 8300000, guid: 3ee5c07eaebff4e4ba98a576853d46b9,
     type: 3}
   self_audio_source: {fileID: 2102614423}
   rightInput: 2
@@ -157,7 +157,7 @@ MonoBehaviour:
   SpellGesture: 17
   OrbColor: {r: 1, g: 0.2834998, b: 0.1462264, a: 1}
   PageTexture: {fileID: 2800000, guid: e8cd33663e506e84c9b390b77b2bd4f3, type: 3}
-  SpellIcon: {fileID: 0}
+  SpellIcon: {fileID: 2800000, guid: 23597cff45b84d245bb20d87fbe064f6, type: 3}
   cast_clip: {fileID: 8300000, guid: 41a43c4f12b5d954fbcae1220fad32ff, type: 3}
   wand_source: {fileID: 1920981830}
   bullet: {fileID: 970754734791704334, guid: 8ba15b87d13f3fe469eca6b170b10242, type: 3}
@@ -276,7 +276,7 @@ MonoBehaviour:
   SpellGesture: 4
   OrbColor: {r: 0, g: 1, b: 0.65682125, a: 1}
   PageTexture: {fileID: 2800000, guid: 439901a9dc2d87d4c8c861a4ddc9ea22, type: 3}
-  SpellIcon: {fileID: 0}
+  SpellIcon: {fileID: 2800000, guid: 6fec593f3667a4a4babbae3ab45e434b, type: 3}
   trajectory: {fileID: 5234696679803921362}
   effectPrefab: {fileID: 8166681735931906920, guid: 2b4c82c43a4981f4eaf9caac59446dd1,
     type: 3}
@@ -284,6 +284,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4097
   collider: {fileID: 837267578}
+  cast_clip: {fileID: 8300000, guid: a8e79b7242ed60f4e8f54b0b8133b1d4, type: 3}
+  wand_source: {fileID: 1920981830}
 --- !u!114 &2102614421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -299,7 +301,7 @@ MonoBehaviour:
   SpellGesture: 13
   OrbColor: {r: 0.53181934, g: 0, b: 1, a: 1}
   PageTexture: {fileID: 2800000, guid: 8a8d268e4e3ba1d4384caf0a004d9c32, type: 3}
-  SpellIcon: {fileID: 0}
+  SpellIcon: {fileID: 2800000, guid: 23e7047e35ef5b243815d7dc70285083, type: 3}
   bullet: {fileID: 4290925732692964558, guid: 9f484891000566644baea7d2ed7a9233, type: 3}
   bulletEmitter: {fileID: 5135887435890056227}
   playerTrans: {fileID: 9198214471464328}
@@ -323,7 +325,7 @@ MonoBehaviour:
   SpellGesture: 1
   OrbColor: {r: 0.495283, g: 0.7897211, b: 1, a: 1}
   PageTexture: {fileID: 2800000, guid: 6edaec218fde90c41beb0ff6468532e3, type: 3}
-  SpellIcon: {fileID: 0}
+  SpellIcon: {fileID: 2800000, guid: fdcbb17d0bfa445489a8e48f794f7f3c, type: 3}
   shieldPrefab: {fileID: 4270273, guid: d1113ec2ef252e642bf9be13bda47900, type: 3}
   staffKnob: {fileID: 5323722686164765034}
   shieldDistance: 2
@@ -342,7 +344,7 @@ MonoBehaviour:
   SpellGesture: 16
   OrbColor: {r: 1, g: 0, b: 0.50872326, a: 1}
   PageTexture: {fileID: 2800000, guid: 150fb522025e68f428c9d1279e808610, type: 3}
-  SpellIcon: {fileID: 0}
+  SpellIcon: {fileID: 2800000, guid: baf4ae0eeb050df4cadfd553067e2d8e, type: 3}
   bullet: {fileID: 8800007297753371116, guid: b8a37da71f7b08f4b9124ea5aca12a08, type: 3}
   bulletEmitter: {fileID: 5135887435890056227}
   playerTrans: {fileID: 9198214471464328}
@@ -365,7 +367,7 @@ MonoBehaviour:
   SpellGesture: 10
   OrbColor: {r: 0.735849, g: 0.39179504, b: 0.2672659, a: 1}
   PageTexture: {fileID: 2800000, guid: 16029cc192d742a44b29ad8f5336d8c3, type: 3}
-  SpellIcon: {fileID: 0}
+  SpellIcon: {fileID: 2800000, guid: 0cd9183cfa182fa4e89760061923fc4d, type: 3}
   bullet: {fileID: 108504, guid: ea8ceeb304a55074e931ab330b6d749e, type: 3}
   bulletEmitter: {fileID: 5135887435890056227}
   playerTrans: {fileID: 9198214471464328}
@@ -404,7 +406,9 @@ MonoBehaviour:
   SpellGesture: 9
   OrbColor: {r: 0.49512804, g: 1, b: 0, a: 1}
   PageTexture: {fileID: 2800000, guid: f82bc403cd0ddc24f9e437db3030caae, type: 3}
-  SpellIcon: {fileID: 0}
+  SpellIcon: {fileID: 2800000, guid: d2c570043a09f5245b10eb90695c5ca8, type: 3}
+  cast_clip: {fileID: 8300000, guid: 4e535a0574f291d498b04bbac931a168, type: 3}
+  wand_source: {fileID: 1920981830}
   bullet: {fileID: 6723708922091333261, guid: a8c127eb5661ea44a87331dbcfe15c63, type: 3}
   bulletEmitter: {fileID: 5135887435890056227}
   playerTrans: {fileID: 9198214471464328}
@@ -425,7 +429,9 @@ MonoBehaviour:
   SpellGesture: 11
   OrbColor: {r: 0, g: 0.42142296, b: 1, a: 1}
   PageTexture: {fileID: 2800000, guid: accd7a3889fccb447a54d0de52238fd8, type: 3}
-  SpellIcon: {fileID: 0}
+  SpellIcon: {fileID: 2800000, guid: bf65acfa6c18ddb428990c94154d8542, type: 3}
+  cast_clip: {fileID: 8300000, guid: 41a43c4f12b5d954fbcae1220fad32ff, type: 3}
+  wand_source: {fileID: 1920981830}
   bullet: {fileID: 1269777111792482526, guid: 40c2ae5c4d7ef6b4186d2e3c951b9b77, type: 3}
   bulletEmitter: {fileID: 5135887435890056227}
   playerTrans: {fileID: 9198214471464328}
@@ -996,6 +1002,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Staff orb
       objectReference: {fileID: 0}
+    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 343326201, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: InitialModule.startColor.maxColor.g
       value: 0
@@ -1074,54 +1095,39 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.010690925
       objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
+    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882791, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: m_VertexStreams.Array.size
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
+    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
       propertyPath: m_UseCustomVertexStreams
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
+    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
       propertyPath: m_VertexStreams.Array.data[1]
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
+    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
+        type: 3}
       propertyPath: m_VertexStreams.Array.data[2]
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
+    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: m_VertexStreams.Array.size
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
+    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: m_UseCustomVertexStreams
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
+    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: m_VertexStreams.Array.data[1]
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 7171259512051882792, guid: a22d43ef481cdef40a26ba4c9138644d,
-        type: 3}
+    - target: {fileID: 343326200, guid: a22d43ef481cdef40a26ba4c9138644d, type: 3}
       propertyPath: m_VertexStreams.Array.data[2]
       value: 4
       objectReference: {fileID: 0}

@@ -17,7 +17,7 @@ public class StaffOrb : MonoBehaviour
     [SerializeField]
     new Light light;
     Material orbMaterial;
-    Material iconMaterial;
+    // Texture iconTexture;
     Color oldColor;
     // float colorSwitchTimer;
     Color currentColor;
@@ -35,17 +35,18 @@ public class StaffOrb : MonoBehaviour
         {
             orbMaterial = orb.material;
         }
-        if (icon)
-        {
-            iconMaterial = icon.material;
-        }
+        // if (icon)
+        // {
+        //     iconTexture = icon.material.mainTexture;
+        // }
         currentColor = mainColor;
         defaultIconSize = icon.transform.localScale;
         icon.transform.localScale = Vector3.zero;
     }
 
-    public void SetIcon(Material iconMaterial)
+    public void SetIcon(Texture iconTexture)
     {
+        icon.material.mainTexture = iconTexture;
     }
 
     public void StartDraw()
@@ -85,7 +86,7 @@ public class StaffOrb : MonoBehaviour
         // iconColor = mainColor;
         // iconColor *= 1.4f;
         // print(iconColor);
-        iconMaterial.SetColor("_Color", currentColor * 2.5f);
+        icon.material.SetColor("_Color", currentColor * 2.5f);
         main = stars.main;
         main.startColor = currentColor;
         main.simulationSpeed = Mathf.Lerp(main.simulationSpeed, 1, Time.deltaTime * 10);
