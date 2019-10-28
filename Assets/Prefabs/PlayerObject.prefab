@@ -371,7 +371,10 @@ MonoBehaviour:
   bullet: {fileID: 108504, guid: ea8ceeb304a55074e931ab330b6d749e, type: 3}
   bulletEmitter: {fileID: 5135887435890056227}
   playerTrans: {fileID: 9198214471464328}
-  forwardForce: 30
+  forwardForce: 50
+  cast_clip: {fileID: 8300000, guid: 41a43c4f12b5d954fbcae1220fad32ff, type: 3}
+  projectile_clip: {fileID: 8300000, guid: 54c3047adbda1964287cd33c3eeb53b6, type: 3}
+  wand_source: {fileID: 1920981830}
   trajectory: {fileID: 5234696679803921362}
 --- !u!114 &1332466040
 MonoBehaviour:
