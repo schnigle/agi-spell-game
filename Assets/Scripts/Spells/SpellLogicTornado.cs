@@ -9,9 +9,12 @@ public class SpellLogicTornado : MonoBehaviour
     bool hit = false;
     private GameObject latesthitObject;
 
+    private Rigidbody thisRigidBody;
+    float passedTime = 0;
+
     private Vector3 playerPos;
 
-    void Start()
+        void Start()
     {
         objectsToPullIn = new List<GameObject>();
         objectsPulled = new Dictionary<GameObject, bool>();
@@ -34,7 +37,7 @@ public class SpellLogicTornado : MonoBehaviour
         }
 
         playerPos = GameObject.Find("PlayerObject").GetComponent<Transform>().position;
-
+        thisRigidBody = GetComponent<Rigidbody>();
     }
 
     //////////////////// Code from https://answers.unity.com/questions/1484056/tornado-physics-2.html
@@ -103,6 +106,15 @@ public class SpellLogicTornado : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
+
+        if (passedTime < 3500)
+        {
+            if (LayerMask.LayerToName(other.gameObject.layer).Equals("TerrainLayer"))
+            {
+                addForceAway();
+            }
+        }
+
         if (objectsToPullIn.Contains(other.gameObject))
         {
             objectsPulled[other.gameObject] = true;
@@ -121,6 +133,7 @@ public class SpellLogicTornado : MonoBehaviour
 
     void OnCollisionExit(Collision other)
     {
+
         if (objectsToPullIn.Contains(other.gameObject))
         {
             objectsPulled[other.gameObject] = false;
@@ -162,6 +175,19 @@ public class SpellLogicTornado : MonoBehaviour
     Vector3 posOffset = new Vector3();
     Vector3 tempPos = new Vector3();
 
+    void addForceAway()
+    {
+        gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
+        Vector3 dir = (gameObject.transform.position - playerPos);
+        dir.y += 8f;
+        dir.Normalize();
+        var rigidBod = gameObject.GetComponent<Rigidbody>();
+        rigidBod.AddRelativeForce(dir * 2f, ForceMode.VelocityChange);
+        Vector3 vel = rigidBod.velocity;
+
+
+    }
+
     void moveTornado()
     {
         gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
@@ -170,6 +196,15 @@ public class SpellLogicTornado : MonoBehaviour
         dir.Normalize();
         var rigidBod = gameObject.GetComponent<Rigidbody>();
         rigidBod.AddRelativeForce(dir * 0.01f, ForceMode.VelocityChange);
+        Vector3 vel = rigidBod.velocity;
+        
+        if(vel.magnitude < 5)
+        {
+            rigidBod.AddForce(dir * 0.09f, ForceMode.VelocityChange);
+        }
+
+
+
     }
 
     void Update()
@@ -179,6 +214,8 @@ public class SpellLogicTornado : MonoBehaviour
         GetObjectsToPullIn();
         PullObjectsIn();
         RotateObjects();
+
+        passedTime += Time.deltaTime*1000.0f;
     }
 
 }
