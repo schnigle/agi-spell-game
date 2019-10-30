@@ -15,9 +15,10 @@ MonoBehaviour:
   muzzlePrefab: {fileID: 0}
   hitPrefab: {fileID: 4308658998904027059, guid: bf865e0c865bfd74aa7ae6dc54328c7b,
     type: 3}
-  critter: {fileID: 4322340937989672897, guid: 8802eb9e36952cb4c9b8408a79e16b74, type: 3}
+  critter: {fileID: 7354510555352220577, guid: b40efd879ec851346ba599fa2fae4546, type: 3}
   critter2: {fileID: 4427073233964008136, guid: 1bdbcfea0b4b9704f9ff79ac17110d73,
     type: 3}
+  wizard: {fileID: 3306375032083718171, guid: b8bd86b576ed53242abec4eb50ea0855, type: 3}
   hit_clip: {fileID: 8300000, guid: 02c33de62b83e264ba1109bfbc7b2192, type: 3}
   miss_clip: {fileID: 8300000, guid: dc730fab1103fec4bbf76f7141492340, type: 3}
   hit_pos_source: {fileID: 7117699992672610571}
