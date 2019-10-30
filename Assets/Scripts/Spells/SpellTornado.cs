@@ -26,7 +26,16 @@ public class SpellTornado : SpellBase
         wand_source.Play();
 
         GameObject tempBull;
-        tempBull = Instantiate(bullet, bulletEmitter.transform.forward.normalized * 0.5f + bulletEmitter.transform.position, playerTrans.rotation) as GameObject;
+        Vector3 forwardVec = bulletEmitter.transform.forward.normalized;
+        forwardVec.y = 0;
+        if(forwardVec.magnitude == 0)
+        {
+            forwardVec.x = 1.0f;
+        }
+        forwardVec.Normalize();
+        Vector3 bullPos = bulletEmitter.transform.position;
+        bullPos.y = playerTrans.position.y + 2.0f;
+        tempBull = Instantiate(bullet, forwardVec + bullPos, playerTrans.rotation) as GameObject;
         Rigidbody tempBody;
         tempBody = tempBull.GetComponent<Rigidbody>();
         tempBody.AddForce(bulletEmitter.transform.forward * forwardForce);
