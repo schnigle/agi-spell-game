@@ -5,19 +5,21 @@ using UnityEngine;
 public class EnemyAnimator : MonoBehaviour
 {
     Animator animator;
-    EnemyAI actor;
+    public bool ragdolling;
+    public float speed;
+    public bool walking;
     // Start is called before the first frame update
     void Start()
     {
         animator = transform.GetComponentInChildren<Animator>();
-        actor = GetComponent<EnemyAI>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        animator.SetBool("walking", actor.agent.velocity.magnitude > 0.5f);
-        animator.SetBool("ragdolling", actor.isRagdolling);
+        animator.SetBool("walking", walking);
+        animator.SetBool("ragdolling", ragdolling);
+        animator.SetFloat("walk speed", speed);
     }
 
     public void PlayCastAnimation(string animation, float prepTime, float unleashTime)

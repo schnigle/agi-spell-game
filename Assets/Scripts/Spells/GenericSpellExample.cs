@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GenericSpellExample : MonoBehaviour, ISpell
+public class GenericSpellExample : SpellBase
 {
-	public GestureRecognition.Gesture SpellGesture => GestureRecognition.Gesture.circle_ccw;
-
-	public void OnAimEnd()
+	public override void OnAimEnd()
 	{
 		print("Aim end");
 	}
 
-	public void OnAimStart()
+	public override void OnAimStart()
 	{
 		print("Aim start");
 	}
 
-	public void UnleashSpell()
+	public override void UnleashSpell()
 	{
 		print("Unleash");
 	}

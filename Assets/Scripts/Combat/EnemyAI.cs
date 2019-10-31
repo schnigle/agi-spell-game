@@ -3,9 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+[System.Serializable]
+public class AISpellColorSet
+{
+    public Color attack = Color.white;
+    public Color teleport = Color.white;
+    public Color shield = Color.white;
+}
+
 public class EnemyAI : MonoBehaviour
 {
     public enum EnemySpell { attack, teleport, shield }
+
+    public bool isHostile = true;
+    // audio
+    private AudioClip[] screams;
 
     public NavMeshAgent agent { get; private set; }
     public Rigidbody body { get; private set; }
@@ -35,11 +47,54 @@ public class EnemyAI : MonoBehaviour
     Shield shieldPrefab;
     [SerializeField]
     GameObject teleportEffectPrefab;
+    [SerializeField]
+    StaffOrb staffOrb;
+    [SerializeField]
+    Color inactiveOrbColor = Color.black;
+    [SerializeField]
+    Color activeOrbColor = Color.cyan;
+    [SerializeField]
+    AISpellColorSet spellColorSet;
+    [SerializeField]
+    GameObject deathEffect;
+
+    public bool IsAlive { get; private set; } = true;
+
+    private float _health = 100;
+    public float Health
+    {
+        get { return _health; }
+        set { 
+            if (IsAlive)
+            {
+                _health = value;
+                if (_health <= 0)
+                {
+                    _health = 0;
+                    IsAlive = false;
+                    Death();
+                }
+            }
+        }
+    }
+    
 
     EnemySpell preparedSpell;
     Vector3 currentTargetPosition;
 
+    EnemyAnimator animator;
+
     const float projectileSpawnHeight = 1f;
+
+    [SerializeField]
+    float sightRange = 20;
+    [SerializeField]
+    LayerMask sightObstacleMask;
+
+    float sightCheckTimer = 1;
+    bool foundPlayer;
+
+    Queue<float> recentVelocities = new Queue<float>();
 
     private bool _isRagdolling;
     /// True if the actor is currently in "ragdoll" mode (which means that it acts as a non-kinematic rigidbody while having its movement disabled)
@@ -55,6 +110,10 @@ public class EnemyAI : MonoBehaviour
                 agent.enabled = false;
                 body.isKinematic = false;
                 isRising = false;
+                animator.PlayCastAnimation("idle", 1, 1);
+                int rand_idx = Random.Range(0, screams.Length);
+                this.gameObject.GetComponent<AudioSource>().clip = screams[rand_idx];
+                this.gameObject.GetComponent<AudioSource>().Play();
             }
             else
             {
@@ -70,12 +129,22 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    void Death()
+    {
+        gameObject.SetActive(false);
+        if (deathEffect)
+        {
+            var eff = Instantiate(deathEffect);
+            eff.transform.position = GetComponent<Collider>().bounds.center;
+        }
+    }
+
     void StartPrepareAnimation(string animation)
     {
             castTimeRemaining = spellUnleashTime + spellPrepTime;
             isCasting = true;
             hasUnleashedSpell = false;
-            GetComponent<EnemyAnimator>().PlayCastAnimation(animation, spellPrepTime, spellUnleashTime);
+            animator.PlayCastAnimation(animation, spellPrepTime, spellUnleashTime);
     }
 
     void PrepareTeleport()
@@ -85,12 +154,23 @@ public class EnemyAI : MonoBehaviour
             preparedSpell = EnemySpell.teleport;
 
             Vector3 targetPosition = transform.position;
-            float r = 10;
+            float r = 20;
             float theta = Random.Range(0, Mathf.PI*2);
             targetPosition.x += r * Mathf.Cos(theta);
             targetPosition.z += r * Mathf.Sin(theta);
-            currentTargetPosition = targetPosition;
-            StartPrepareAnimation("spell circle cw");
+            // currentTargetPosition = targetPosition;
+            Vector3 origin = transform.position + Vector3.up * 1.5f;
+            Vector3 direction = targetPosition - origin;
+            RaycastHit hit;
+            if (Physics.Raycast(origin, direction, out hit, Vector3.Distance(targetPosition, origin), sightObstacleMask))
+            {
+                currentTargetPosition = hit.point;
+            }
+            else
+            {
+                currentTargetPosition = targetPosition;
+            }
+            StartPrepareAnimation("spell line ud");
         }
     }
 
@@ -98,6 +178,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (!isRagdolling)
         {
+            staffOrb.mainColor = spellColorSet.teleport;
             if (teleportEffectPrefab)
 			{
 				var newObj = Instantiate(teleportEffectPrefab);
@@ -108,9 +189,13 @@ public class EnemyAI : MonoBehaviour
             agent.destination = currentTargetPosition;
             if (teleportEffectPrefab)
 			{
-				var newObj = Instantiate(teleportEffectPrefab);
-				newObj.transform.position = transform.position;
-				Destroy(newObj, 5);
+                NavMeshHit hit;
+                if (NavMesh.SamplePosition(currentTargetPosition, out hit, 5, NavMesh.AllAreas))
+                {
+                    var newObj = Instantiate(teleportEffectPrefab);
+                    newObj.transform.position = hit.position;
+                    Destroy(newObj, 5);
+                }
 			}
         }
     }
@@ -121,7 +206,7 @@ public class EnemyAI : MonoBehaviour
         {
             currentTargetPosition = player.transform.position;
             preparedSpell = EnemySpell.shield;
-            StartPrepareAnimation("spell circle ccw");
+            StartPrepareAnimation("spell circle cw");
         }
     }
 
@@ -129,6 +214,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (!isRagdolling && player != null && shieldPrefab)
         {
+            staffOrb.mainColor = spellColorSet.shield;
             var shield = Instantiate(shieldPrefab);
             shield.transform.position = transform.position + transform.forward * 3 + Vector3.up * 1;
             shield.transform.rotation = transform.rotation;
@@ -147,7 +233,7 @@ public class EnemyAI : MonoBehaviour
             if (!float.IsNaN(currentFireAngle))
             {
                 preparedSpell = EnemySpell.attack;
-                StartPrepareAnimation("spell line lr");
+                StartPrepareAnimation("spell fish r");
             }
         }
     }
@@ -156,6 +242,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (!isRagdolling && player != null && projectilePrefab)
         {
+            staffOrb.mainColor = spellColorSet.attack;
             var projStartPos = transform.position + Vector3.up*2;
             var currentFireAngle = GetAttackAngle();
             // Only fire if AI is within range
@@ -182,6 +269,7 @@ public class EnemyAI : MonoBehaviour
 
     void Awake()
     {
+        animator = GetComponent<EnemyAnimator>();
         agent = GetComponent<NavMeshAgent>();
         body = GetComponent<Rigidbody>();
         if (staffTrail == null)
@@ -195,12 +283,25 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        screams = new AudioClip[]{
+            //Resources.Load<AudioClip>("audio/scream_1"),
+            //Resources.Load<AudioClip>("audio/scream_2"),
+            Resources.Load<AudioClip>("audio/scream_3"),
+            Resources.Load<AudioClip>("audio/scream_4"),
+            Resources.Load<AudioClip>("audio/scream_5"),
+            Resources.Load<AudioClip>("audio/scream_6"),
+            Resources.Load<AudioClip>("audio/scream_7"),
+            Resources.Load<AudioClip>("audio/scream_8"),
+            Resources.Load<AudioClip>("audio/scream_9"),
+            //Resources.Load<AudioClip>("audio/scream_10"),
+            //Resources.Load<AudioClip>("audio/scream_11"),
+            //Resources.Load<AudioClip>("audio/scream_12")
+        };
+        
+        staffOrb.mainColor = Color.black;
         // Quick fix to find the player in a "pluggable" way
         player = GameObject.FindGameObjectWithTag("Player");
-        if (player)
-        {
-            currentTargetPosition = player.transform.position;
-        }
+        currentTargetPosition = transform.position + transform.forward;
     }
 
     // Update is called once per frame
@@ -230,23 +331,45 @@ public class EnemyAI : MonoBehaviour
             isRagdolling = false;
         }
 
-        // Move towards player and attack them
-        if (player)
+        // Animation properties
+        if (animator)
         {
-            if (agent.enabled && agent.remainingDistance < 0.1f)
+            animator.ragdolling = isRagdolling;
+            animator.speed = agent.speed;
+            animator.walking = agent.velocity.sqrMagnitude > 0.5f * 0.5f;
+        }
+
+        // Move towards player and attack them
+        if (player && isHostile)
+        {
+            if (!foundPlayer)
             {
-                if (!isCasting)
+                sightCheckTimer -= Time.deltaTime;
+                if (sightCheckTimer <= 0)
                 {
-                    int rand = Random.Range(0, 3);
-                    if (rand == 0)
+                    sightCheckTimer = Random.Range(0.8f, 1.2f);
+                    bool sightCheck = CanSeePlayer();
+                    if (sightCheck)
+                    {
+                        foundPlayer = true;
+                        print(gameObject.name + " found player");
+                    }
+                }
+            }
+            if (foundPlayer && agent.enabled && agent.remainingDistance < 0.1f)
+            {
+                if (!isCasting && CanSeePlayer())
+                {
+                    float rand = Random.Range(0, 100);
+                    if (rand < 50)
                     {
                         PrepareAttack();
                     }
-                    else if (rand == 1)
+                    else if (rand < 75)
                     {
                         PrepareShield();
                     }
-                    else if (rand == 2)
+                    else
                     {
                         PrepareTeleport();
                     }
@@ -257,11 +380,16 @@ public class EnemyAI : MonoBehaviour
 
         if (isCasting)
         {
-            agent.speed = 0;
+            agent.velocity = Vector3.zero;
             if (player)
             {
                 // rotate towards player
-                var q = Quaternion.LookRotation(currentTargetPosition - transform.position);
+                var lookTarget = currentTargetPosition - transform.position;
+                if (lookTarget == Vector3.zero)
+                {
+                    lookTarget = transform.forward;
+                }
+                var q = Quaternion.LookRotation(lookTarget);
                 var euler_q = q.eulerAngles;
                 euler_q.x = 0;
                 euler_q.z = 0;
@@ -295,9 +423,49 @@ public class EnemyAI : MonoBehaviour
         else
         {
             agent.speed = defaultSpeed;
+            staffOrb.mainColor = inactiveOrbColor;
         }
-
+        CheckMoveProgress();
         UpdateStaffLine();
+    }
+
+    void CheckMoveProgress()
+    {
+        if (!isCasting && !isRagdolling && agent.enabled)
+        {
+            recentVelocities.Enqueue(agent.velocity.sqrMagnitude * Time.deltaTime);
+            if (recentVelocities.Count > 10)
+            {
+                recentVelocities.Dequeue();
+                float velocitySum = 0;
+                foreach (var item in recentVelocities)
+                {
+                    velocitySum += item / recentVelocities.Count;
+                }
+                if (velocitySum < 0.02f)
+                {
+                    agent.destination = transform.position;
+                    recentVelocities.Clear();
+                }
+            }
+        }
+        else
+        {
+            recentVelocities.Clear();
+        }
+    }
+
+    bool CanSeePlayer()
+    {
+        Vector3 origin = transform.position + Vector3.up * 1.5f;
+        Vector3 direction = player.transform.position - origin;
+        direction.Normalize();
+        float distance = Vector3.Distance(origin, player.transform.position);
+        if (distance > sightRange)
+        {
+            return false;
+        }
+        return !Physics.Raycast(origin, direction, distance, sightObstacleMask);
     }
 
     void UpdateStaffLine()
@@ -310,6 +478,7 @@ public class EnemyAI : MonoBehaviour
             if (isCasting && preparationProgress > lowerPrepLimit && preparationProgress < upperPrepLimit && preparationProgress < 1)
             {
                 staffTrail.enabled = true;
+                staffOrb.mainColor = activeOrbColor;
             }
             else
             {
@@ -325,9 +494,9 @@ public class EnemyAI : MonoBehaviour
         Vector2 flatPosition = new Vector2(transform.position.x, transform.position.z);
         Vector2 flatTargetPosition = new Vector2(target.x, target.z);
         float distance = Mathf.Max(Vector2.Distance(flatPosition, flatTargetPosition), 10);
-        float r = Random.Range(distance * 0.8f, distance);
+        float r = Random.Range(distance * 0.6f, distance);
         var angle = Mathf.Atan2(transform.position.z - target.z, transform.position.x- target.x);
-        var maxAngleDelta = Mathf.PI/32;
+        var maxAngleDelta = Mathf.PI/16;
         float theta = Random.Range(angle - maxAngleDelta, angle + maxAngleDelta);
         target.x += r * Mathf.Cos(theta);
         target.z += r * Mathf.Sin(theta);

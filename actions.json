@@ -23,7 +23,8 @@
     {
       "name": "/actions/default/in/SkeletonLeftHand",
       "type": "skeleton",
-      "skeleton": "/skeleton/hand/left"
+      "skeleton": "/skeleton/hand/left",
+      "requirement": "suggested"
     },
     {
       "name": "/actions/default/in/SkeletonRightHand",
@@ -39,6 +40,14 @@
       "name": "/actions/default/in/HeadsetOnHead",
       "type": "boolean",
       "requirement": "optional"
+    },
+    {
+      "name": "/actions/default/in/Trackpad",
+      "type": "vector2"
+    },
+    {
+      "name": "/actions/default/in/TrackpadActive",
+      "type": "boolean"
     },
     {
       "name": "/actions/default/out/Haptic",
@@ -72,6 +81,14 @@
       "name": "/actions/mixedreality/in/ExternalCamera",
       "type": "pose",
       "requirement": "optional"
+    },
+    {
+      "name": "/actions/SpellWaves/in/TrackpadActive",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/SpellWaves/in/Trackpad",
+      "type": "vector2"
     }
   ],
   "action_sets": [
@@ -89,6 +106,10 @@
     },
     {
       "name": "/actions/mixedreality",
+      "usage": "single"
+    },
+    {
+      "name": "/actions/SpellWaves",
       "usage": "single"
     }
   ],

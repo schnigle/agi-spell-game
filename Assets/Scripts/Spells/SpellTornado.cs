@@ -2,37 +2,65 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpellTornado : MonoBehaviour, ISpell
+public class SpellTornado : SpellBase
 {
-    [SerializeField]
-    GestureRecognition.Gesture gesture;
-	public GestureRecognition.Gesture SpellGesture => gesture;
-
-
     public GameObject bullet, bulletEmitter;
     public Transform playerTrans;
     public float forwardForce = 30.0f;
     private const float waitTime = 15.0f;
 
+    // audio
+    public AudioClip cast_clip;
+    public AudioClip projectile_clip;
+    private AudioSource projectile_source;
+    public AudioSource wand_source;
+
     [SerializeField]
     TrajectoryPreview trajectory;
 
-    public void UnleashSpell()
+    public override void UnleashSpell()
     {
+        // cast audio 
+        //wand_source.time = 0.0f;
+        wand_source.volume = 0.15f;
+        wand_source.Play();
+
         GameObject tempBull;
-        tempBull = Instantiate(bullet, bulletEmitter.transform.forward.normalized * 0.5f + bulletEmitter.transform.position, playerTrans.rotation) as GameObject;
+        Vector3 forwardVec = bulletEmitter.transform.forward.normalized;
+        forwardVec.y = 0;
+        if(forwardVec.magnitude == 0)
+        {
+            forwardVec.x = 1.0f;
+        }
+        forwardVec.Normalize();
+        Vector3 bullPos = bulletEmitter.transform.position;
+        bullPos.y = playerTrans.position.y + 2.0f;
+        tempBull = Instantiate(bullet, forwardVec + bullPos, playerTrans.rotation) as GameObject;
         Rigidbody tempBody;
         tempBody = tempBull.GetComponent<Rigidbody>();
         tempBody.AddForce(bulletEmitter.transform.forward * forwardForce);
+
+        // projectile audio
+        projectile_source = tempBull.AddComponent<AudioSource>();
+        projectile_source.clip = projectile_clip;
+        projectile_source.loop = true;
+        projectile_source.spatialize = true;
+        projectile_source.spatialBlend = 1.0f;
+        projectile_source.volume = 1.0f;
+        projectile_source.Play();
+
         Destroy(tempBull, waitTime);
     }
 
-    public void OnAimStart()
+    public override void OnAimStart()
     {
         trajectory?.gameObject.SetActive(true);
+
+        // audio
+        wand_source.clip = cast_clip;
     }
 
-    public void OnAimEnd()
+    public override void OnAimEnd()
     {
         trajectory?.gameObject.SetActive(false);
     }

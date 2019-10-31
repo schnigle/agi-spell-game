@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/CastleIndoors.unity
+    guid: b39c1c5d6916b674ab921dcc25b855b4
+  - enabled: 1
+    path: Assets/Scenes/Garden.unity
+    guid: bff0ca4e97ba34b47b4c14f4e80e5fc5
+  - enabled: 1
+    path: Assets/Scenes/TerrainSandbox.unity
+    guid: 9813eecee5508324e80d574632a1be2e
   m_configObjects: {}
