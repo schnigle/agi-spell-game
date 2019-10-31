@@ -26,7 +26,7 @@ public class DoorScript : MonoBehaviour
             float playDist = Vector3.Distance(transform.position, playerTrans.position);
             if (playDist < 3.0f)
             {
-                SceneManager.LoadScene("TerrainSandbox", LoadSceneMode.Single);
+                SceneLoader.LoadNextScene();
             }
         }
         

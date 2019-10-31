@@ -15,17 +15,22 @@ public class SceneLoader : MonoBehaviour
     {
         if (Input.GetKey("n"))
         {
-            int activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
-            if (activeSceneIndex < SceneManager.sceneCountInBuildSettings - 1)
+            LoadNextScene();
+        }
+    }
+
+    public static void LoadNextScene()
+    {
+        int activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        if (activeSceneIndex < SceneManager.sceneCountInBuildSettings - 1)
+        {
+            SceneManager.LoadScene(activeSceneIndex + 1);
+        }
+        else
+        {
+            if (SceneManager.sceneCountInBuildSettings > 0)
             {
-                SceneManager.LoadScene(activeSceneIndex + 1);
-            }
-            else
-            {
-                if (SceneManager.sceneCountInBuildSettings > 0)
-                {
-                    SceneManager.LoadScene(0);
-                }
+                SceneManager.LoadScene(0);
             }
         }
     }

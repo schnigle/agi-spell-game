@@ -283,14 +283,6 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        var others = Transform.FindObjectsOfType<EnemyAI>();
-        foreach (var item in others)
-        {
-            if (item != this)
-            {
-                agent.destination = (transform.position + item.transform.position) / 2;
-            }
-        }
         screams = new AudioClip[]{
             //Resources.Load<AudioClip>("audio/scream_1"),
             //Resources.Load<AudioClip>("audio/scream_2"),
@@ -309,10 +301,7 @@ public class EnemyAI : MonoBehaviour
         staffOrb.mainColor = Color.black;
         // Quick fix to find the player in a "pluggable" way
         player = GameObject.FindGameObjectWithTag("Player");
-        if (player)
-        {
-            currentTargetPosition = player.transform.position;
-        }
+        currentTargetPosition = transform.position + transform.forward;
     }
 
     // Update is called once per frame
@@ -363,6 +352,7 @@ public class EnemyAI : MonoBehaviour
                     if (sightCheck)
                     {
                         foundPlayer = true;
+                        print(gameObject.name + " found player");
                     }
                 }
             }
@@ -469,8 +459,12 @@ public class EnemyAI : MonoBehaviour
     {
         Vector3 origin = transform.position + Vector3.up * 1.5f;
         Vector3 direction = player.transform.position - origin;
-        float distance = Mathf.Min(Vector3.Distance(origin, player.transform.position), sightRange);
         direction.Normalize();
+        float distance = Vector3.Distance(origin, player.transform.position);
+        if (distance > sightRange)
+        {
+            return false;
+        }
         return !Physics.Raycast(origin, direction, distance, sightObstacleMask);
     }
 

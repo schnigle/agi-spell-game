@@ -236,7 +236,7 @@ MonoBehaviour:
     shield: {r: 0.5518868, g: 0.95391774, b: 1, a: 1}
   deathEffect: {fileID: 4974367201840923647, guid: 88d852549944be24d809c6d4787e29bd,
     type: 3}
-  sightRange: 20
+  sightRange: 100
   sightObstacleMask:
     serializedVersion: 2
     m_Bits: 4097
