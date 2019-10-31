@@ -11,7 +11,7 @@ public class ShockWaveSpell : SpellBase
 
     public GameObject bullet, bulletEmitter;
     public Transform playerTrans;
-    public float shockForce = 5.0f;
+    public float shockForce = 20.0f;
     public float radius = 10f;
     private const float waitTime = 5.0f;
 
