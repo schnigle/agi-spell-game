@@ -21,6 +21,7 @@ public class DoorScript : MonoBehaviour
     public void fadeToLevel(string lvlname)
     {
         chosenlvl = lvlname;
+        CameraPostProcessing.instance.FadeOut();
         animator.SetTrigger("FadeOut");
     }
 
