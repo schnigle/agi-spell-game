@@ -15,7 +15,7 @@ MonoBehaviour:
   muzzlePrefab: {fileID: 0}
   hitPrefab: {fileID: 4308658998904027059, guid: bf865e0c865bfd74aa7ae6dc54328c7b,
     type: 3}
-  critter: {fileID: 7354510555352220577, guid: b40efd879ec851346ba599fa2fae4546, type: 3}
+  critter: {fileID: 9088153001774741583, guid: 12d1d24f56ae7014dafc8726b90d0c34, type: 3}
   critter2: {fileID: 4427073233964008136, guid: 1bdbcfea0b4b9704f9ff79ac17110d73,
     type: 3}
   wizard: {fileID: 3306375032083718171, guid: b8bd86b576ed53242abec4eb50ea0855, type: 3}
