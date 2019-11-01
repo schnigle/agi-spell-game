@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PolymorphLogic : MonoBehaviour
 {
-    public GameObject muzzlePrefab, hitPrefab, critter, critter2;
+    public GameObject muzzlePrefab, hitPrefab, critter, critter2, wizard;
     private GameObject latesthitObject;
 
     // audio
@@ -73,6 +73,12 @@ public class PolymorphLogic : MonoBehaviour
             {
 
                 latesthitObject.transform.localScale += new Vector3(5, 5, 5);
+            }
+
+            else if (latesthitObject.tag != "Actor")
+            {
+                Destroy(latesthitObject);
+                Instantiate(wizard, pos, Quaternion.identity);
             }
 
             else if (rng < 0.45)
