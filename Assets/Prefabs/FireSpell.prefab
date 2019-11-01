@@ -82,7 +82,7 @@ MonoBehaviour:
     type: 3}
   hitPrefab: {fileID: 4308658998904027059, guid: 8560b67eb3085dd4498cee3b9dc9e94e,
     type: 3}
-  force: 100
+  force: 200
   explosion_clip: {fileID: 8300000, guid: dc730fab1103fec4bbf76f7141492340, type: 3}
   hit_pos_source: {fileID: 3670609081433092232}
   shieldMask:

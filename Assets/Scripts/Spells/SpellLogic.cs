@@ -69,7 +69,8 @@ public class SpellLogic : MonoBehaviour
             }
         }
 
-        var nearby = Physics.OverlapSphere(pos, 5);
+        var radius = 5;
+        var nearby = Physics.OverlapSphere(pos, radius);
         foreach(var item in nearby)
         {
             Rigidbody rigidbody = null;
@@ -86,7 +87,7 @@ public class SpellLogic : MonoBehaviour
             if (rigidbody != null)
             {
                 var direction = (item.bounds.center - pos).normalized;
-                rigidbody.AddForce((5 - Vector3.Distance(item.bounds.center, pos)) * (direction) * 200, ForceMode.Impulse);
+                rigidbody.AddForce(Mathf.Max(0, radius - Vector3.Distance(item.bounds.center, pos)) * (direction) * force, ForceMode.Impulse);
             }
         }
 

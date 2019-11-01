@@ -21,7 +21,7 @@ public class PlayerScript : MonoBehaviour
     private float originalTrailTime;
     private Color originalTrailMaterialColor;
     private float trailAlphaDelta = 0.03f;
-    private int fadeCounter = 0;
+    private float fadeCounter = 0;
     private float originalTrailWidthMultiplier;
 
     // audio
@@ -327,7 +327,7 @@ public class PlayerScript : MonoBehaviour
 
         // fade trail
         if (trail.activeSelf && !drawingGesture) {
-            fadeCounter++;
+            fadeCounter+=Time.deltaTime * 60;
             float newAlpha = Mathf.Sin(fadeCounter/21.2f) + 1.0f;
             Color newcolor = trail.GetComponent<TrailRenderer>().startColor;
             Color newmatcolor = trail.GetComponent<TrailRenderer>().material.color;
