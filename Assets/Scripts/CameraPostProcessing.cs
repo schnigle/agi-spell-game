@@ -14,14 +14,22 @@ public class CameraPostProcessing : MonoBehaviour
     [SerializeField]
     float hitEffectDuration = 1;
 
-    PostProcessVolume volume;
     bool enableHitEffect;
     float currentHitCurvePosition = 0;
+
+    [SerializeField]
+    PostProcessVolume hitVolume;
+
+    [SerializeField]
+    PostProcessVolume fadeVolume;
+
+    bool fade = false;
+    float fadeWeight = 0;
+
 
     void Awake()
     {
         instance = this;
-        volume = GetComponent<PostProcessVolume>();
     }
 
     // Update is called once per frame
@@ -34,11 +42,20 @@ public class CameraPostProcessing : MonoBehaviour
             {
                 enableHitEffect = false;
             }
-            volume.weight = hitEffectCurve.Evaluate(currentHitCurvePosition / hitEffectDuration);
+            hitVolume.weight = hitEffectCurve.Evaluate(currentHitCurvePosition / hitEffectDuration);
         }
         else
         {
-            volume.weight = 0;
+            hitVolume.weight = 0;
+        }
+        if (fade)
+        {
+            fadeWeight += Time.deltaTime;
+            fadeVolume.weight = fadeWeight;
+        }
+        else
+        {
+            fadeVolume.weight = 0;
         }
     }
 
@@ -46,5 +63,10 @@ public class CameraPostProcessing : MonoBehaviour
     {
         enableHitEffect = true;
         currentHitCurvePosition = 0;
+    }
+
+    public void FadeOut()
+    {
+        fade = true;
     }
 }
